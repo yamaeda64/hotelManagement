@@ -34,7 +34,7 @@ public class ClientConnection extends Thread
     {
         try
         {
-            abstractServer.setConnectionToClient(this);
+            abstractServer.setClientConnection(this);
             abstractServer.clientConnected();
             inputStream = clientSocket.getInputStream();
             outputStream = clientSocket.getOutputStream();
@@ -46,7 +46,6 @@ public class ClientConnection extends Thread
             logger.log(Level.SEVERE, "There was a problem when communicating with client");
             abstractServer.exceptionOccured(e);
         }
-        
     }
     
     private void listenForClientRequest() throws IOException
@@ -68,6 +67,7 @@ public class ClientConnection extends Thread
                     if(readBytes == -1)
                     {
                         abstractServer.clientDisconnected();
+                        clientSocket.close();
                         clientIsConnected = false;
                     }
                     else
@@ -89,10 +89,10 @@ public class ClientConnection extends Thread
             }
             catch(SocketTimeoutException e)
             {
+                
                 abstractServer.exceptionOccured(new SocketTimeoutException("The connection timed out"));
                 logger.log(Level.SEVERE, "The connection timed out");
             }
-           
         }
     }
     

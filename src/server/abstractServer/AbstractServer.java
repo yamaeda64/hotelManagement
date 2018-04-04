@@ -3,6 +3,7 @@ package server.abstractServer;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +23,7 @@ public abstract class AbstractServer
     
     private final int SERVER_TIMEOUT = 5000;
     private Logger logger = Logger.getLogger(AbstractServer.class.getName());
-    private ClientConnection connectionToClient;
+    private ClientConnection clientConnection;
     
     /**
      * A function to start server and listen for new clients
@@ -52,17 +53,9 @@ public abstract class AbstractServer
             /* whenever a timeout occurs the system checks for closed connection and removes them */
             catch(SocketTimeoutException e)
             {
-                for(Socket s : connectedClients)
-                {
-                    System.out.println(s.getPort());
-                    System.out.println("checkedForClosedConnection");
-                    if(s.isClosed())
-                    {
-                        System.out.println("Found closedConnection");
-                        logger.log(Level.FINEST, "Server found closed client and remove client from list");
-                        connectedClients.remove(s);
-                    }
-                }
+                
+                removeUnusedSockets();
+                
     
             } catch(SocketException e)
             {
@@ -78,6 +71,25 @@ public abstract class AbstractServer
             
             
         
+        }
+    }
+    
+    private void removeUnusedSockets()
+    {
+        ArrayList<Socket> removeList = new ArrayList<>();
+        Iterator<Socket> iterator = connectedClients.iterator();
+        while(iterator.hasNext())
+        {
+            Socket socket = iterator.next();
+            if(socket.isClosed())
+            {
+                removeList.add(socket);
+            }
+        }
+        
+        for(Socket closedSocket : removeList)
+        {
+            connectedClients.remove(closedSocket);
         }
     }
     
@@ -125,14 +137,14 @@ public abstract class AbstractServer
             Socket clientSocket = serverSocket.accept();
             connectedClients.add(clientSocket);
             logger.log(Level.INFO, "Server connected to client: " + clientSocket.getInetAddress().getHostAddress());
-            connectionToClient = new ClientConnection(clientSocket, logger, this);
+            clientConnection = new ClientConnection(clientSocket, logger, this);
             
         }
     }
     
     public void sendToClient(String message)
     {
-        if(connectionToClient == null)
+        if(clientConnection == null)
         {
             logger.log(Level.SEVERE, "there was no connection to send to");
             exceptionOccured(new UnknownHostException("There was no open connection"));
@@ -141,7 +153,7 @@ public abstract class AbstractServer
         {
             try
             {
-                connectionToClient.sendMessageToClient(message);
+                clientConnection.sendMessageToClient(message);
             }
             catch(IOException e)
             {
@@ -203,9 +215,9 @@ public abstract class AbstractServer
         return serverSocket.getInetAddress();
     }
     
-    protected void setConnectionToClient(ClientConnection currentConnection)
+    protected void setClientConnection(ClientConnection currentConnection)
     {
-        this.connectionToClient = currentConnection;
+        this.clientConnection = currentConnection;
     }
     
     // Hooks (methods the subclass can override)
