@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="808.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ResultListController">
+   <children>
+      <SplitPane dividerPositions="0.30128956623681125" layoutX="-4.0" layoutY="-1.0" prefHeight="807.0" prefWidth="855.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="797.0" prefWidth="406.0">
+               <children>
+                  <ListView fx:id="result_list" layoutX="-5.0" layoutY="-5.0" prefHeight="808.0" prefWidth="261.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="797.0" prefWidth="580.0">
+               <children>
+                  <TextArea layoutX="51.0" layoutY="467.0" prefHeight="130.0" prefWidth="405.0" text="Room information&#10;&#10;Generell idé, Rum dyker upp i listan bredvid, och om man klickar på&#10;dom ska dom dyka upp i ett schysst formulär med information i detta&#10;fönstret.&#10;&#10;Får utöka antalet fält när vi bestämt vad som ska finnas med." />
+                  <TextField fx:id="room_number_field" editable="false" layoutX="51.0" layoutY="46.0" text="201" />
+                  <TextField fx:id="floor_field" editable="false" layoutX="298.0" layoutY="43.0" text="6" />
+                  <TextField fx:id="location_field" editable="false" layoutX="51.0" layoutY="88.0" text="Växjö" />
+                  <Text layoutX="51.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room number" />
+                  <Text layoutX="298.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Floor" />
+                  <Text layoutX="51.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location" />
+                  <TextField fx:id="smoke_free_field" layoutX="51.0" layoutY="135.0" />
+                  <TextField fx:id="number_of_beds_field" layoutX="298.0" layoutY="135.0" />
+                  <TextField fx:id="bed_size_field" layoutX="298.0" layoutY="88.0" />
+                  <Text layoutX="298.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bed size" />
+                  <Text layoutX="51.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Smoke-free" />
+                  <Text layoutX="298.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of beds" />
+                  <TextField fx:id="view_field" layoutX="51.0" layoutY="179.0" />
+                  <Text layoutX="51.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View" />
+                  <TextField fx:id="room_size_field" layoutX="298.0" layoutY="179.0" />
+                  <Text layoutX="298.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room size" />
+                  <Button fx:id="proceed_to_booking_button" layoutX="447.0" layoutY="730.0" mnemonicParsing="false" onAction="#bookingButton" prefHeight="53.0" prefWidth="132.0" text="Proceed to booking" />
+                  <Button fx:id="return_to_main_menu_button" layoutX="22.0" layoutY="730.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="53.0" prefWidth="149.0" text="Return to main menu" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
