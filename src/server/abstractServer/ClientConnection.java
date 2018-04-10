@@ -1,8 +1,6 @@
 package server.abstractServer;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -16,8 +14,8 @@ public class ClientConnection extends Thread
 {
     private Socket clientSocket;
     private boolean isConnected;
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    private BufferedInputStream inputStream;
+    private BufferedOutputStream outputStream;
     private Logger logger;
     private AbstractServer abstractServer;
     
@@ -27,7 +25,7 @@ public class ClientConnection extends Thread
         this.logger = logger;
         this.clientSocket = clientSocket;
         isConnected = true;
-        run();
+        start();
     }
     @Override
     public void run()
@@ -36,8 +34,8 @@ public class ClientConnection extends Thread
         {
             abstractServer.setClientConnection(this);
             abstractServer.clientConnected();
-            inputStream = clientSocket.getInputStream();
-            outputStream = clientSocket.getOutputStream();
+            inputStream = new BufferedInputStream(clientSocket.getInputStream());
+            outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
             clientSocket.setSoTimeout(5000);
             listenForClientRequest();
         }
@@ -57,12 +55,13 @@ public class ClientConnection extends Thread
             byte[] buffer = new byte[1024];
             StringBuilder inputRequest = new StringBuilder();
             
+            
             try
             {
                 boolean isEndOfMsg = false;
                 while(readBytes != -1 &! isEndOfMsg)
                 {
-                    readBytes = inputStream.read(buffer);
+                    readBytes = inputStream.read(buffer,0,6);
                     
                     if(readBytes == -1)
                     {
@@ -83,8 +82,8 @@ public class ClientConnection extends Thread
                     }
                 }
                 logger.log(Level.FINEST, "MessageFromClient: " + inputRequest.toString());
-    
-                abstractServer.handleMessageFromClient(inputRequest.toString());
+               
+               handleMessageFromClient(inputRequest.toString());
                 
             }
             catch(SocketTimeoutException e)
@@ -92,17 +91,31 @@ public class ClientConnection extends Thread
                 
                 abstractServer.exceptionOccured(new SocketTimeoutException("The connection timed out"));
                 logger.log(Level.SEVERE, "The connection timed out");
+                try
+                {
+                    Thread.sleep(100);
+                } catch(InterruptedException e1)
+                {
+                    e1.printStackTrace();
+                }
             }
         }
+    }
+    
+    public synchronized void handleMessageFromClient(String message)
+    {
+        abstractServer.setClientConnection(this);
+        abstractServer.handleMessageFromClient(message);
     }
     
     public void sendMessageToClient(String message) throws IOException
     {
         message += '\0';
         byte[] buffer = message.getBytes();
-        outputStream = clientSocket.getOutputStream();
+
         outputStream.write(buffer);
         outputStream.flush();
+        
     }
     
     /**
