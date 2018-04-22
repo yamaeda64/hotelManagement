@@ -1,24 +1,28 @@
 package controller;
 
-import java.io.IOException;
-
+import client.model.ModelAccess;
 import controller.ScreenController.Screen;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class CentralController {
+import java.io.IOException;
+
+public class CentralController
+{
 	private ScreenController screenC;
 	private StageManager stageM;
 	private Stage stage;
 	private Scene scene;
+	private ModelAccess modelAccess;
 	
-	public CentralController() {};
+	public CentralController() {
+		
+	};
 	
 	public CentralController(Stage stage) throws IOException {
 		//setup();
 		screenC = new ScreenController(stage,this);
+		modelAccess = new ModelAccess();
 	}
 	
 	public ScreenController getScreenController() {
@@ -30,6 +34,7 @@ public class CentralController {
 	public void changeScreen(Screen screen) throws IOException {
 		screenC.setScreen(screen);
 	}
+	
 	
 	/*
 	public void setup() throws IOException {
