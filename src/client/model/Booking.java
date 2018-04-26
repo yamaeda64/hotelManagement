@@ -17,6 +17,21 @@ public class Booking
     private LocalDate endDate;
     private double price;
     private Customer customer;
+    private BookingStatus bookingStatus;
+    
+    public Booking()
+    {
+        bookedRooms = new ArrayList<>();
+    }
+    
+    public enum BookingStatus
+    {
+        IN_PROGRESS,
+        BOOKED,
+        CHECKED_IN,
+        CHECKED_OUT,
+        CANCELLED
+    }
     
     
     public void addRoom(Room room)
@@ -25,6 +40,17 @@ public class Booking
     }
     
     // Getters & Setters
+    
+    
+    public BookingStatus getBookingStatus()
+    {
+        return bookingStatus;
+    }
+    
+    public void setBookingStatus(BookingStatus bookingStatus)
+    {
+        this.bookingStatus = bookingStatus;
+    }
     
     public Iterator<Room> getAllRooms()
     {

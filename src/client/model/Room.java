@@ -3,11 +3,11 @@ package client.model;
 
 public class Room
 {
+    private int roomID;
     private Hotel hotel;
     private int roomNumber;
     private String view;
     private QualityLevel qualityLevel;
-    private RoomStatus roomStatus;
     private boolean noSmoking;
     private BedType bedType;
     private Room adjecentRoom;
@@ -18,13 +18,7 @@ public class Room
         KALMAR
     }
     
-    public enum RoomStatus
-    {
-        AVAILABLE,
-        BOOKED,
-        CHECKED_IN,
-        HELD_FOR_BOOKING
-    }
+   
     
     public enum BedType
     {
@@ -40,6 +34,15 @@ public class Room
     
     // Getters & Setters
     
+    public int getRoomID()
+    {
+        return roomID;
+    }
+    
+    public void setRoomID(int roomID)
+    {
+        this.roomID = roomID;
+    }
     
     public Hotel getHotel()
     {
@@ -79,16 +82,6 @@ public class Room
     public void setQualityLevel(QualityLevel qualityLevel)
     {
         this.qualityLevel = qualityLevel;
-    }
-    
-    public RoomStatus getRoomStatus()
-    {
-        return roomStatus;
-    }
-    
-    public void setRoomStatus(RoomStatus roomStatus)
-    {
-        this.roomStatus = roomStatus;
     }
     
     public boolean isNoSmoking()
