@@ -8,19 +8,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SearchRoomController">
    <children>
       <DatePicker fx:id="check_in_datepicker" layoutX="61.0" layoutY="56.0" />
       <DatePicker fx:id="check_out_datepicker" layoutX="61.0" layoutY="115.0" />
-      <Button fx:id="find_rooms_button" layoutX="333.0" layoutY="317.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" text="Find rooms" />
-      <Button fx:id="cancel_button" layoutX="118.0" layoutY="317.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" text="Cancel" />
+      <Button fx:id="find_rooms_button" layoutX="333.0" layoutY="317.0" mnemonicParsing="false" onAction="#findRoomsButton" prefHeight="48.0" prefWidth="128.0" text="Find rooms" />
+      <Button fx:id="cancel_button" layoutX="118.0" layoutY="317.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="48.0" prefWidth="128.0" text="Cancel" />
       <TextField fx:id="number_of_beds_field" layoutX="61.0" layoutY="167.0" />
       <Text layoutX="61.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-in" />
       <Text layoutX="61.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-out" />
       <Text layoutX="61.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of beds" />
       <CheckBox fx:id="smoking_allowed_box" layoutX="333.0" layoutY="60.0" mnemonicParsing="false" text="Smoking allowed" />
       <CheckBox fx:id="neighboring_room_box" layoutX="333.0" layoutY="87.0" mnemonicParsing="false" text="Neighboring room is available" />
-      <CheckBox layoutX="333.0" layoutY="119.0" mnemonicParsing="false" text="Something else" />
       <ComboBox fx:id="location_box" layoutX="310.0" layoutY="167.0" prefWidth="150.0" promptText="Location" />
+      <ComboBox fx:id="bed_size_box" layoutX="310.0" layoutY="200.0" prefWidth="150.0" promptText="Bed size" />      
    </children>
 </AnchorPane>
