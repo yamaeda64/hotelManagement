@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerFormController">
    <children>
       <TextField fx:id="first_name_field" layoutX="40.0" layoutY="67.0" prefHeight="25.0" prefWidth="169.0" />
       <TextField fx:id="last_name_field" layoutX="40.0" layoutY="109.0" prefHeight="25.0" prefWidth="169.0" />
@@ -28,13 +28,13 @@
       <TextField fx:id="city_state_field" layoutX="317.0" layoutY="193.0" prefHeight="25.0" prefWidth="169.0" />
       <TextField fx:id="card_number_field" layoutX="40.0" layoutY="320.0" prefHeight="25.0" prefWidth="223.0" />
       <Text layoutX="40.0" layoutY="316.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Card Number" />
-      <ComboBox fx:id="expiration_month" layoutX="40.0" layoutY="365.0" prefHeight="25.0" prefWidth="61.0" />
-      <ComboBox fx:id="expiration_year" layoutX="108.0" layoutY="365.0" prefHeight="25.0" prefWidth="61.0" />
+      <ComboBox fx:id="expiration_month" layoutX="40.0" layoutY="365.0" prefHeight="25.0" prefWidth="72.0" promptText="MM" />
+      <ComboBox fx:id="expiration_year" layoutX="121.0" layoutY="365.0" prefHeight="25.0" prefWidth="61.0" promptText="YY" />
       <Text layoutX="49.0" layoutY="358.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expiration date" />
-      <TextField fx:id="cvc_code_field" layoutX="189.0" layoutY="363.0" prefHeight="25.0" prefWidth="72.0" />
-      <Text layoutX="189.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CVC code" />
-      <Button fx:id="cancel_button" layoutX="42.0" layoutY="429.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="124.0" text="Cancel" />
-      <Button fx:id="confirm_button" layoutX="440.0" layoutY="429.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="124.0" text="Confirm booking" />
+      <TextField fx:id="cvc_code_field" layoutX="205.0" layoutY="365.0" prefHeight="25.0" prefWidth="72.0" />
+      <Text layoutX="209.0" layoutY="358.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CVC code" />
+      <Button fx:id="cancel_button" layoutX="42.0" layoutY="429.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="48.0" prefWidth="124.0" text="Cancel" />
+      <Button fx:id="confirm_button" layoutX="440.0" layoutY="429.0" mnemonicParsing="false" onAction="#confirmButton" prefHeight="48.0" prefWidth="124.0" text="Confirm booking" />
       <TextField fx:id="country_field" layoutX="317.0" layoutY="235.0" prefHeight="25.0" prefWidth="169.0" />
       <Text layoutX="317.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Country" />
       <Text layoutX="319.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" text="City / state" />
