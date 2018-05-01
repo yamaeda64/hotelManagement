@@ -77,14 +77,14 @@ public class ModelAccess
         Room room = new Room();
         room.setRoomNumber(201);
         room.setBedType(Room.BedType.TWIN);
-        room.setHotel(Room.Hotel.VAXJO);
+        room.setHotel(Hotel.VAXJO);
         room.setNoSmoking(true);
         room.setView("Castle");
         rooms.add(room);
         Room room2 = new Room();
         room2.setRoomNumber(202);
         room.setBedType(Room.BedType.SINGLE);
-        room.setHotel(Room.Hotel.VAXJO);
+        room.setHotel(Hotel.VAXJO);
         room.setNoSmoking(true);
         room.setView("Castle");
         rooms.add(room2);
@@ -92,7 +92,7 @@ public class ModelAccess
         Room room3 = new Room();
         room3.setRoomNumber(404);
         room3.setBedType(Room.BedType.KINGSIZE);
-        room3.setHotel(Room.Hotel.VAXJO);
+        room3.setHotel(Hotel.VAXJO);
         room3.setNoSmoking(true);
         room3.setView("Lake");
        
@@ -125,5 +125,11 @@ public class ModelAccess
         booking2.setPrice(6000);
         booking2.setBookingStatus(Booking.BookingStatus.CHECKED_IN);
         bookings.add(booking2);
+    }
+    
+    public void updateBookings(Hotel hotel, LocalDate value)
+    {
+        // TODO, request all Bookings in one of the Hotels from server
+        System.out.println("Requested " + hotel.toString() + " " + value);
     }
 }

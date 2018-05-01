@@ -12,19 +12,13 @@ public class Room
     private BedType bedType;
     private Room adjecentRoom;
     
-    public enum Hotel
-    {
-        VAXJO,
-        KALMAR
-    }
     
-   
     
     public enum BedType
     {
-        KINGSIZE,
+        SINGLE,
         TWIN,
-        SINGLE
+        KINGSIZE
     }
     public enum QualityLevel
     {

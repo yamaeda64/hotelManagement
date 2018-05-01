@@ -1,6 +1,8 @@
 package controller;
 
+
 import client.model.Booking;
+import client.model.Hotel;
 import client.view.BookingWrapper;
 import controller.ScreenController.Screen;
 import controller.supportClasses.SwedishDateFormat;
@@ -21,7 +23,7 @@ import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable{
     
-    private CentralController CC;
+    private CentralController centralController;
     private ObservableList<BookingWrapper> bookingList;
     
 	@FXML private Button new_booking_button;
@@ -32,7 +34,7 @@ public class MainMenuController implements Initializable{
 	@FXML private MenuItem menu_preferences;
 	@FXML private MenuItem menu_quit;
 	@FXML private MenuItem menu_about;
-	@FXML CheckMenuItem menu_växjö;
+	@FXML CheckMenuItem menu_vaxjo;
 	@FXML CheckMenuItem menu_kalmar;
 	@FXML private DatePicker datePicker;
 	@FXML private TableView<BookingWrapper> bookingsTableView;
@@ -43,16 +45,16 @@ public class MainMenuController implements Initializable{
     public void new_booking_button() throws IOException {
     	String ost = ScreenController.Screen.SEARCH_ROOMS.getResourceLocation();
     	System.out.println(ost);
-        CC.changeScreen(Screen.SEARCH_ROOMS);
+        centralController.changeScreen(Screen.SEARCH_ROOMS);
     }
     
     @FXML
     public void find_existing_button() throws IOException {
-    	CC.changeScreen(Screen.SEARCH_BOOKING);
+    	centralController.changeScreen(Screen.SEARCH_BOOKING);
     }
     @FXML
     public void menu_preferences() throws IOException {
-    	CC.changeScreen(Screen.SEARCH_ROOMS);
+    	centralController.changeScreen(Screen.SEARCH_ROOMS);
     }
     @FXML
     public void menu_quit() throws IOException {
@@ -60,10 +62,11 @@ public class MainMenuController implements Initializable{
     }
     @FXML
     public void menu_about() throws IOException {
-    	CC.changeScreen(Screen.SEARCH_ROOMS);
+    	centralController.changeScreen(Screen.SEARCH_ROOMS);
     }
-    public void setCentralController(CentralController cc) {
-    	CC = cc;
+    public void setCentralController(CentralController centralController)
+    {
+    	this.centralController = centralController;
     }
     
     
@@ -72,18 +75,9 @@ public class MainMenuController implements Initializable{
     {
         Platform.runLater(()->
         {
-            if(CC == null)
-            {
-                System.out.println("CC = null");
-            }
-            else
-            {
-                System.out.println("CC is available");
-            }
             bookingList = FXCollections.observableArrayList();
-    
-    
-            Iterator<Booking> bookingIterator = CC.getBookings();
+            
+            Iterator<Booking> bookingIterator = centralController.getBookings();
             while(bookingIterator.hasNext())
             {
                 bookingList.add(new BookingWrapper(bookingIterator.next()));
@@ -91,7 +85,31 @@ public class MainMenuController implements Initializable{
             System.out.println(bookingList.size());
     
             initTableView();
+    
+            if(centralController.getLocation().equals(Hotel.VAXJO))
+            {
+                menu_vaxjo.setSelected(true);
+            }
+            else if(centralController.getLocation() == Hotel.KALMAR)
+            {
+                menu_kalmar.setSelected(true);
+            }
            
+        });
+        
+        
+        menu_vaxjo.setOnAction(event ->
+        {
+            menu_vaxjo.setSelected(true);
+            menu_kalmar.setSelected(false);
+            centralController.setLocation(Hotel.VAXJO);
+        });
+        
+        menu_kalmar.setOnAction(event ->
+        {
+            menu_kalmar.setSelected(true);
+            menu_vaxjo.setSelected(false);
+            centralController.setLocation(Hotel.KALMAR);
         });
     
         
@@ -102,7 +120,28 @@ public class MainMenuController implements Initializable{
         
         SwedishDateFormat swedishDateFormat = new SwedishDateFormat();
         datePicker.setConverter(swedishDateFormat.getSwedishDateConverter());
-        
+    
+        Hotel hotel;
+        // Action when changing date picker
+        datePicker.onActionProperty().set(event ->
+        {
+            System.out.println("came here");
+            System.out.println(menu_vaxjo == null);
+            if(menu_vaxjo.isSelected())
+            {
+                System.out.println("växjö");
+                centralController.getBookings(Hotel.VAXJO, datePicker.getValue());
+            } else if(menu_kalmar.isSelected())
+            {
+                centralController.getBookings(Hotel.KALMAR, datePicker.getValue());
+            }
+            else
+            {
+                System.out.println("non was selected");
+            }
+            
+        });
+    
     }
     
     private void initTableView()
@@ -124,7 +163,6 @@ public class MainMenuController implements Initializable{
         
         bookingsTableView.getColumns().addAll(firstNameCol, lastNameCol, roomNumberCol, bookingStatusCol);
         bookingsTableView.setItems(bookingList);
-      
     }
 }
 

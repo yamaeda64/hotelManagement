@@ -1,6 +1,11 @@
 package controller;
+
+import client.model.Hotel;
+import client.model.Room;
 import controller.ScreenController.Screen;
+import controller.supportClasses.BookingSearch;
 import controller.supportClasses.SwedishDateFormat;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -11,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class SearchRoomController implements Initializable
 {
-    private controller.CentralController CC;
+    private CentralController centralController;
     
     @FXML
     private DatePicker check_in_datepicker;
@@ -35,32 +40,52 @@ public class SearchRoomController implements Initializable
     private CheckBox neighboring_room_box;
     
     @FXML
-    private ComboBox<String> bed_size_box;
+    private ComboBox<Room.BedType> bed_size_box;
     
     @FXML
-    private ComboBox<String> location_box;
+    private ComboBox<Hotel> location_box;
     
     @FXML
-    public void findRoomsButton() throws IOException {
-        CC.changeScreen(Screen.RESULTS);
+    public void findRoomsButton() throws IOException
+    {
+    
+        BookingSearch currentSearch = new BookingSearch();
+    
+        try
+        {
+            currentSearch.setHotel(location_box.getValue());
+            currentSearch.setBedType(bed_size_box.getValue());
+            currentSearch.setSmokingAllowed(smoking_allowed_box.isSelected());
+            currentSearch.setAdjecentRoomAvailable(smoking_allowed_box.isSelected());
+            currentSearch.setStartDate(check_in_datepicker.getValue());
+            currentSearch.setEndDate(check_out_datepicker.getValue());
+            
+           
+            System.out.println(currentSearch.getBedType() + "" + currentSearch.getHotel());
+            centralController.changeScreen(Screen.RESULTS);
+        }
+        catch(IllegalArgumentException e)
+        {
+            System.out.println(e.getMessage());  // TODO, this should be GUI error message
+        }
+        
     }
     @FXML
     public void cancelButton() throws IOException {
-        CC.changeScreen(Screen.MAIN);
+        centralController.changeScreen(Screen.MAIN);
     }
-    public void setCentralController(controller.CentralController cc) {
-        CC=cc;
+    public void setCentralController(CentralController centralController) {
+        this.centralController = centralController;
     }
     public boolean hasNoCentralController() {
-        return CC == null;
+        return centralController == null;
     }
     @Override
     public void initialize(URL url, ResourceBundle resource) {
         
         location_box.getItems().removeAll(location_box.getItems());
-        location_box.getItems().addAll("V" + (char)228 + "xj" + (char)246,"Kalmar");               // TODO. choises should probably be received from server
-        bed_size_box.getItems().addAll("Single", "Twin", "King");                                 // TODO, choises should probably be received form server
-        
+        location_box.getItems().addAll(Hotel.values());
+        bed_size_box.getItems().addAll(Room.BedType.values());
         
         SwedishDateFormat swedishDateFormat = new SwedishDateFormat();
         check_in_datepicker.setShowWeekNumbers(true);
@@ -68,6 +93,10 @@ public class SearchRoomController implements Initializable
         check_out_datepicker.setShowWeekNumbers(true);
         check_out_datepicker.setConverter(swedishDateFormat.getSwedishDateConverter());
     
+        Platform.runLater(()->
+        {
+            location_box.setValue(centralController.getLocation());
+        });
     }
         
     

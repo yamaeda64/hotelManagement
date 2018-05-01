@@ -9,7 +9,7 @@ import java.io.IOException;
 public class ScreenController {
 	controller.StageManager stageM;
 	FXMLLoader loader;
-	CentralController CC;
+	CentralController centralController;
 	/**
 	 * Manages the handling of screens. Controller classes call the setScreen method to update the screen.
 	 */
@@ -33,9 +33,9 @@ public class ScreenController {
 		}
 	}
 	
-	public ScreenController(Stage s, CentralController cc) throws IOException{
-		stageM = new controller.StageManager(s,cc);
-		CC = cc;
+	public ScreenController(Stage s, CentralController centralController) throws IOException{
+		stageM = new controller.StageManager(s,centralController);
+		this.centralController = centralController;
 	}
 	
 	public void setScreen(ScreenController.Screen screen)throws IOException {
@@ -45,7 +45,7 @@ public class ScreenController {
 			Parent root=loader.load();
 			//FXMLLoader.load(ScreenController.class.getResource("/fxml/Main_menu.fxml"));
 			MainMenuController mainMenuController = loader.getController();
-			mainMenuController.setCentralController(CC);
+			mainMenuController.setCentralController(centralController);
 			stageM.setRoot(root);
 			//stageM.setPane(loader.load(ScreenController.class.getResource(screen.getResourceLocation())));
 			//stageM.setRoot(FXMLLoader.load(ScreenController.class.getResource(screen.getResourceLocation())));
@@ -54,7 +54,7 @@ public class ScreenController {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			SearchRoomController searchRoomController = loader.getController();
-			searchRoomController.setCentralController(CC);
+			searchRoomController.setCentralController(centralController);
 			//System.out.print(controller == null);
 			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);
@@ -63,7 +63,7 @@ public class ScreenController {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			ResultListController resultListController = loader.getController();
-			resultListController.setCentralController(CC);
+			resultListController.setCentralController(centralController);
 			//System.out.print(controller == null);
 			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);
@@ -74,7 +74,7 @@ public class ScreenController {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			CustomerFormController customerFormController = loader.getController();
-			customerFormController.setCentralController(CC);
+			customerFormController.setCentralController(centralController);
 			//System.out.print(controller == null);
 			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);
@@ -88,7 +88,7 @@ public class ScreenController {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			SearchBookingController searchBookingController = loader.getController();
-			searchBookingController.setCentralController(CC);
+			searchBookingController.setCentralController(centralController);
 			//System.out.print(controller == null);
 			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);
@@ -99,7 +99,7 @@ public class ScreenController {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			BookingResultsListController bookingResultsListController = loader.getController();
-			bookingResultsListController.setCentralController(CC);
+			bookingResultsListController.setCentralController(centralController);
 			//System.out.print(controller == null);
 			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);

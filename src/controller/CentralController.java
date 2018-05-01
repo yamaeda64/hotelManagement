@@ -1,41 +1,44 @@
 package controller;
 
 import client.model.Booking;
+import client.model.Hotel;
 import client.model.ModelAccess;
 import controller.ScreenController.Screen;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Iterator;
 
 public class CentralController
 {
-	private ScreenController screenC;
+	private ScreenController screenController;
 	private StageManager stageM;
 	private Stage stage;
 	private Scene scene;
 	private ModelAccess modelAccess;
+	private Hotel location;
 	
-	public CentralController() {
-		
-	};
+	
 	
 	public CentralController(Stage stage) throws IOException {
 		//setup();
-		screenC = new ScreenController(stage,this);
+		screenController = new ScreenController(stage,this);
 		modelAccess = new ModelAccess();
+		location = Hotel.VAXJO; 	//TODO Default, should maybe come from server or save default so not kalmar has vaxjo as default
 	}
 	
 	public ScreenController getScreenController() {
-		return screenC;
+		return screenController;
 	}
 	public StageManager getStageManager() {
 		return stageM;
 	}
 	public void changeScreen(Screen screen) throws IOException {
-		screenC.setScreen(screen);
+		screenController.setScreen(screen);
 	}
+	
 	
 	
 	/*
@@ -60,4 +63,18 @@ public class CentralController
 		return modelAccess.getAllBookings();
 	}
 	
+	public Iterator<Booking> getBookings(Hotel hotel, LocalDate value)
+	{
+		modelAccess.updateBookings(hotel, value);
+		return modelAccess.getAllBookings();
+	}
+	
+	public void setLocation(Hotel hotel)
+	{
+		this.location = hotel;
+	}
+	public Hotel getLocation()
+	{
+		return location;
+	}
 }

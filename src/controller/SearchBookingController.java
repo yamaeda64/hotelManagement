@@ -39,7 +39,7 @@ public class SearchBookingController{
     }
     @FXML
     public void findBookingButton() throws IOException {
-    	centralController.changeScreen(Screen.RESULTS);
+    	centralController.changeScreen(Screen.BOOKING_RESULTS);
     }
     
     
