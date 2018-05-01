@@ -1,18 +1,30 @@
 package controller;
 
-import java.io.IOException;
-
-import javafx.fxml.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.MenuItem;
-import controller.ScreenController;
+import client.model.Booking;
+import client.view.BookingWrapper;
 import controller.ScreenController.Screen;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
+
+import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
+import java.util.ResourceBundle;
 
 
-public class MainMenuController{
-	private CentralController CC;
-	
+public class MainMenuController implements Initializable{
+    
+    private CentralController CC;
+    private ObservableList<BookingWrapper> bookingList;
+    
 	@FXML private Button new_booking_button;
     @FXML private Button find_existing_button;
     @FXML private Button find_available_button;
@@ -23,22 +35,18 @@ public class MainMenuController{
 	@FXML private MenuItem menu_about;
 	@FXML CheckMenuItem menu_växjö;
 	@FXML CheckMenuItem menu_kalmar;
-    //public void initialize() {}
-	
-	
-	
-    	
-    	
+	@FXML private DatePicker datePicker;
+	@FXML private TableView<BookingWrapper> bookingsTableView;
+    
+    
+
     @FXML
     public void new_booking_button() throws IOException {
     	String ost = ScreenController.Screen.SEARCH_ROOMS.getResourceLocation();
     	System.out.println(ost);
         CC.changeScreen(Screen.SEARCH_ROOMS);
     }
-    @FXML
-    public void find_available_button() throws IOException {
-    	CC.changeScreen(Screen.SEARCH_ROOMS);
-    }
+    
     @FXML
     public void find_existing_button() throws IOException {
     	CC.changeScreen(Screen.SEARCH_BOOKING);
@@ -60,5 +68,91 @@ public class MainMenuController{
     }
     
     
+    @Override
+    public void initialize(URL location, ResourceBundle resources)
+    {
+        Platform.runLater(()->
+        {
+            if(CC == null)
+            {
+                System.out.println("CC = null");
+            }
+            else
+            {
+                System.out.println("CC is available");
+            }
+            bookingList = FXCollections.observableArrayList();
+    
+    
+            Iterator<Booking> bookingIterator = CC.getBookings();
+            while(bookingIterator.hasNext())
+            {
+                bookingList.add(new BookingWrapper(bookingIterator.next()));
+            }
+            System.out.println(bookingList.size());
+    
+            initTableView();
+           
+        });
+    
+        
+        
+        /* Date picker setup for dafault as today, and Swedish date format. */
+        datePicker.setValue(LocalDate.now());
+        datePicker.setShowWeekNumbers(true);
+        
+        datePicker.setConverter(new StringConverter<LocalDate>()
+        {
+            final String pattern = "yyyy-MM-dd";
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+            @Override
+            public String toString(LocalDate date)
+            {
+                if(date != null)
+                {
+                    return dateFormatter.format(date);
+                }
+                else
+                {
+                    return "";
+                }
+            }
+    
+            @Override
+            public LocalDate fromString(String string)
+            {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        });
+    
+         
+    
+    }
+    
+    private void initTableView()
+    {
+        TableColumn firstNameCol = new TableColumn("First Name");
+        firstNameCol.setCellValueFactory(
+                new PropertyValueFactory<BookingWrapper, String>("firstName"));
+        TableColumn lastNameCol = new TableColumn("Last Name");
+        lastNameCol.setCellValueFactory(
+                new PropertyValueFactory<BookingWrapper, String>("familyName"));
+        
+        TableColumn roomNumberCol = new TableColumn("Room Number");
+        roomNumberCol.setCellValueFactory(
+                new PropertyValueFactory<BookingWrapper, String>("roomNumbers"));
+        
+        TableColumn bookingStatusCol = new TableColumn("Booking Status");
+        bookingStatusCol.setCellValueFactory(
+                new PropertyValueFactory<BookingWrapper, String>("bookingStatus"));
+        
+        bookingsTableView.getColumns().addAll(firstNameCol, lastNameCol, roomNumberCol, bookingStatusCol);
+        bookingsTableView.setItems(bookingList);
+      
+    }
 }
 

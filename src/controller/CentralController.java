@@ -1,11 +1,13 @@
 package controller;
 
+import client.model.Booking;
 import client.model.ModelAccess;
 import controller.ScreenController.Screen;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 public class CentralController
 {
@@ -53,6 +55,9 @@ public class CentralController
 	}
 	
 	*/
-
+	public Iterator<Booking> getBookings()
+	{
+		return modelAccess.getAllBookings();
+	}
 	
 }

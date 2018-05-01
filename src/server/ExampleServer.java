@@ -2,9 +2,7 @@ package server;
 
 import server.abstractServer.AbstractServer;
 
-/**
- * Created by joakimbergqvist on 2018-03-28.
- */
+
 public class ExampleServer extends AbstractServer
 {
     

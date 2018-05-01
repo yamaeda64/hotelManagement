@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="808.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ResultListController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="791.0" prefWidth="847.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <SplitPane dividerPositions="0.30128956623681125" layoutX="-4.0" layoutY="-1.0" prefHeight="807.0" prefWidth="855.0">
         <items>
@@ -36,8 +36,8 @@
                   <Text layoutX="51.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View" />
                   <TextField fx:id="room_size_field" layoutX="298.0" layoutY="179.0" />
                   <Text layoutX="298.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room size" />
-                  <Button fx:id="proceed_to_booking_button" layoutX="447.0" layoutY="730.0" mnemonicParsing="false" onAction="#bookingButton" prefHeight="53.0" prefWidth="132.0" text="Proceed to booking" />
-                  <Button fx:id="return_to_main_menu_button" layoutX="22.0" layoutY="730.0" mnemonicParsing="false" onAction="#cancelButton" prefHeight="53.0" prefWidth="149.0" text="Return to main menu" />
+                  <Button fx:id="proceed_to_booking_button" layoutX="447.0" layoutY="730.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="132.0" text="Proceed to booking" />
+                  <Button fx:id="return_to_main_menu_button" layoutX="22.0" layoutY="730.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="149.0" text="Return to main menu" />
                </children>
             </AnchorPane>
         </items>

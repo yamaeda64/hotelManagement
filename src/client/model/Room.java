@@ -23,7 +23,6 @@ public class Room
     public enum BedType
     {
         KINGSIZE,
-        QUEENSIZE,
         TWIN,
         SINGLE
     }

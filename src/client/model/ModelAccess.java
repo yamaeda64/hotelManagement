@@ -113,6 +113,7 @@ public class ModelAccess
         booking.setStartDate(LocalDate.of(2018,04,22));
         booking.setEndDate(LocalDate.of(2018,04,23));
         booking.setPrice(2000);
+        booking.setBookingStatus(Booking.BookingStatus.BOOKED);
         bookings.add(booking);
         
         Booking booking2 = new Booking();
@@ -122,6 +123,7 @@ public class ModelAccess
         booking2.setStartDate(LocalDate.of(2018,04,22));
         booking2.setEndDate(LocalDate.of(2018,04,25));
         booking2.setPrice(6000);
+        booking2.setBookingStatus(Booking.BookingStatus.CHECKED_IN);
         bookings.add(booking2);
     }
 }

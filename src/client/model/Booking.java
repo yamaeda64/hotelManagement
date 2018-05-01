@@ -1,7 +1,7 @@
 package client.model;
 
 
-import client.model.customer.*;
+import client.model.customer.Customer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ public class Booking
     private double price;
     private Customer customer;
     private BookingStatus bookingStatus;
+    
     
     public Booking()
     {
@@ -103,7 +104,9 @@ public class Booking
     }
     
     public void setCustomer(Customer customer)
+
     {
         this.customer = customer;
     }
+    
 }

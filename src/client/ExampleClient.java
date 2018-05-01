@@ -2,9 +2,7 @@ package client;
 
 import client.abstractClient.AbstractClient;
 
-/**
- * Created by joakimbergqvist on 2018-03-29.
- */
+
 public class ExampleClient extends AbstractClient
 {
     private boolean isRunning = true;
