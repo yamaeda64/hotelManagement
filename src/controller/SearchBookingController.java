@@ -1,14 +1,14 @@
 package controller;
 
-import java.io.IOException;
-
 import controller.ScreenController.Screen;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-public class SearchBookingController {
-	private CentralController CC;
+import java.io.IOException;
+
+public class SearchBookingController{
+	private CentralController centralController;
 	
 	
     @FXML
@@ -35,19 +35,19 @@ public class SearchBookingController {
     
     @FXML
     public void cancelButton() throws IOException {
-    	CC.changeScreen(Screen.MAIN);
+    	centralController.changeScreen(Screen.MAIN);
     }
     @FXML
     public void findBookingButton() throws IOException {
-    	CC.changeScreen(Screen.RESULTS);
+    	centralController.changeScreen(Screen.RESULTS);
     }
     
     
     public void setCentralController(CentralController cc) {
-    	CC=cc;
+    	centralController=cc;
     }
     public boolean hasNoCentralController() {
-    	return CC == null;
+    	return centralController == null;
     }
     
     

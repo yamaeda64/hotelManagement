@@ -3,6 +3,7 @@ package controller;
 import client.model.Booking;
 import client.view.BookingWrapper;
 import controller.ScreenController.Screen;
+import controller.supportClasses.SwedishDateFormat;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,12 +11,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -101,36 +100,9 @@ public class MainMenuController implements Initializable{
         datePicker.setValue(LocalDate.now());
         datePicker.setShowWeekNumbers(true);
         
-        datePicker.setConverter(new StringConverter<LocalDate>()
-        {
-            final String pattern = "yyyy-MM-dd";
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
-            @Override
-            public String toString(LocalDate date)
-            {
-                if(date != null)
-                {
-                    return dateFormatter.format(date);
-                }
-                else
-                {
-                    return "";
-                }
-            }
-    
-            @Override
-            public LocalDate fromString(String string)
-            {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
-    
-         
-    
+        SwedishDateFormat swedishDateFormat = new SwedishDateFormat();
+        datePicker.setConverter(swedishDateFormat.getSwedishDateConverter());
+        
     }
     
     private void initTableView()

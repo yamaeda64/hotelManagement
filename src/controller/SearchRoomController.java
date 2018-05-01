@@ -1,5 +1,6 @@
 package controller;
 import controller.ScreenController.Screen;
+import controller.supportClasses.SwedishDateFormat;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -60,7 +61,14 @@ public class SearchRoomController implements Initializable
         location_box.getItems().addAll("V" + (char)228 + "xj" + (char)246,"Kalmar");               // TODO. choises should probably be received from server
         bed_size_box.getItems().addAll("Single", "Twin", "King");                                 // TODO, choises should probably be received form server
         
-    }
+        
+        SwedishDateFormat swedishDateFormat = new SwedishDateFormat();
+        check_in_datepicker.setShowWeekNumbers(true);
+        check_in_datepicker.setConverter(swedishDateFormat.getSwedishDateConverter());
+        check_out_datepicker.setShowWeekNumbers(true);
+        check_out_datepicker.setConverter(swedishDateFormat.getSwedishDateConverter());
     
+    }
+        
     
 }
