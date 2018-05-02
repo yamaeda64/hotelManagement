@@ -132,4 +132,6 @@ public class ModelAccess
         // TODO, request all Bookings in one of the Hotels from server
         System.out.println("Requested " + hotel.toString() + " " + value);
     }
+    
+   
 }

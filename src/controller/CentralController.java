@@ -4,6 +4,7 @@ import client.model.Booking;
 import client.model.Hotel;
 import client.model.ModelAccess;
 import controller.ScreenController.Screen;
+import controller.supportClasses.RoomSearch;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -38,6 +39,8 @@ public class CentralController
 	public void changeScreen(Screen screen) throws IOException {
 		screenController.setScreen(screen);
 	}
+	
+	
 	
 	
 	
@@ -76,5 +79,10 @@ public class CentralController
 	public Hotel getLocation()
 	{
 		return location;
+	}
+	
+	public void updateModel(RoomSearch currentSearch)
+	{
+		modelAccess.getAllRooms(currentSearch);
 	}
 }

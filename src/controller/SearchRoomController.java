@@ -62,6 +62,7 @@ public class SearchRoomController implements Initializable
             
            
             System.out.println(currentSearch.getBedType() + "" + currentSearch.getHotel());
+            centralController.updateModel(currentSearch);
             centralController.changeScreen(Screen.RESULTS);
         }
         catch(IllegalArgumentException e)

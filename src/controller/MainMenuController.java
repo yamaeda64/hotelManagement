@@ -138,21 +138,14 @@ public class MainMenuController implements Initializable{
         // Action when changing date picker
         datePicker.onActionProperty().set(event ->
         {
-            System.out.println("came here");
-            System.out.println(menu_vaxjo == null);
             if(menu_vaxjo.isSelected())
             {
-                System.out.println("växjö");
                 centralController.getBookings(Hotel.VAXJO, datePicker.getValue());
-            } else if(menu_kalmar.isSelected())
+            }
+            else if(menu_kalmar.isSelected())
             {
                 centralController.getBookings(Hotel.KALMAR, datePicker.getValue());
             }
-            else
-            {
-                System.out.println("non was selected");
-            }
-            
         });
     
     }
