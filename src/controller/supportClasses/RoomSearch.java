@@ -5,22 +5,22 @@ import client.model.Room;
 
 import java.time.LocalDate;
 
-public class BookingSearch
+public class RoomSearch
 {
     
     private LocalDate startDate;
     private LocalDate endDate;
-    
+        
     private int numberOfBeds;
     private Hotel hotel;
     private Room.BedType bedType;
     
     private boolean smokingAllowed;
-    private boolean adjecentRoomAvailable;
+    private boolean adjacentRoomAvailable;
     
     
     
-    public BookingSearch()
+    public RoomSearch()
     {
         
     }
@@ -114,11 +114,11 @@ public class BookingSearch
     
     public boolean isAdjecentRoomAvailable()
     {
-        return adjecentRoomAvailable;
+        return adjacentRoomAvailable;
     }
     
     public void setAdjecentRoomAvailable(boolean adjecentRoomAvailable)
     {
-        this.adjecentRoomAvailable = adjecentRoomAvailable;
+        this.adjacentRoomAvailable = adjecentRoomAvailable;
     }
 }

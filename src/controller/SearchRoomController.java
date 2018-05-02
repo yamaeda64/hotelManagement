@@ -3,7 +3,7 @@ package controller;
 import client.model.Hotel;
 import client.model.Room;
 import controller.ScreenController.Screen;
-import controller.supportClasses.BookingSearch;
+import controller.supportClasses.RoomSearch;
 import controller.supportClasses.SwedishDateFormat;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -49,7 +49,7 @@ public class SearchRoomController implements Initializable
     public void findRoomsButton() throws IOException
     {
     
-        BookingSearch currentSearch = new BookingSearch();
+        RoomSearch currentSearch = new RoomSearch();
     
         try
         {

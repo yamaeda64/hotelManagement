@@ -38,6 +38,8 @@ public class MainMenuController implements Initializable{
 	@FXML CheckMenuItem menu_kalmar;
 	@FXML private DatePicker datePicker;
 	@FXML private TableView<BookingWrapper> bookingsTableView;
+	@FXML private Button refresh;
+	
     
     
 
@@ -64,6 +66,18 @@ public class MainMenuController implements Initializable{
     public void menu_about() throws IOException {
     	centralController.changeScreen(Screen.SEARCH_ROOMS);
     }
+    
+    @FXML
+    public void refresh()
+    {
+        bookingList.clear();
+        Iterator<Booking> bookingIterator = centralController.getBookings();
+        while(bookingIterator.hasNext())
+        {
+            bookingList.add(new BookingWrapper(bookingIterator.next()));
+        }
+    }
+    
     public void setCentralController(CentralController centralController)
     {
     	this.centralController = centralController;
@@ -82,7 +96,6 @@ public class MainMenuController implements Initializable{
             {
                 bookingList.add(new BookingWrapper(bookingIterator.next()));
             }
-            System.out.println(bookingList.size());
     
             initTableView();
     
