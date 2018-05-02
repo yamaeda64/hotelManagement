@@ -4,6 +4,8 @@ package client.model;
 import client.model.customer.Customer;
 import client.model.customer.ProxyCustomer;
 import com.google.gson.Gson;
+import controller.supportClasses.RoomSearch;
+import controller.supportClasses.ServerMessage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.Iterator;
  */
 public class ModelAccess
 {
-    
+    private ServerMessage serverMessage;
     private ArrayList<Booking> bookings;
     private ArrayList<Room> rooms;
     
@@ -32,8 +34,8 @@ public class ModelAccess
         Gson gson = new Gson();
         String jsonString = gson.toJson(bookings);
         System.out.println(jsonString);
-        
-        
+    
+        serverMessage = new ServerMessage();
        
         // from json array example
         /*
@@ -133,5 +135,10 @@ public class ModelAccess
         System.out.println("Requested " + hotel.toString() + " " + value);
     }
     
-   
+    
+    public void updateBookings(RoomSearch currentSearch)
+    {
+       String messageToServer =  serverMessage.getRoomsFromSearch(currentSearch);
+       System.out.println(messageToServer);
+    }
 }

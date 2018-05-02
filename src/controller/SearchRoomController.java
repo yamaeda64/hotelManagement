@@ -95,8 +95,8 @@ public class SearchRoomController implements Initializable
         check_out_datepicker.setConverter(swedishDateFormat.getSwedishDateConverter());
     
         Platform.runLater(()->
-        {
-            location_box.setValue(centralController.getLocation());
+        {location_box.setValue(centralController.getLocation());
+            
         });
     }
         

@@ -83,6 +83,7 @@ public class CentralController
 	
 	public void updateModel(RoomSearch currentSearch)
 	{
-		//modelAccess.getAllRooms(currentSearch);
+		modelAccess.updateBookings(currentSearch);
+		modelAccess.getAllRooms();
 	}
 }
