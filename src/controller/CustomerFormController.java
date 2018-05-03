@@ -1,5 +1,7 @@
 package controller;
 
+import client.model.customer.Customer;
+import client.model.customer.RealCustomer;
 import controller.ScreenController.Screen;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,7 +31,7 @@ public class CustomerFormController implements Initializable
     private TextField personal_number_field;
     
     @FXML
-    private TextField power_level_field;
+    private ComboBox<RealCustomer.PowerLevel> powerLevel;
     
     @FXML
     private TextField address_field;
@@ -38,10 +40,7 @@ public class CustomerFormController implements Initializable
     private TextField postal_code_field;
     
     @FXML
-    private TextField town_field;
-    
-    @FXML
-    private TextField city_state_field;
+    private TextField city_field;
     
     @FXML
     private TextField card_number_field;
@@ -70,6 +69,9 @@ public class CustomerFormController implements Initializable
     }
     @FXML
     public void confirmButton() throws IOException {
+    
+        Customer custormer = new RealCustomer();
+        
         centralController.changeScreen(Screen.MAIN);
     }
     
@@ -89,6 +91,9 @@ public class CustomerFormController implements Initializable
         {
             expiration_year.getItems().add(("" + i).substring(2));  // Take last two digits of current year and five consecutive years
         }
+        
+        powerLevel.getItems().addAll(RealCustomer.PowerLevel.values());
+        powerLevel.setValue(RealCustomer.PowerLevel.NONE);
     }
 }
 

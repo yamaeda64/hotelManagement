@@ -8,11 +8,11 @@ import java.util.Iterator;
 /**
  * A wrapper class to show a Booking in the TableView of mainWindow
  */
-public class BookingWrapper
+public class RoomWrapper
 {
     private Booking booking;
     
-    public BookingWrapper(Booking booking)
+    public RoomWrapper(Booking booking)
     {
         this.booking = booking;
     }

@@ -3,6 +3,7 @@ package controller;
 import client.model.Booking;
 import client.model.Hotel;
 import client.model.ModelAccess;
+import client.model.Room;
 import controller.ScreenController.Screen;
 import controller.supportClasses.RoomSearch;
 import javafx.scene.Scene;
@@ -20,7 +21,7 @@ public class CentralController
 	private Scene scene;
 	private ModelAccess modelAccess;
 	private Hotel location;
-	
+	private RoomSearch lastRoomSearch;
 	
 	
 	public CentralController(Stage stage) throws IOException {
@@ -72,6 +73,12 @@ public class CentralController
 		return modelAccess.getAllBookings();
 	}
 	
+	public Iterator<Room> getRooms()
+	{
+		return modelAccess.getAllRooms();
+	}
+	
+	
 	public void setLocation(Hotel hotel)
 	{
 		this.location = hotel;
@@ -83,7 +90,13 @@ public class CentralController
 	
 	public void updateModel(RoomSearch currentSearch)
 	{
+		this.lastRoomSearch = currentSearch;
 		modelAccess.updateBookings(currentSearch);
-		modelAccess.getAllRooms();
 	}
+	
+	public RoomSearch getLastRoomSearch()
+	{
+		return lastRoomSearch;
+	}
+	
 }
