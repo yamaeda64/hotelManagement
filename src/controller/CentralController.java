@@ -4,6 +4,7 @@ import client.model.Booking;
 import client.model.Hotel;
 import client.model.ModelAccess;
 import client.model.Room;
+import client.model.customer.RealCustomer;
 import controller.ScreenController.Screen;
 import controller.supportClasses.RoomSearch;
 import javafx.scene.Scene;
@@ -22,6 +23,7 @@ public class CentralController
 	private ModelAccess modelAccess;
 	private Hotel location;
 	private RoomSearch lastRoomSearch;
+	private Booking inProgressBooking;
 	
 	
 	public CentralController(Stage stage) throws IOException {
@@ -99,4 +101,16 @@ public class CentralController
 		return lastRoomSearch;
 	}
 	
+	public void sendInProgressBooking(Booking booking)
+	{
+		this.inProgressBooking = booking;
+		// TODO, need to send the in progress booking to server to "lock" the room
+	}
+	
+	public void finishBooking(RealCustomer customer)
+	{
+		inProgressBooking.setCustomer(customer);
+		inProgressBooking.setBookingStatus(Booking.BookingStatus.BOOKED);
+		// TODO, send the final booking which updates the previous inProgressBooking
+	}
 }

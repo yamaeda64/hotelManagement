@@ -70,13 +70,14 @@ public class ResultListController implements Initializable
         booking.setStartDate(centralController.getLastRoomSearch().getStartDate());
         booking.setEndDate(centralController.getLastRoomSearch().getEndDate());
 
-        
+        centralController.sendInProgressBooking(booking);
         centralController.changeScreen(Screen.CUSTOMER_FORM);
     }
     
     public void setCentralController(controller.CentralController cc) {
         this.centralController = cc;
     }
+    
     public boolean hasNoCentralController() {
         return centralController == null;
     }
