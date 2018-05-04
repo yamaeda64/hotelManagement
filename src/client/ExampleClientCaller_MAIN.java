@@ -42,13 +42,7 @@ public class ExampleClientCaller_MAIN
                 client.receiveMessageFromServer();
             }
         }
-        
-       /* if(client.isRunning())
-        {
-            client.sendToServer("TjoFlöjt");
-            client.receiveMessageFromServer();
-        }
-       */
+     
         if(client.isRunning())
         {
             client.sendToServer("Hello");
