@@ -3,10 +3,8 @@ package controller;
 import client.model.Booking;
 import client.model.Hotel;
 import client.model.ModelAccess;
-import client.model.Room;
-import client.model.customer.RealCustomer;
 import controller.ScreenController.Screen;
-import controller.supportClasses.RoomSearch;
+import controller.supportClasses.BookingSearch;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -22,8 +20,8 @@ public class CentralController
 	private Scene scene;
 	private ModelAccess modelAccess;
 	private Hotel location;
-	private RoomSearch lastRoomSearch;
-	private Booking inProgressBooking;
+	private BookingSearch bookingSearch;
+	
 	
 	
 	public CentralController(Stage stage) throws IOException {
@@ -42,9 +40,9 @@ public class CentralController
 	public void changeScreen(Screen screen) throws IOException {
 		screenController.setScreen(screen);
 	}
-	
-	
-	
+	public BookingSearch getBookingSearch() {
+		return bookingSearch;
+	}
 	
 	
 	/*
@@ -75,12 +73,6 @@ public class CentralController
 		return modelAccess.getAllBookings();
 	}
 	
-	public Iterator<Room> getRooms()
-	{
-		return modelAccess.getAllRooms();
-	}
-	
-	
 	public void setLocation(Hotel hotel)
 	{
 		this.location = hotel;
@@ -89,28 +81,7 @@ public class CentralController
 	{
 		return location;
 	}
-	
-	public void updateModel(RoomSearch currentSearch)
-	{
-		this.lastRoomSearch = currentSearch;
-		modelAccess.updateBookings(currentSearch);
-	}
-	
-	public RoomSearch getLastRoomSearch()
-	{
-		return lastRoomSearch;
-	}
-	
-	public void sendInProgressBooking(Booking booking)
-	{
-		this.inProgressBooking = booking;
-		// TODO, need to send the in progress booking to server to "lock" the room
-	}
-	
-	public void finishBooking(RealCustomer customer)
-	{
-		inProgressBooking.setCustomer(customer);
-		inProgressBooking.setBookingStatus(Booking.BookingStatus.BOOKED);
-		// TODO, send the final booking which updates the previous inProgressBooking
+	public void updateModel(BookingSearch booking) {
+		bookingSearch = booking;
 	}
 }

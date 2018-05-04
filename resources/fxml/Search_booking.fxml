@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
@@ -20,5 +21,6 @@
       <Button fx:id="find_booking_button" layoutX="332.0" layoutY="196.0" mnemonicParsing="false" onAction="#findBookingButton" prefHeight="48.0" prefWidth="124.0" text="Find Booking" />
       <TextField fx:id="passport_number_field" layoutX="329.0" layoutY="42.0" prefHeight="25.0" prefWidth="169.0" />
       <Text layoutX="329.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Passport Number" />
+      <ComboBox fx:id="location_box" layoutX="329.0" layoutY="147.0" prefWidth="150.0" promptText="Location" />
    </children>
 </AnchorPane>

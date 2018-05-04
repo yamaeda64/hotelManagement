@@ -107,23 +107,16 @@ public abstract class AbstractClient
             StringBuilder sb = new StringBuilder();
             int readBytes = 0;
             boolean isEndOfMessage = false;
-            while(readBytes != -1 &! isEndOfMessage)
+            while(readBytes != -1&!isEndOfMessage)
             {
                 readBytes = inputStream.read(buffer);
-                if(readBytes == -1)
+                if(buffer[readBytes - 1] == '\0')
                 {
-                    socket.close();
-                }
-                else
+                    sb.append(new String(buffer, 0, readBytes - 1));
+                    isEndOfMessage = true;
+                } else
                 {
-                    if(buffer[readBytes - 1] == '\0')
-                    {
-                        sb.append(new String(buffer, 0, readBytes - 1));
-                        isEndOfMessage = true;
-                    } else
-                    {
-                        sb.append(new String(buffer, 0, readBytes));
-                    }
+                    sb.append(new String(buffer, 0, readBytes));
                 }
             }
             
