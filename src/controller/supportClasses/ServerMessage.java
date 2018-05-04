@@ -17,4 +17,11 @@ public class ServerMessage
         }
         return stringBuilder.toString();
     }
+    public String getBookingsFromSearch(BookingSearch search) {
+    	StringBuilder sb= new StringBuilder("GetBookings ");
+    	{
+    		sb.append(gsonParser.toJson(search));
+    	}
+    	return sb.toString();
+    }
 }

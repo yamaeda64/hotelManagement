@@ -8,6 +8,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -19,10 +21,13 @@ import javafx.util.Callback;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
+
 import client.model.Booking;
+import client.model.Booking.BookingStatus;
 import client.model.Room;
 
 public class BookingResultsListController implements Initializable
@@ -71,15 +76,34 @@ public class BookingResultsListController implements Initializable
 	}
 	@FXML
 	public void checkInButton() {
-
+		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_IN);
+		checked_in_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
 	}
 	@FXML
 	public void checkOutButton() {
-
+		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_OUT);
+		checked_in_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
 	}
 	@FXML
 	public void cancelBookingButton() {
+		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CANCELLED);
+		checked_in_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+		
+		/* TODO
+		 * Logic for the late cancellation.
+		 */
+		LocalDate bookingStart = booking_ListView.getSelectionModel().getSelectedItem().getStartDate();
+		LocalDate current = LocalDate.now();
+		if (bookingStart.isAfter(current.minusDays(2)) && bookingStart.isBefore(current.plusDays(1)))  {
+			System.err.println("Late cancellation");
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Information Dialog");
+			alert.setHeaderText(null);
+			alert.setContentText("Late cancellation. Customer will be fined for the cancellation fee.");
 
+			alert.showAndWait();
+		}
+		
 	}
 	@FXML
 	public void backToSearchButton() throws IOException {

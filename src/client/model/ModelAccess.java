@@ -20,7 +20,7 @@ public class ModelAccess
     private ArrayList<Room> rooms;
     
     // TODO, Maybe customer only needs to be saved in bookings in client??
-    private ArrayList<Customer> custormer;
+    private ArrayList<Customer> customer;
     
     
     public ModelAccess()
@@ -110,8 +110,8 @@ public class ModelAccess
         booking.addRoom(rooms.get(0));
         booking.addRoom(rooms.get(1));
         booking.setCustomer(customer);
-        booking.setStartDate(LocalDate.of(2018,04,22));
-        booking.setEndDate(LocalDate.of(2018,04,23));
+        booking.setStartDate(LocalDate.of(2018,05,04));
+        booking.setEndDate(LocalDate.of(2018,05,06));
         booking.setPrice(2000);
         booking.setBookingStatus(Booking.BookingStatus.BOOKED);
         bookings.add(booking);
