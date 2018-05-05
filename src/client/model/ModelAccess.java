@@ -22,7 +22,7 @@ public class ModelAccess
     private ArrayList<Room> rooms;
     
     // TODO, Maybe customer only needs to be saved in bookings in client??
-    private ArrayList<Customer> custormer;
+    private ArrayList<Customer> customer;
     
     
     public ModelAccess()
