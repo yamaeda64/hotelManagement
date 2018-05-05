@@ -12,14 +12,15 @@ public class ExampleClientCaller_MAIN
 {
     public static void main(String[] args) throws IOException, InterruptedException
     {
-        InetSocketAddress socketAddress = new InetSocketAddress(6464);
-    
+        InetSocketAddress socketAddress = new InetSocketAddress( 6464);
+        
         ExampleClient client = new ExampleClient();
         client.setLogLevel(Level.ALL);
         ConsoleHandler handler = new ConsoleHandler();
         handler.setLevel(Level.ALL);
         client.setLogHandler(handler);
         client.openConnection(socketAddress);
+        
     
         if(client.isRunning())
     
@@ -27,10 +28,22 @@ public class ExampleClientCaller_MAIN
             client.sendToServer("Hello");
         
             client.receiveMessageFromServer();
+            while(true)
+            {
+                try
+                {
+                    Thread.sleep(400 + (int)(Math.random()*50));
+                }
+                catch(Exception e)
+                {
+            
+                }
+                client.sendToServer("Hello");
+                client.receiveMessageFromServer();
+            }
         }
      
         if(client.isRunning())
-
         {
             client.sendToServer("Hello");
     
@@ -40,8 +53,8 @@ public class ExampleClientCaller_MAIN
         
         if(client.isRunning())
         {
-            System.out.println("called CloseConnection");
-            client.closeConnection();
+            //System.out.println("called CloseConnection");
+            //client.closeConnection();
         }
     }
     

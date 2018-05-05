@@ -3,7 +3,9 @@ package client.model;
 
 import client.model.customer.Customer;
 import client.model.customer.ProxyCustomer;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import controller.supportClasses.RoomSearch;
+import controller.supportClasses.ServerMessage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.Iterator;
  */
 public class ModelAccess
 {
-    
+    private ServerMessage serverMessage;
     private ArrayList<Booking> bookings;
     private ArrayList<Room> rooms;
     
@@ -32,8 +34,8 @@ public class ModelAccess
         Gson gson = new Gson();
         String jsonString = gson.toJson(bookings);
         System.out.println(jsonString);
-        
-        
+    
+        serverMessage = new ServerMessage();
        
         // from json array example
         /*
@@ -83,10 +85,10 @@ public class ModelAccess
         rooms.add(room);
         Room room2 = new Room();
         room2.setRoomNumber(202);
-        room.setBedType(Room.BedType.SINGLE);
-        room.setHotel(Hotel.VAXJO);
-        room.setNoSmoking(true);
-        room.setView("Castle");
+        room2.setBedType(Room.BedType.SINGLE);
+        room2.setHotel(Hotel.VAXJO);
+        room2.setNoSmoking(true);
+        room2.setView("Castle");
         rooms.add(room2);
     
         Room room3 = new Room();
@@ -131,5 +133,12 @@ public class ModelAccess
     {
         // TODO, request all Bookings in one of the Hotels from server
         System.out.println("Requested " + hotel.toString() + " " + value);
+    }
+    
+    
+    public void updateBookings(RoomSearch currentSearch)
+    {
+       String messageToServer =  serverMessage.getRoomsFromSearch(currentSearch);
+       System.out.println(messageToServer); // TODO, add send to server here
     }
 }

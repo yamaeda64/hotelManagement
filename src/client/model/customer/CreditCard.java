@@ -6,7 +6,7 @@ public class CreditCard
     private String cardNumber;
     private int expMonth;
     private int expYear;
-    private int cvv;
+    private int cvc;
     
     
     // Getters & Setters
@@ -42,13 +42,13 @@ public class CreditCard
         this.expYear = expYear;
     }
     
-    public int getCvv()
+    public int getCvc()
     {
-        return cvv;
+        return cvc;
     }
     
-    public void setCvv(int cvv)
+    public void setCvc(int cvv)
     {
-        this.cvv = cvv;
+        this.cvc = cvc;
     }
 }

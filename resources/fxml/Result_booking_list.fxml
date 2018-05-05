@@ -17,10 +17,12 @@
          <children>
             <TextField fx:id="booking_number_field" layoutX="23.0" layoutY="45.0" />
             <TextField fx:id="name_field" layoutX="23.0" layoutY="95.0" />
-            <TextField fx:id="room_number_field" layoutX="209.0" layoutY="45.0" />
+            <TextField fx:id="room_number_field" layoutX="23.0" layoutY="141.0" />
             <Text layoutX="23.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Booking number" />
             <Text layoutX="23.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-            <Text layoutX="210.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room number" />
+            <Text layoutX="23.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room number" />
+            <TextField fx:id="telephone_number_field" layoutX="209.0" layoutY="45.0" />
+            <Text layoutX="209.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telephone number" />
             <TextField fx:id="checked_in_field" layoutX="209.0" layoutY="95.0" />
             <Text layoutX="209.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Checked in" />
             <Button fx:id="check_in_button" layoutX="23.0" layoutY="419.0" mnemonicParsing="false" onAction="#checkInButton" prefHeight="40.0" prefWidth="108.0" text="Check in" />
@@ -28,10 +30,6 @@
             <Button fx:id="cancel_booking_button" layoutX="23.0" layoutY="468.0" mnemonicParsing="false" onAction="#cancelBookingButton" prefHeight="40.0" prefWidth="108.0" text="Cancel booking" />
             <Button fx:id="back_to_search_button" layoutX="284.0" layoutY="419.0" mnemonicParsing="false" onAction="#backToSearchButton" prefHeight="40.0" prefWidth="108.0" text="Back to search" />
             <Button fx:id="return_to_main_button" layoutX="284.0" layoutY="468.0" mnemonicParsing="false" onAction="#returnToMainButton" prefHeight="40.0" prefWidth="108.0" text="Return to main" />
-            <TextField fx:id="check_in_date_field" layoutX="23.0" layoutY="262.0" />
-            <TextField fx:id="check_out_date_field" layoutX="210.0" layoutY="262.0" />
-            <Text layoutX="23.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-in date" />
-            <Text layoutX="210.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-out date" />
          </children></AnchorPane>
   </items>
 </SplitPane>

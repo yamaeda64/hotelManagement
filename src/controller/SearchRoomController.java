@@ -60,8 +60,7 @@ public class SearchRoomController implements Initializable
             currentSearch.setStartDate(check_in_datepicker.getValue());
             currentSearch.setEndDate(check_out_datepicker.getValue());
             
-           
-            System.out.println(currentSearch.getBedType() + "" + currentSearch.getHotel());
+            centralController.updateModel(currentSearch);
             centralController.changeScreen(Screen.RESULTS);
         }
         catch(IllegalArgumentException e)
@@ -74,12 +73,14 @@ public class SearchRoomController implements Initializable
     public void cancelButton() throws IOException {
         centralController.changeScreen(Screen.MAIN);
     }
-    public void setCentralController(CentralController centralController) {
+    public void setCentralController(CentralController centralController)
+    {
         this.centralController = centralController;
     }
     public boolean hasNoCentralController() {
         return centralController == null;
     }
+    
     @Override
     public void initialize(URL url, ResourceBundle resource) {
         
@@ -92,7 +93,7 @@ public class SearchRoomController implements Initializable
         check_in_datepicker.setConverter(swedishDateFormat.getSwedishDateConverter());
         check_out_datepicker.setShowWeekNumbers(true);
         check_out_datepicker.setConverter(swedishDateFormat.getSwedishDateConverter());
-    
+        
         Platform.runLater(()->
         {
             location_box.setValue(centralController.getLocation());

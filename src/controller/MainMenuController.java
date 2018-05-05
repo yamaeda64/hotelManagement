@@ -3,7 +3,7 @@ package controller;
 
 import client.model.Booking;
 import client.model.Hotel;
-import client.view.BookingWrapper;
+import client.view.RoomWrapper;
 import controller.ScreenController.Screen;
 import controller.supportClasses.SwedishDateFormat;
 import javafx.application.Platform;
@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 public class MainMenuController implements Initializable{
     
     private CentralController centralController;
-    private ObservableList<BookingWrapper> bookingList;
+    private ObservableList<RoomWrapper> bookingList;
     
 	@FXML private Button new_booking_button;
     @FXML private Button find_existing_button;
@@ -37,7 +37,7 @@ public class MainMenuController implements Initializable{
 	@FXML CheckMenuItem menu_vaxjo;
 	@FXML CheckMenuItem menu_kalmar;
 	@FXML private DatePicker datePicker;
-	@FXML private TableView<BookingWrapper> bookingsTableView;
+	@FXML private TableView<RoomWrapper> bookingsTableView;
 	@FXML private Button refresh;
 	
     
@@ -74,7 +74,7 @@ public class MainMenuController implements Initializable{
         Iterator<Booking> bookingIterator = centralController.getBookings();
         while(bookingIterator.hasNext())
         {
-            bookingList.add(new BookingWrapper(bookingIterator.next()));
+            bookingList.add(new RoomWrapper(bookingIterator.next()));
         }
     }
     
@@ -94,7 +94,7 @@ public class MainMenuController implements Initializable{
             Iterator<Booking> bookingIterator = centralController.getBookings();
             while(bookingIterator.hasNext())
             {
-                bookingList.add(new BookingWrapper(bookingIterator.next()));
+                bookingList.add(new RoomWrapper(bookingIterator.next()));
             }
     
             initTableView();
@@ -138,21 +138,15 @@ public class MainMenuController implements Initializable{
         // Action when changing date picker
         datePicker.onActionProperty().set(event ->
         {
-            System.out.println("came here");
-            System.out.println(menu_vaxjo == null);
+            
             if(menu_vaxjo.isSelected())
             {
-                System.out.println("växjö");
                 centralController.getBookings(Hotel.VAXJO, datePicker.getValue());
-            } else if(menu_kalmar.isSelected())
+            }
+            else if(menu_kalmar.isSelected())
             {
                 centralController.getBookings(Hotel.KALMAR, datePicker.getValue());
             }
-            else
-            {
-                System.out.println("non was selected");
-            }
-            
         });
     
     }
@@ -161,18 +155,18 @@ public class MainMenuController implements Initializable{
     {
         TableColumn firstNameCol = new TableColumn("First Name");
         firstNameCol.setCellValueFactory(
-                new PropertyValueFactory<BookingWrapper, String>("firstName"));
+                new PropertyValueFactory<RoomWrapper, String>("firstName"));
         TableColumn lastNameCol = new TableColumn("Last Name");
         lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<BookingWrapper, String>("familyName"));
+                new PropertyValueFactory<RoomWrapper, String>("familyName"));
         
         TableColumn roomNumberCol = new TableColumn("Room Number");
         roomNumberCol.setCellValueFactory(
-                new PropertyValueFactory<BookingWrapper, String>("roomNumbers"));
+                new PropertyValueFactory<RoomWrapper, String>("roomNumbers"));
         
         TableColumn bookingStatusCol = new TableColumn("Booking Status");
         bookingStatusCol.setCellValueFactory(
-                new PropertyValueFactory<BookingWrapper, String>("bookingStatus"));
+                new PropertyValueFactory<RoomWrapper, String>("bookingStatus"));
         
         bookingsTableView.getColumns().addAll(firstNameCol, lastNameCol, roomNumberCol, bookingStatusCol);
         bookingsTableView.setItems(bookingList);

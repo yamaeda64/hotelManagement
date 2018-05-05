@@ -1,25 +1,22 @@
 package controller;
 
 import controller.ScreenController.Screen;
-import controller.supportClasses.BookingSearch;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
+<<<<<<< HEAD
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+=======
+>>>>>>> parent of 55dfa62... Uploading new fxmls and the booking search files.
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+<<<<<<< HEAD
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -200,7 +197,67 @@ public class BookingResultsListController implements Initializable
 		});
 
 
+=======
 
-	}
-	
+public class BookingResultsListController
+{
+	CentralController centralController;
+>>>>>>> parent of 55dfa62... Uploading new fxmls and the booking search files.
+
+    @FXML
+    private ListView<?> booking_ListView;
+
+    @FXML
+    private TextField booking_number_field;
+
+    @FXML
+    private TextField name_field;
+
+    @FXML
+    private TextField room_number_field;
+
+    @FXML
+    private TextField telephone_number_field;
+
+    @FXML
+    private TextField checked_in_field;
+
+    @FXML
+    private Button check_in_button;
+
+    @FXML
+    private Button check_out_button;
+
+    @FXML
+    private Button cancel_booking_button;
+
+    @FXML
+    private Button back_to_search_button;
+
+    @FXML
+    private Button return_to_main_button;
+
+    public void setCentralController(CentralController cc) {
+    	this.centralController = cc;
+    }
+    @FXML
+    public void checkInButton() {
+    	
+    }
+    @FXML
+    public void checkOutButton() {
+    	
+    }
+    @FXML
+    public void cancelBookingButton() {
+    	
+    }
+    @FXML
+    public void backToSearchButton() throws IOException {
+    	centralController.changeScreen(Screen.SEARCH_BOOKING);
+    }
+    @FXML
+    public void returnToMainButton() throws IOException {
+    	centralController.changeScreen(Screen.MAIN);
+    }
 }

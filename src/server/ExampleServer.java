@@ -7,7 +7,7 @@ public class ExampleServer extends AbstractServer
 {
     
     @Override
-    protected synchronized void handleMessageFromClient(String message)
+    protected void handleMessageFromClient(String message)
     {
 
         if(message.equals("Hello"))
@@ -24,6 +24,5 @@ public class ExampleServer extends AbstractServer
     public void exceptionOccured(Exception e)
     {
        System.out.println("Exception occured: " +  e.getClass().getName() + e.getMessage());
-       
     }
 }
