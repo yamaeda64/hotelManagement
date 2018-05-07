@@ -132,6 +132,7 @@ public class ModelAccess
     public void updateBookings(Hotel hotel, LocalDate value)
     {
         // TODO, request all Bookings in one of the Hotels from server
+        // TODO, test
         System.out.println("Requested " + hotel.toString() + " " + value);
     }
     
