@@ -6,6 +6,7 @@ import client.model.ModelAccess;
 import client.model.Room;
 import client.model.customer.RealCustomer;
 import controller.ScreenController.Screen;
+import controller.supportClasses.BookingSearch;
 import controller.supportClasses.RoomSearch;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -24,6 +25,8 @@ public class CentralController
 	private Hotel location;
 	private RoomSearch lastRoomSearch;
 	private Booking inProgressBooking;
+	
+	private BookingSearch bookingSearch;
 	
 	
 	public CentralController(Stage stage) throws IOException {
@@ -95,6 +98,10 @@ public class CentralController
 		this.lastRoomSearch = currentSearch;
 		modelAccess.updateBookings(currentSearch);
 	}
+	public void updateModel(BookingSearch booking)
+	{
+		this.bookingSearch = booking;
+	}
 	
 	public RoomSearch getLastRoomSearch()
 	{
@@ -112,5 +119,10 @@ public class CentralController
 		inProgressBooking.setCustomer(customer);
 		inProgressBooking.setBookingStatus(Booking.BookingStatus.BOOKED);
 		// TODO, send the final booking which updates the previous inProgressBooking
+	}
+	
+	public BookingSearch getBookingSearch()
+	{
+		return bookingSearch;
 	}
 }
