@@ -10,6 +10,7 @@ public class HotelServer extends AbstractServer
 {
     SqlDAO database;
     public HotelServer() throws SQLException {
+    	// hej
     	try {
 			database = new SqlDAO();
 		} catch (ClassNotFoundException e) {
