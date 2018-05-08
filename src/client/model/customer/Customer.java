@@ -17,5 +17,6 @@ public interface Customer
      * @return The enum PowerLevel
      */
     public RealCustomer.PowerLevel getPowerLevel();
+
     
 }

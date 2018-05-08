@@ -1,5 +1,6 @@
 package client.model.customer;
 
+import client.model.customer.RealCustomer.PowerLevel;
 
 /**
  * Proxy customer is a lightweight Customer which loads more customer
@@ -110,11 +111,13 @@ public class ProxyCustomer implements Customer
     {
         
         //TODO Code to load the details to create a full customer
+    	
         this.realCustomer = new RealCustomer();
         
         realCustomer.setCustomerID(customerID);
         realCustomer.setFirstName(firstName);
         realCustomer.setFamilyName(familyName);
-        
+        //TODO Fix PowerLevel etc.
+        realCustomer.setPowerLevel(PowerLevel.SILVER);
     }
 }

@@ -3,6 +3,7 @@ package controller;
 import client.model.Booking;
 import client.model.Booking.BookingStatus;
 import client.model.Room;
+import client.model.customer.RealCustomer.PowerLevel;
 import controller.ScreenController.Screen;
 import controller.supportClasses.BookingSearch;
 import javafx.application.Platform;
@@ -26,54 +27,54 @@ public class BookingResultsListController implements Initializable
 {
 	CentralController centralController;
 	BookingSearch search;
-	
+
 	@FXML
 	private ListView<Booking> booking_ListView;
-	
+
 	@FXML
 	private TextField booking_number_field;
-	
+
 	@FXML
 	private TextField name_field;
-	
+
 	@FXML
 	private TextField room_number_field;
-	
+
 	@FXML
 	private TextField checked_in_field;
-	
+
 	@FXML
 	private Button check_in_button;
-	
+
 	@FXML
 	private Button check_out_button;
-	
+
 	@FXML
 	private Button cancel_booking_button;
-	
+
 	@FXML
 	private Button back_to_search_button;
-	
+
 	@FXML
 	private Button return_to_main_button;
-	
+
 	@FXML
 	private TextField check_in_date_field;
-	
+
 	@FXML
 	private TextField check_out_date_field;
-	
+
 	@FXML
 	private TextField amount_payed_field;
-	
+
 	@FXML
 	private TextField amount_remaining_field;
-	
+
 	public void setCentralController(CentralController cc)
 	{
 		this.centralController = cc;
 	}
-	
+
 	@FXML
 	public void checkInButton()
 	{
@@ -81,15 +82,25 @@ public class BookingResultsListController implements Initializable
 		// TODO, send to server
 		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
 	}
-	
+
 	@FXML
 	public void checkOutButton()
 	{
-		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_OUT);
-		// Todo, send to server
-		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+		if (amount_remaining_field.getText() != "0") {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Payment not complete");
+			alert.setHeaderText(null);
+			alert.setContentText("Customer has not payed the bill.");
+
+			alert.showAndWait();
+		}
+		else {
+			booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_OUT);
+			// TODO, send to server
+			checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+		}
 	}
-	
+
 	@FXML
 	public void cancelBookingButton()
 	{
@@ -105,28 +116,28 @@ public class BookingResultsListController implements Initializable
 			alert.setTitle("Information Dialog");
 			alert.setHeaderText(null);
 			alert.setContentText("Late cancellation. Customer will be fined for the cancellation fee.");
-			
+
 			alert.showAndWait();
 		}
-		
+
 	}
-	
+
 	@FXML
 	public void backToSearchButton() throws IOException
 	{
 		centralController.changeScreen(Screen.SEARCH_BOOKING);
 	}
-	
+
 	@FXML
 	public void returnToMainButton() throws IOException
 	{
 		centralController.changeScreen(Screen.MAIN);
 	}
-	
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1)
 	{
-		
+
 		Platform.runLater(() ->
 		{
 			search = centralController.getBookingSearch();
@@ -135,8 +146,8 @@ public class BookingResultsListController implements Initializable
 			{
 				booking_ListView.getItems().add(bookings.next());
 			}
-			
-			
+
+
 			//formatting the ListView.
 			booking_ListView.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>()
 			{
@@ -161,10 +172,10 @@ public class BookingResultsListController implements Initializable
 					return cell;
 				}
 			});
-			
-			
+
+
 		});
-		
+
 		booking_ListView.setOnMouseClicked(event ->
 		{
 			if(booking_ListView.getSelectionModel().getSelectedItem() != null)
@@ -172,7 +183,7 @@ public class BookingResultsListController implements Initializable
 				System.out.println(booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
 				booking_number_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingID());
 				name_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFirstName() + " " + booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFamilyName());
-				
+
 				Iterator<Room> rooms = booking_ListView.getSelectionModel().getSelectedItem().getAllRooms();
 				String roomString = "";
 				while(rooms.hasNext())
@@ -183,13 +194,37 @@ public class BookingResultsListController implements Initializable
 				check_in_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStartDate().toString());
 				check_out_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getEndDate().toString());
 				checked_in_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus().toString());
+
+				//Cash Logic
+				amount_payed_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed());
+				
+				if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == null) {		//Preventing Nullpointer exception.
+					amount_remaining_field.setText(""+(booking_ListView.getSelectionModel().getSelectedItem().getPrice() - booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
+				}
+				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.NONE) {
+					amount_remaining_field.setText(""+(booking_ListView.getSelectionModel().getSelectedItem().getPrice() - booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
+				}
+				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.BRONZE) {
+					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.95)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
+				}
+				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.SILVER) {
+					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.90)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
+				}
+				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.GOLD) {
+					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.85)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
+				}
+				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.PLATINUM) {
+					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.80)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
+				}
+				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.DIAMOND) {
+					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.75)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
+				}
 				
 				
-				//When an item in the lisst has been double-clicked.
+				//When an item in the list has been double-clicked.
 				if(event.getClickCount() == 2)
 				{
 					System.out.println("Double Clicked");
-					//TODO Fixa en extra FXML med mera f�lt och se glad ut. G�r mer eller mindre om Customer form och fyll i all information.
 					Stage infoStage = new Stage();
 					FXMLLoader loader = new FXMLLoader(ScreenController.class.getResource("/fxml/Customer_information_form.fxml"));
 					Parent root = null;
@@ -213,8 +248,8 @@ public class BookingResultsListController implements Initializable
 					{
 						System.err.println("File not found");
 					}
-					
-					
+
+
 				}
 			}
 			//Handling the return to menu bug.
