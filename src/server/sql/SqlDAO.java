@@ -225,6 +225,18 @@ public class SqlDAO {
 			return "ERROR";
 		}
 	}
+	
+	public String allBookings(String hotel, String startDate, String endDate) {
+		try {
+			ResultSet bookingSet = query.bookingsForHotel(hotel, startDate, endDate);
+			bookingSet.beforeFirst();
+			String response = "OK " + packBookings(bookingSet);
+			return response;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "ERROR";
+		}
+	}
 
 	/**
 	 * Compiles a list of rooms meeting the criteria, that are unbooked during a
@@ -241,6 +253,7 @@ public class SqlDAO {
 	public String findFreeRooms(String hotel, String bedType, boolean noSmoking, boolean adjacent, String startDate,
 			String endDate) {
 		try {
+			// bedtype can be null!
 			ResultSet rooms = query.findFreeRooms(hotel, bedType, noSmoking, adjacent, startDate, endDate);
 //			StringBuilder ret = new StringBuilder("OK");
 //			for (int room : rooms) {

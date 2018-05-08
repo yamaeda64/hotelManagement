@@ -184,6 +184,27 @@ public class SqlQueries {
 		return svar;
 	}
 	
+	public ResultSet bookingsForHotel(String hotel, String startDate, String endDate) throws SQLException {
+		PreparedStatement bfhPrepStatement = uplink.prepareStatement("SELECT * FROM hotel.rooms WHERE hotel=?");
+		bfhPrepStatement.setString(1, hotel);
+		ResultSet roomSet = bfhPrepStatement.executeQuery();
+		ArrayList<Integer> rooms = new ArrayList<>();
+		while (roomSet.next()) {
+			rooms.add(roomSet.getInt("id"));
+		}
+		StringBuilder roomClause = new StringBuilder("SELECT * FROM hotel.bookings WHERE startDate < ? AND endDate > ?");
+		roomClause.append(" AND room IN (");
+		Iterator<Integer> roomIt = rooms.iterator();
+		while(roomIt.hasNext()) {
+			roomClause.append(roomIt.next());
+			if (roomIt.hasNext()) roomClause.append(",");
+		}
+		roomClause.append(")");
+		PreparedStatement bfhBookingStatement = uplink.prepareStatement(roomClause.toString());
+		ResultSet bookings = bfhBookingStatement.executeQuery();
+		return bookings;
+	}
+	
 	/**
 	 * Filters out a list of bookings to only those that reference a specific room.
 	 * 
@@ -237,10 +258,13 @@ public class SqlQueries {
 		if (adjacent) {
 			adjSearch = " AND adjacentRoom IS NOT NULL";
 		}
-		PreparedStatement ffrRoomStatement = uplink.prepareStatement("SELECT * FROM hotel.rooms WHERE hotel=? AND bedType=? AND noSmoking=?" + adjSearch + bookingClause.toString());
+		String bedTypeSearch = "";
+		if (bedType != null) {
+			 bedTypeSearch = " AND bedType='"+bedType+"'";
+		}
+		PreparedStatement ffrRoomStatement = uplink.prepareStatement("SELECT * FROM hotel.rooms WHERE hotel=? AND noSmoking=?" + bedTypeSearch + adjSearch + bookingClause.toString());
 		ffrRoomStatement.setString(1, hotel);
-		ffrRoomStatement.setString(2, bedType);
-		ffrRoomStatement.setBoolean(3, noSmoking);
+		ffrRoomStatement.setBoolean(2, noSmoking);
 		
 		ResultSet rooms = ffrRoomStatement.executeQuery();
 		return rooms;
