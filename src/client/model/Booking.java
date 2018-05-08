@@ -18,7 +18,7 @@ public class Booking
     private double price;
     private Customer customer;
     private BookingStatus bookingStatus;
-    
+    private double amountPayed;
     
     public Booking()
     {
@@ -107,6 +107,12 @@ public class Booking
 
     {
         this.customer = customer;
+    }
+    public double getAmountPayed() {
+    	return amountPayed;
+    }
+    public void setAmountPayed(double amount) {
+    	amountPayed = amount;
     }
     
 }

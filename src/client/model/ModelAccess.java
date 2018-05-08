@@ -109,6 +109,7 @@ public class ModelAccess
         
         Booking booking = new Booking();
         Customer customer = new ProxyCustomer("1","John","Doe");
+        booking.setAmountPayed(145);
         booking.addRoom(rooms.get(0));
         booking.addRoom(rooms.get(1));
         booking.setCustomer(customer);
@@ -121,6 +122,7 @@ public class ModelAccess
         Booking booking2 = new Booking();
         Customer customer2 = new ProxyCustomer("2","Ray","Kurzweil");
         booking2.addRoom(rooms.get(2));
+        booking2.setAmountPayed(500);
         booking2.setCustomer(customer2);
         booking2.setStartDate(LocalDate.of(2018,04,22));
         booking2.setEndDate(LocalDate.of(2018,04,25));
