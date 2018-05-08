@@ -185,6 +185,7 @@ public class SqlQueries {
 	}
 	
 	public ResultSet bookingsForHotel(String hotel, String startDate, String endDate) throws SQLException {
+		// get rooms in the hotel
 		PreparedStatement bfhPrepStatement = uplink.prepareStatement("SELECT * FROM hotel.rooms WHERE hotel=?");
 		bfhPrepStatement.setString(1, hotel);
 		ResultSet roomSet = bfhPrepStatement.executeQuery();
@@ -192,15 +193,39 @@ public class SqlQueries {
 		while (roomSet.next()) {
 			rooms.add(roomSet.getInt("id"));
 		}
-		StringBuilder roomClause = new StringBuilder("SELECT * FROM hotel.bookings WHERE startDate < ? AND endDate > ?");
-		roomClause.append(" AND room IN (");
+		
+		// get bindings between a room and a booking
+		StringBuilder roomClause = new StringBuilder("SELECT * FROM hotel.roomBinding WHERE");
+		roomClause.append(" room IN (");
 		Iterator<Integer> roomIt = rooms.iterator();
 		while(roomIt.hasNext()) {
 			roomClause.append(roomIt.next());
 			if (roomIt.hasNext()) roomClause.append(",");
 		}
 		roomClause.append(")");
-		PreparedStatement bfhBookingStatement = uplink.prepareStatement(roomClause.toString());
+		
+		PreparedStatement bindingStatement = uplink.prepareStatement(roomClause.toString());
+		ResultSet bindingSet = bindingStatement.executeQuery();
+		ArrayList<Integer> bindings = new ArrayList<>();
+		while(bindingSet.next()) {
+			bindings.add(bindingSet.getInt("booking"));
+		}
+		
+
+		// get all the affected bookings, within the correct time
+		StringBuilder bookingClause = new StringBuilder("SELECT * FROM hotel.bookings WHERE startDate < ? AND endDate > ?");
+		bookingClause.append(" AND id IN (");
+		Iterator<Integer> bindingIt = bindings.iterator();
+		while(bindingIt.hasNext()) {
+			bookingClause.append(bindingIt.next());
+			if (bindingIt.hasNext()) bookingClause.append(",");
+		}
+		bookingClause.append(")");
+		java.sql.Date start = new java.sql.Date(Long.parseLong(startDate));
+		java.sql.Date end = new java.sql.Date(Long.parseLong(endDate));
+		PreparedStatement bfhBookingStatement = uplink.prepareStatement(bookingClause.toString());
+		bfhBookingStatement.setDate(1, end);
+		bfhBookingStatement.setDate(2, start);
 		ResultSet bookings = bfhBookingStatement.executeQuery();
 		return bookings;
 	}

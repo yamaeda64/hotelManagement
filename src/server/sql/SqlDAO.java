@@ -200,7 +200,7 @@ public class SqlDAO {
 		try {
 			ResultSet roomSet = query.allRooms();
 			String rooms = packRooms(roomSet);
-			return "OK " + rooms;
+			return "rooms: " + rooms;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR " + e.toString();
@@ -218,7 +218,7 @@ public class SqlDAO {
 		try {
 			ResultSet bookingSet = query.bookingsInsideTimeframe(startDate, endDate);
 			bookingSet.beforeFirst();
-			String response = "OK " + packBookings(bookingSet);
+			String response = "bookings:" + packBookings(bookingSet);
 			return response;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -230,7 +230,7 @@ public class SqlDAO {
 		try {
 			ResultSet bookingSet = query.bookingsForHotel(hotel, startDate, endDate);
 			bookingSet.beforeFirst();
-			String response = "OK " + packBookings(bookingSet);
+			String response = "bookings:" + packBookings(bookingSet);
 			return response;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -260,7 +260,7 @@ public class SqlDAO {
 //				ret.append(' ').append(room);
 //			}
 //			return rooms.toString();
-			return packRooms(rooms);
+			return "rooms:" + packRooms(rooms);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR";
@@ -314,7 +314,7 @@ public class SqlDAO {
 				results = query.specificBooking(bookingId);
 			}
 			if (results != null) {
-				return "OK " + packBookings(results);
+				return "bookings:" + packBookings(results);
 			} else {
 				// exception.
 				return "ERROR bad parameters";
@@ -335,7 +335,7 @@ public class SqlDAO {
 	public String allCustomers() {
 		try {
 			ResultSet allCustomers = query.allCustomers();
-			return "OK " + packCustomers(allCustomers);
+			return "customers:" + packCustomers(allCustomers);
 		} catch (SQLException e) {
 			return "ERROR";
 		}
@@ -351,7 +351,7 @@ public class SqlDAO {
 	public String fullCustomer(int id) {
 		try {
 			ResultSet customer = query.searchCustomer(id);
-			return "OK " + packCustomer(customer, true);
+			return "customer:" + packCustomer(customer, true);
 		} catch (SQLException e) {
 			return "ERROR";
 		}
@@ -422,7 +422,7 @@ public class SqlDAO {
 					powerLevel, passportNumber);
 			ResultSet newCustomer = query.searchCustomer(newCustomerId);
 			newCustomer.next();
-			return "OK + " + packCustomer(newCustomer, false);
+			return "customer:" + packCustomer(newCustomer, false);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR";

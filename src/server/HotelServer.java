@@ -1,6 +1,7 @@
 package server;
 
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import server.abstractServer.AbstractServer;
 import server.sql.SqlDAO;
@@ -14,6 +15,8 @@ import com.google.gson.JsonParser;
 public class HotelServer extends AbstractServer
 {
     SqlDAO database;
+    private Logger logger = Logger.getLogger(HotelServer.class.getName());
+    
     public HotelServer() throws SQLException {
     	// hej
     	try {
@@ -28,7 +31,7 @@ public class HotelServer extends AbstractServer
     protected void handleMessageFromClient(String message)
     {
         if(message.indexOf(':') >= 0) {
-        	String[] incoming = message.split(":");
+        	String[] incoming = message.split(":", 2);
         	switch(incoming[0]) {
         	
         	case "list rooms":
