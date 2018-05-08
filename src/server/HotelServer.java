@@ -1,12 +1,15 @@
 package server;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import server.abstractServer.AbstractServer;
 import server.sql.SqlDAO;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -103,6 +106,47 @@ public class HotelServer extends AbstractServer
         		String[] params = incoming[1].split(",");
         		sendToClient(database.updateBookingPayment(Integer.parseInt(params[0]), 
         				Integer.parseInt(params[1]), Integer.parseInt(params[2])));
+        		break;
+        	}
+        	
+        	case "create booking":
+        	{
+        		JsonElement requestElement = new JsonParser().parse(incoming[1]);
+        		JsonObject request = requestElement.getAsJsonObject();
+        		
+        		String startDate = request.get("startDate").getAsString();
+        		String endDate = request.get("endDate").getAsString();
+        		
+        		JsonArray roomJ = request.get("bookedRooms").getAsJsonArray();
+        		ArrayList<Integer> rooms = new ArrayList<>();
+        		Iterator<JsonElement> roomIt = roomJ.iterator();
+        		while(roomIt.hasNext()) {
+        			JsonObject room = roomIt.next().getAsJsonObject();
+        			rooms.add(room.get("id").getAsInt());
+        		}
+        		
+        		sendToClient(database.createBooking(rooms, startDate, endDate));
+        		break;
+        	}
+        	
+        	case "realize booking":
+        	{
+        		String[] params = incoming[1].split(",", 3);
+        		int bookingID = Integer.parseInt(params[0]);
+        		int newPrice = Integer.parseInt(params[1]);
+        		JsonElement requestElement = new JsonParser().parse(params[2]);
+        		JsonObject request = requestElement.getAsJsonObject();
+        		
+        		String firstName = request.get("firstName").getAsString();
+        		String lastName = request.get("lastName").getAsString();
+        		String telephone = request.get("telephone").getAsString();
+        		String idNumber = request.get("idNumber").getAsString();
+        		String address = request.get("address").getAsString();
+        		String creditCard = request.get("creditCard").getAsString();
+        		String passportNumber = request.get("passportNumber").getAsString();
+        		int powerLevel = request.get("powerLevel").getAsInt();
+        		
+        		sendToClient(database.realizeBooking(bookingID, newPrice, firstName, lastName, telephone, idNumber, address, creditCard, powerLevel, passportNumber));
         		break;
         	}
         	

@@ -44,7 +44,7 @@ public class SqlQueries {
 	
 	public ResultSet searchCustomer(String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, int powerLevel) throws SQLException {
 		PreparedStatement prepStatement = uplink.prepareStatement("SELECT * FROM hotel.customers WHERE "
-				+ "firstName = '?' AND lastName = '?'");
+				+ "firstName = ? AND lastName = ?");
 		ResultSet svar = prepStatement.executeQuery();
 		return svar;
 	}
@@ -105,8 +105,8 @@ public class SqlQueries {
 	
 	public ResultSet searchRoom(int hotel, int size, int quality, int bedSize, int bedAmount, int status, int smokeFree, int[] adjacentRooms, int view) throws SQLException {
 		PreparedStatement prepStatement = uplink.prepareStatement("SELECT * FROM hotel.rooms WHERE "
-				+ "hotel='?' AND size='?' AND quality = '?' AND bedSize = '?' AND bedAmount = '?' AND status = '?' AND smokeFree = '?' AND adjacentRooms = "
-				+ "'?' AND view = '?'");
+				+ "hotel=? AND size=? AND quality = ? AND bedSize = ? AND bedAmount = ? AND status = ? AND smokeFree = ? AND adjacentRooms = "
+				+ "? AND view = ?");
 		ResultSet svar = prepStatement.executeQuery();
 		return svar;
 	}
@@ -134,12 +134,12 @@ public class SqlQueries {
 	 */
 	/* UNTESTED!!!!!!!!!!!!!!!!! */
 	/* UNTESTED!!!!!!!!!!!!!!!!! */
-	public void createBooking(int customer, ArrayList<Integer> rooms, int givenPrice, int amountPaid, String startDate, String endDate) throws SQLException {
+	public int createBooking(int customer, ArrayList<Integer> rooms, int givenPrice, int amountPaid, String startDate, String endDate) throws SQLException {
 		// convert dates from String to long to sql-date. EPOCH time in milliseconds.
 		java.sql.Date start = new java.sql.Date(Long.parseLong(startDate));
 		java.sql.Date end = new java.sql.Date(Long.parseLong(startDate));
 		
-		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.bookings(customer, givenPrice, amountPaid, startDate, endDate, status) values (?, ?, ?, ?, ?, ?, 'BOOKED');"
+		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.bookings(customer, givenPrice, amountPaid, startDate, endDate, status) values (?, ?, ?, ?, ?, ?, 'IN_PROGRESS');"
 				+ " SELECT LAST_INSERT_ID();");
 		prepStatement.setInt(1, customer);
 		prepStatement.setInt(2, givenPrice);
@@ -157,6 +157,7 @@ public class SqlQueries {
 			prepStatement.setInt(2, room);
 			prepStatement.executeQuery();
 		}
+		return bookingId;
 	}
 	
 	public ResultSet allBookings() throws SQLException {
@@ -314,58 +315,6 @@ public class SqlQueries {
 		return bindings;
 	}
 	
-//	public ArrayList<Integer> findFreeRooms(String hotel, String bedType, boolean noSmoking, boolean adjacent, String startDate, String endDate) throws SQLException  {
-//		//1. find rooms that are matching
-//		// TODO: lägg till view etc här
-//		String adjSearch = " AND adjacentRoom IS NULL";
-//		if (adjacent) {
-//			adjSearch = " AND adjacentRoom IS NOT NULL";
-//		}
-//		PreparedStatement ffrRoomStatement = uplink.prepareStatement("SELECT * FROM hotel.rooms WHERE hotel='?' AND bedType='?' AND noSmoking='?'" + adjSearch);
-//
-//		// 2. find bokings for a certain range
-//		java.sql.Date start = new java.sql.Date(Long.parseLong(startDate));
-//		java.sql.Date end = new java.sql.Date(Long.parseLong(startDate));
-//		PreparedStatement ffrBookingStatement = uplink.prepareStatement("SELECT * FROM hotel.bookings "
-//				+ "WHERE startDate < ? AND endDate > ?");
-//		ffrBookingStatement.setDate(1, start);
-//		ffrBookingStatement.setDate(2, end);
-//		
-//		// 3. cross-reference :(
-//		ResultSet applicableRooms = ffrRoomStatement.executeQuery();
-//		ResultSet applicableBookings = ffrBookingStatement.executeQuery();
-//		StringBuilder roomString = new StringBuilder("(");
-//		int roomCount = 0;
-//		while (applicableRooms.next()) {
-//			String i = applicableRooms.getString("id");
-//			roomString.append(i);
-//			if (!applicableRooms.isLast()) {
-//				roomString.append(", ");
-//			}
-//			roomCount++;
-//		}
-//		StringBuilder bookingString = new StringBuilder("(");
-//		int bookingCount = 0;
-//		while (applicableBookings.next()) {
-//			String i = applicableRooms.getString("id");
-//			roomString.append(i);
-//			if (!applicableRooms.isLast()) {
-//				roomString.append(", ");
-//			}
-//			bookingCount++;
-//		}
-//		ArrayList<Integer> bookableRooms = new ArrayList<>();
-//		if (bookingCount > 0 && roomCount > 0) {
-//			PreparedStatement ffrFreeRoomsStatement = uplink.prepareStatement("SELECT * FROM hotel.roomBinding WHERE booking IN " + bookingString + " AND room IN " + roomString);
-//			while(applicableRooms.next()) {
-//				bookableRooms.add(applicableRooms.getInt("room"));
-//			}
-//		}
-//		bookableRooms.add(-1);
-//		return bookableRooms;
-//	}
-	
-	
 	public ResultSet findCustomer(HashMap<String, String> parameters) throws SQLException {
 		StringBuilder query = new StringBuilder("SELECT * FROM hotel.customers WHERE ");
 		Set<String> params = parameters.keySet();
@@ -411,7 +360,7 @@ public class SqlQueries {
 	}
 	
 	public void updateBookingStatus(int id, String status) throws SQLException {
-		PreparedStatement ubsPrepStatement = uplink.prepareStatement("UPDATE hotel.bokings SET status='?' WHERE id=?");
+		PreparedStatement ubsPrepStatement = uplink.prepareStatement("UPDATE hotel.bokings SET status=? WHERE id=?");
 		ubsPrepStatement.setString(1, status);
 		ubsPrepStatement.setInt(2,id);
 		ubsPrepStatement.executeQuery();
@@ -452,6 +401,13 @@ public class SqlQueries {
 		grPrepStatement.setInt(1, id);
 		ResultSet room = grPrepStatement.executeQuery();
 		return room;
+	}
+	
+	public void setCustomerOnBooking(int bookingID, int customerID) throws SQLException {
+		PreparedStatement scobPrepStatement = uplink.prepareStatement("UPDATE hotel.bokings SET customer=? WHERE id=?");
+		scobPrepStatement.setInt(1, customerID);
+		scobPrepStatement.setInt(2, bookingID);
+		scobPrepStatement.executeQuery();
 	}
 
 }

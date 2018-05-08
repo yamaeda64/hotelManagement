@@ -24,7 +24,7 @@ public class SqlDAO {
 	 * @throws SQLException
 	 */
 	private String packRoom(ResultSet room, boolean parseAdjacent) throws SQLException {
-		String[] keys = new String[] { "id", "hotel", "roomNumber", "quality", "bedType", "noSmoking", "adjacentRoom",
+		String[] keys = new String[] { "id", "hotel", "roomNumber", "bedType", "noSmoking", "adjacentRoom",
 				"view" };
 		StringBuilder output = new StringBuilder("{");
 		int i = 0;
@@ -389,15 +389,31 @@ public class SqlDAO {
 	 * @param endDate
 	 * @return
 	 */
-	public String createBooking(int customer, int givenPrice, ArrayList<Integer> rooms, String startDate,
+	public String createBooking(ArrayList<Integer> rooms, String startDate,
 			String endDate) {
 		try {
-			query.createBooking(customer, rooms, givenPrice, 0, startDate, endDate);
-			return "OK";
+			int bookingId = query.createBooking(-1, rooms, 0, 0, startDate, endDate);
+			return "new booking:" + bookingId;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR";
 		}
+	}
+	
+	public String realizeBooking(int id, int newPrice, String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, Integer powerLevel, String passportNumber) {
+		try {
+			int newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
+					powerLevel, passportNumber);
+			query.setCustomerOnBooking(id, newCustomerId);
+			query.updateBookingPayment(id, 0, newPrice);
+			return "OK";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "ERROR";
+		}
+		
+		
 	}
 
 	/**
@@ -415,7 +431,6 @@ public class SqlDAO {
 	 */
 	public String createCustomer(String firstName, String lastName, String telephone, String idNumber, String address,
 			String creditCard, Integer powerLevel, String passportNumber) {
-		// JsonElement root = new JsonParser().parse(jsonString); --->
 		int newCustomerId;
 		try {
 			newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
