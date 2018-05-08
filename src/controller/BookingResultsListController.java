@@ -27,46 +27,46 @@ public class BookingResultsListController implements Initializable
 {
 	CentralController centralController;
 	BookingSearch search;
-
+	
 	@FXML
 	private ListView<Booking> booking_ListView;
-
+	
 	@FXML
 	private TextField booking_number_field;
-
+	
 	@FXML
 	private TextField name_field;
-
+	
 	@FXML
 	private TextField room_number_field;
-
+	
 	@FXML
 	private TextField checked_in_field;
-
+	
 	@FXML
 	private Button check_in_button;
-
+	
 	@FXML
 	private Button check_out_button;
-
+	
 	@FXML
 	private Button cancel_booking_button;
-
+	
 	@FXML
 	private Button back_to_search_button;
-
+	
 	@FXML
 	private Button return_to_main_button;
-
+	
 	@FXML
 	private TextField check_in_date_field;
-
+	
 	@FXML
 	private TextField check_out_date_field;
-
+	
 	@FXML
 	private TextField amount_payed_field;
-
+	
 	@FXML
 	private TextField amount_remaining_field;
 
@@ -81,6 +81,7 @@ public class BookingResultsListController implements Initializable
 		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_IN);
 		// TODO, send to server
 		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+		centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_IN);
 	}
 
 	@FXML
@@ -97,8 +98,11 @@ public class BookingResultsListController implements Initializable
 		else {
 			booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_OUT);
 			// TODO, send to server
-			checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
-		}
+            booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_OUT);
+            // Todo, send to server
+            checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+            centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_OUT);		}
+		
 	}
 
 	@FXML
@@ -106,38 +110,40 @@ public class BookingResultsListController implements Initializable
 	{
 		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CANCELLED);
 		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+		
+		centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CANCELLED);
 		// TODO, send to server
 		LocalDate bookingStart = booking_ListView.getSelectionModel().getSelectedItem().getStartDate();
 		LocalDate current = LocalDate.now();
 		if(bookingStart.isAfter(current.minusDays(2)) && bookingStart.isBefore(current.plusDays(1)))
 		{
-			System.err.println("Late cancellation");
+			centralController.changePayedBookingAmount(booking_ListView.getSelectionModel().getSelectedItem(), 0, booking_ListView.getSelectionModel().getSelectedItem().getPrice() * 0.1); // payes 10% of price if late cancellation TODO, this should maybe be set from server
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Information Dialog");
 			alert.setHeaderText(null);
 			alert.setContentText("Late cancellation. Customer will be fined for the cancellation fee.");
-
+			
 			alert.showAndWait();
 		}
-
+		
 	}
-
+	
 	@FXML
 	public void backToSearchButton() throws IOException
 	{
 		centralController.changeScreen(Screen.SEARCH_BOOKING);
 	}
-
+	
 	@FXML
 	public void returnToMainButton() throws IOException
 	{
 		centralController.changeScreen(Screen.MAIN);
 	}
-
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1)
 	{
-
+		
 		Platform.runLater(() ->
 		{
 			search = centralController.getBookingSearch();
@@ -146,8 +152,8 @@ public class BookingResultsListController implements Initializable
 			{
 				booking_ListView.getItems().add(bookings.next());
 			}
-
-
+			
+			
 			//formatting the ListView.
 			booking_ListView.setCellFactory(new Callback<ListView<Booking>, ListCell<Booking>>()
 			{
@@ -172,10 +178,10 @@ public class BookingResultsListController implements Initializable
 					return cell;
 				}
 			});
-
-
+			
+			
 		});
-
+		
 		booking_ListView.setOnMouseClicked(event ->
 		{
 			if(booking_ListView.getSelectionModel().getSelectedItem() != null)
@@ -220,8 +226,7 @@ public class BookingResultsListController implements Initializable
 					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.75)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
 				}
 				
-				
-				//When an item in the list has been double-clicked.
+				//When an item in the lisst has been double-clicked.
 				if(event.getClickCount() == 2)
 				{
 					System.out.println("Double Clicked");
@@ -233,7 +238,6 @@ public class BookingResultsListController implements Initializable
 						root = loader.load();
 					} catch(IOException e)
 					{
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					CustomerInformationFormController Controller = loader.getController();
@@ -248,8 +252,8 @@ public class BookingResultsListController implements Initializable
 					{
 						System.err.println("File not found");
 					}
-
-
+					
+					
 				}
 			}
 			//Handling the return to menu bug.

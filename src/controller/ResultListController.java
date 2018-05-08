@@ -69,6 +69,11 @@ public class ResultListController implements Initializable
         booking.setBookingStatus(Booking.BookingStatus.IN_PROGRESS);
         booking.setStartDate(centralController.getLastRoomSearch().getStartDate());
         booking.setEndDate(centralController.getLastRoomSearch().getEndDate());
+        for(Room room:selectedItems)
+        {
+            System.out.println("added room");
+            booking.addRoom(room);
+        }
 
         centralController.sendInProgressBooking(booking);
         centralController.changeScreen(Screen.CUSTOMER_FORM);

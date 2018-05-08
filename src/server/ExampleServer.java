@@ -16,13 +16,14 @@ public class ExampleServer extends AbstractServer
         }
         else
         {
-            System.out.println("MESSAGE WAS WRONG!!!!    " + message);
+            System.out.println("message from client: " + message);
+            sendToClient("a little reply");
         }
     }
     
     @Override
     public void exceptionOccured(Exception e)
     {
-       System.out.println("Exception occured: " +  e.getClass().getName() + e.getMessage());
+      // System.out.println("Exception occured: " +  e.getClass().getName() + e.getMessage());
     }
 }
