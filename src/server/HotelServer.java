@@ -46,7 +46,8 @@ public class HotelServer extends AbstractServer
         	case "list bookings":
         	{
         		String[] params = incoming[1].split(",");
-        		response = database.allBookings(params[0], params[1], params[1]);
+        		logger.log(Level.SEVERE, "PARAM0: " + params[0]);
+        		response = database.allBookingsForHotel(params[0], params[1], params[1]);
         		break;
         	}	
         	case "full customer":
@@ -64,7 +65,12 @@ public class HotelServer extends AbstractServer
         		String endDate = request.get("endDate").getAsString();
         		
         		JsonElement bedStep = request.get("bedType");
-        		String bedType = bedStep.getAsString();
+        		String bedType = null;
+        		try {
+        			bedType = bedStep.getAsString();
+        		} catch (NullPointerException e) {
+        			logger.log(Level.FINE, "-- a bed was null so i catched that");
+        		}
         		
     			response = database.findFreeRooms(hotel, bedType, noSmoking, adjacent, startDate, endDate);
         		break;

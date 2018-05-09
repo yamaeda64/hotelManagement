@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
 
 class SqlQueries {
 	private final String db_url = "jdbc:mysql://" + SqlLogin.db_hostname + ":" + SqlLogin.db_port + "/" + SqlLogin.db_dbname + "?user=" + SqlLogin.db_username + "&password=" + SqlLogin.db_password;
@@ -269,7 +270,9 @@ class SqlQueries {
 	 * @throws SQLException
 	 */
 	ResultSet bookingsForHotel(String hotel, String startDate, String endDate) throws SQLException {
-		// get rooms in the hotel
+		// get rooms in the hotelt
+
+		System.out.println("--bookingsForHotel(queries)--");
 		PreparedStatement bfhPrepStatement = uplink.prepareStatement("SELECT * FROM hotel.rooms WHERE hotel=?");
 		bfhPrepStatement.setString(1, hotel);
 		ResultSet roomSet = bfhPrepStatement.executeQuery();
@@ -295,18 +298,20 @@ class SqlQueries {
 			bindings.add(bindingSet.getInt("booking"));
 		}
 		
+		if (bindings.size() > 0) {
+			return null;
+		}
 
 		// get all the affected bookings, within the correct time
 		StringBuilder bookingClause = new StringBuilder("SELECT * FROM hotel.bookings WHERE startDate < ? AND endDate > ?");
-		if (bindings.size() > 0) {
-			bookingClause.append(" AND id IN (");
-			Iterator<Integer> bindingIt = bindings.iterator();
-			while(bindingIt.hasNext()) {
-				bookingClause.append(bindingIt.next());
-				if (bindingIt.hasNext()) bookingClause.append(",");
-			}
-			bookingClause.append(")");
+		bookingClause.append(" AND id IN (");
+		Iterator<Integer> bindingIt = bindings.iterator();
+		while(bindingIt.hasNext()) {
+			bookingClause.append(bindingIt.next());
+			if (bindingIt.hasNext()) bookingClause.append(",");
 		}
+		bookingClause.append(")");
+			
 		java.sql.Date start = new java.sql.Date(Long.parseLong(startDate));
 		java.sql.Date end = new java.sql.Date(Long.parseLong(endDate));
 		PreparedStatement bfhBookingStatement = uplink.prepareStatement(bookingClause.toString());
@@ -360,21 +365,23 @@ class SqlQueries {
 		// 3. return a result set.
 		ResultSet bookingSet = this.bookingsInsideTimeframe(startDate, endDate);
 		ResultSet roomSet = roomBindingsForMultipleBookings(bookingSet);
-		Set<Integer> occupiedRooms = new HashSet<>();
-		while(roomSet.next()) {
-			occupiedRooms.add(roomSet.getInt("room"));
-		}
 		StringBuilder bookingClause = new StringBuilder("");
-		if (occupiedRooms.size() > 0) {
-			Iterator<Integer> bookingIterator = occupiedRooms.iterator();
-			bookingClause.append(" AND id NOT IN (");
-			while(bookingIterator.hasNext()) {
-				bookingClause.append(bookingIterator.next());
-				if (bookingIterator.hasNext()) {
-					bookingClause.append(", ");
-				}
+		if (roomSet != null) {
+			Set<Integer> occupiedRooms = new HashSet<>();
+			while(roomSet.next()) {
+				occupiedRooms.add(roomSet.getInt("room"));
 			}
-			bookingClause.append(")");
+			if (occupiedRooms.size() > 0) {
+				Iterator<Integer> bookingIterator = occupiedRooms.iterator();
+				bookingClause.append(" AND id NOT IN (");
+				while(bookingIterator.hasNext()) {
+					bookingClause.append(bookingIterator.next());
+					if (bookingIterator.hasNext()) {
+						bookingClause.append(", ");
+					}
+				}
+				bookingClause.append(")");
+			}
 		}
 		String adjSearch = ""; //" AND adjacentRoom IS NULL"; <---- NO, we want to allow it, right?
 		if (adjacent) {
@@ -404,6 +411,9 @@ class SqlQueries {
 		Set<Integer> bookingIDs = new HashSet<Integer>();
 		while (bookings.next()) {
 			bookingIDs.add(bookings.getInt("id"));
+		}
+		if (bookingIDs.size() <= 0) {
+			return null;
 		}
 		StringBuilder bindingQuery = new StringBuilder("SELECT * FROM hotel.roomBinding WHERE booking IN (");
 		Iterator<Integer> bindingIterator = bookingIDs.iterator();
