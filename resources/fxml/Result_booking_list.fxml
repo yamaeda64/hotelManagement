@@ -26,7 +26,7 @@
                 <Button fx:id="check_in_button" layoutX="23.0" layoutY="419.0" mnemonicParsing="false" onAction="#checkInButton" prefHeight="40.0" prefWidth="108.0" text="Check in" />
                 <Button fx:id="check_out_button" layoutX="155.0" layoutY="419.0" mnemonicParsing="false" onAction="#checkOutButton" prefHeight="40.0" prefWidth="108.0" text="Check out" />
                 <Button fx:id="cancel_booking_button" layoutX="23.0" layoutY="468.0" mnemonicParsing="false" onAction="#cancelBookingButton" prefHeight="40.0" prefWidth="108.0" text="Cancel booking" />
-                <Button fx:id="back_to_search_button" layoutX="284.0" layoutY="419.0" mnemonicParsing="false" onAction="#backToSearchButton" prefHeight="40.0" prefWidth="108.0" text="Back to search" />
+                <Button fx:id="back_to_search_button" layoutX="153.0" layoutY="468.0" mnemonicParsing="false" onAction="#backToSearchButton" prefHeight="40.0" prefWidth="108.0" text="Back to search" />
                 <Button fx:id="return_to_main_button" layoutX="284.0" layoutY="468.0" mnemonicParsing="false" onAction="#returnToMainButton" prefHeight="40.0" prefWidth="108.0" text="Return to main" />
                 <TextField fx:id="check_in_date_field" editable="false" layoutX="22.0" layoutY="150.0" />
                 <TextField fx:id="check_out_date_field" editable="false" layoutX="209.0" layoutY="150.0" />
@@ -36,6 +36,7 @@
                 <TextField fx:id="amount_remaining_field" editable="false" layoutX="209.0" layoutY="249.0" />
                 <Text layoutX="20.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount payed" />
                 <Text layoutX="209.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount remaining" />
+            <Button fx:id="pay_button" layoutX="284.0" layoutY="419.0" mnemonicParsing="false" onAction="#payButton" prefHeight="40.0" prefWidth="108.0" text="Pay" />
             </children></AnchorPane>
     </items>
 </SplitPane>

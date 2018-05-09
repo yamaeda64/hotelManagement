@@ -31,16 +31,13 @@ public class SearchRoomController implements Initializable
     private Button cancel_button;
     
     @FXML
-    private TextField number_of_beds_field;
-    
-    @FXML
     private CheckBox smoking_allowed_box;
     
     @FXML
     private CheckBox neighboring_room_box;
     
     @FXML
-    private ComboBox<Room.BedType> bed_size_box;
+    private ComboBox<Room.BedType> room_size_box;
     
     @FXML
     private ComboBox<Hotel> location_box;
@@ -54,7 +51,7 @@ public class SearchRoomController implements Initializable
         try
         {
             currentSearch.setHotel(location_box.getValue());
-            currentSearch.setBedType(bed_size_box.getValue());
+            currentSearch.setBedType(room_size_box.getValue());
             currentSearch.setSmokingAllowed(smoking_allowed_box.isSelected());
             currentSearch.setAdjecentRoomAvailable(smoking_allowed_box.isSelected());
             currentSearch.setStartDate(check_in_datepicker.getValue());
@@ -86,7 +83,7 @@ public class SearchRoomController implements Initializable
         
         location_box.getItems().removeAll(location_box.getItems());
         location_box.getItems().addAll(Hotel.values());
-        bed_size_box.getItems().addAll(Room.BedType.values());
+        room_size_box.getItems().addAll(Room.BedType.values());
         
         SwedishDateFormat swedishDateFormat = new SwedishDateFormat();
         check_in_datepicker.setShowWeekNumbers(true);
