@@ -202,23 +202,28 @@ class SqlQueries {
 		java.sql.Date start = new java.sql.Date(Long.parseLong(startDate));
 		java.sql.Date end = new java.sql.Date(Long.parseLong(startDate));
 		
-		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.bookings(customer, givenPrice, amountPaid, startDate, endDate, status) values (?, ?, ?, ?, ?, ?, 'IN_PROGRESS');"
-				+ " SELECT LAST_INSERT_ID();");
+		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.bookings(customer, givenPrice, amountPaid, startDate, endDate, status) values (?, ?, ?, ?, ?, 'IN_PROGRESS');"
+				+ " ");
 		prepStatement.setInt(1, customer);
 		prepStatement.setInt(2, givenPrice);
 		prepStatement.setInt(3, amountPaid);
 		prepStatement.setDate(4, start);
 		prepStatement.setDate(5, end);
-		ResultSet svar = prepStatement.executeQuery();
+		prepStatement.executeUpdate();
+		
+		// /home/musho/Desktop/hotelserver.jar No value specified for parameter 6
+		
+		PreparedStatement idStatement = uplink.prepareStatement("SELECT LAST_INSERT_ID();");
+		ResultSet svar = idStatement.executeQuery();
 		
 		svar.next();
-		int bookingId = svar.getInt(0);
+		int bookingId = svar.getInt(0); //svar.getInt("LAST_INSERT_ID()");
 		
 		prepStatement = uplink.prepareStatement("insert into hotel.roomBinding(booking, room) values (?, ?)");
 		for(int room : rooms) {
 			prepStatement.setInt(1, bookingId);
 			prepStatement.setInt(2, room);
-			prepStatement.executeQuery();
+			prepStatement.executeUpdate();
 		}
 		return bookingId;
 	}

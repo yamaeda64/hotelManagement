@@ -30,16 +30,8 @@ public class SqlDAO {
 		int i = 0;
 		for (String key : keys) {
 			if (key.equals("adjacentRoom")) {
-				String adjacentRoom = room.getString("adjacentRoom");
-				if (!(adjacentRoom == null || adjacentRoom.equals("null"))) {
-					if (parseAdjacent) {
-						ResultSet adjRoom = query.getRoom(Integer.parseInt(adjacentRoom));
-						adjRoom.next();
-						output.append("\"adjacentRoom\":\"").append(packRoom(adjRoom, false));
-					}
-				} else {
-					// should i send back an empty string?
-				}
+				int adjacentRoom = room.getInt("adjacentRoom");
+				output.append("\"adjacentRoom\":\"" + adjacentRoom + "\"");
 			} else {
 				output.append("\"").append(key).append("\": \"").append(room.getString(key)).append("\"");
 			}
@@ -133,7 +125,7 @@ public class SqlDAO {
 	 * @throws SQLException
 	 */
 	private String packBooking(ResultSet booking) throws SQLException {
-		String[] bookingKeys = new String[] { "id", "customer", "givenPrice", "amountPaid", "startDate", "endDate" };
+		String[] bookingKeys = new String[] { "id", "customer", "givenPrice", "amountPaid", "startDate", "endDate", "status" };
 
 		StringBuilder output = new StringBuilder("{");
 		int i = 0;
@@ -146,8 +138,8 @@ public class SqlDAO {
 			} else {
 				output.append("\"").append(booking.getString(key)).append("\"");
 			}
-			if (i++ < (bookingKeys.length - 1))
-				output.append(", ");
+			//if (i++ < (bookingKeys.length - 1))
+			output.append(", ");
 		}
 
 		// rooms is a bit special because it's not a real key
