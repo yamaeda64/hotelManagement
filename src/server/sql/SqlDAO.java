@@ -24,7 +24,7 @@ public class SqlDAO {
 	 * @throws SQLException
 	 */
 	private String packRoom(ResultSet room, boolean parseAdjacent) throws SQLException {
-		String[] keys = new String[] { "id", "hotel", "roomNumber", "quality", "bedType", "noSmoking", "adjacentRoom",
+		String[] keys = new String[] { "id", "hotel", "roomNumber", "bedType", "noSmoking", "adjacentRoom",
 				"view" };
 		StringBuilder output = new StringBuilder("{");
 		int i = 0;
@@ -184,8 +184,21 @@ public class SqlDAO {
 	/*
 	 * 
 	 * 
-	 * -----------------------------------------------------------------------------
-	 * ------------------- ***
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 */
@@ -200,7 +213,7 @@ public class SqlDAO {
 		try {
 			ResultSet roomSet = query.allRooms();
 			String rooms = packRooms(roomSet);
-			return "OK " + rooms;
+			return "rooms: " + rooms;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR " + e.toString();
@@ -208,7 +221,7 @@ public class SqlDAO {
 	}
 
 	/**
-	 * Returns all bookings within a certain timeframe. (A)
+	 * Returns all bookings within a certain timeframe.
 	 * 
 	 * @param startDate
 	 * @param endDate
@@ -218,7 +231,26 @@ public class SqlDAO {
 		try {
 			ResultSet bookingSet = query.bookingsInsideTimeframe(startDate, endDate);
 			bookingSet.beforeFirst();
-			String response = "OK " + packBookings(bookingSet);
+			String response = "bookings:" + packBookings(bookingSet);
+			return response;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "ERROR";
+		}
+	}
+	
+	/**
+	 * Returns all bookings within a certain timeframe and a specific hotel.
+	 * 
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public String allBookings(String hotel, String startDate, String endDate) {
+		try {
+			ResultSet bookingSet = query.bookingsForHotel(hotel, startDate, endDate);
+			bookingSet.beforeFirst();
+			String response = "bookings:" + packBookings(bookingSet);
 			return response;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -241,13 +273,14 @@ public class SqlDAO {
 	public String findFreeRooms(String hotel, String bedType, boolean noSmoking, boolean adjacent, String startDate,
 			String endDate) {
 		try {
+			// bedtype can be null!
 			ResultSet rooms = query.findFreeRooms(hotel, bedType, noSmoking, adjacent, startDate, endDate);
 //			StringBuilder ret = new StringBuilder("OK");
 //			for (int room : rooms) {
 //				ret.append(' ').append(room);
 //			}
 //			return rooms.toString();
-			return packRooms(rooms);
+			return "rooms:" + packRooms(rooms);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR";
@@ -301,7 +334,7 @@ public class SqlDAO {
 				results = query.specificBooking(bookingId);
 			}
 			if (results != null) {
-				return "OK " + packBookings(results);
+				return "bookings:" + packBookings(results);
 			} else {
 				// exception.
 				return "ERROR bad parameters";
@@ -322,7 +355,7 @@ public class SqlDAO {
 	public String allCustomers() {
 		try {
 			ResultSet allCustomers = query.allCustomers();
-			return "OK " + packCustomers(allCustomers);
+			return "customers:" + packCustomers(allCustomers);
 		} catch (SQLException e) {
 			return "ERROR";
 		}
@@ -338,7 +371,7 @@ public class SqlDAO {
 	public String fullCustomer(int id) {
 		try {
 			ResultSet customer = query.searchCustomer(id);
-			return "OK " + packCustomer(customer, true);
+			return "customer:" + packCustomer(customer, true);
 		} catch (SQLException e) {
 			return "ERROR";
 		}
@@ -376,15 +409,46 @@ public class SqlDAO {
 	 * @param endDate
 	 * @return
 	 */
-	public String createBooking(int customer, int givenPrice, ArrayList<Integer> rooms, String startDate,
+	public String createBooking(ArrayList<Integer> rooms, String startDate,
 			String endDate) {
 		try {
-			query.createBooking(customer, rooms, givenPrice, 0, startDate, endDate);
-			return "OK";
+			int bookingId = query.createBooking(-1, rooms, 0, 0, startDate, endDate);
+			return "new booking:" + bookingId;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR";
 		}
+	}
+	
+	/**
+	 * Realize a booking - create a customer, add it to the booking, and set the price.
+	 * 
+	 * @param id
+	 * @param newPrice
+	 * @param firstName
+	 * @param lastName
+	 * @param telephone
+	 * @param idNumber
+	 * @param address
+	 * @param creditCard
+	 * @param powerLevel
+	 * @param passportNumber
+	 * @return
+	 */
+	public String realizeBooking(int id, int newPrice, String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, Integer powerLevel, String passportNumber) {
+		try {
+			int newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
+					powerLevel, passportNumber);
+			query.setCustomerOnBooking(id, newCustomerId);
+			query.updateBookingPayment(id, 0, newPrice);
+			return "OK";
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "ERROR";
+		}
+		
+		
 	}
 
 	/**
@@ -402,14 +466,13 @@ public class SqlDAO {
 	 */
 	public String createCustomer(String firstName, String lastName, String telephone, String idNumber, String address,
 			String creditCard, Integer powerLevel, String passportNumber) {
-		// JsonElement root = new JsonParser().parse(jsonString); --->
 		int newCustomerId;
 		try {
 			newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
 					powerLevel, passportNumber);
 			ResultSet newCustomer = query.searchCustomer(newCustomerId);
 			newCustomer.next();
-			return "OK + " + packCustomer(newCustomer, false);
+			return "customer:" + packCustomer(newCustomer, false);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR";

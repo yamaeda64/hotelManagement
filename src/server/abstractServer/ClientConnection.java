@@ -90,13 +90,14 @@ public class ClientConnection extends Thread
             {
                 
                 abstractServer.exceptionOccured(new SocketTimeoutException("The connection timed out"));
-                logger.log(Level.SEVERE, "The connection timed out");
+                //logger.log(Level.SEVERE, "The connection timed out");
+                // TODO, how to handle timeout??
                 try
                 {
                     Thread.sleep(100);
                 } catch(InterruptedException e1)
                 {
-                    e1.printStackTrace();
+                    //e1.printStackTrace();
                 }
             }
         }

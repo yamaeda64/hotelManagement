@@ -8,6 +8,8 @@ import client.model.customer.RealCustomer;
 import controller.ScreenController.Screen;
 import controller.supportClasses.BookingSearch;
 import controller.supportClasses.RoomSearch;
+import controller.supportClasses.ServerCommunicator;
+import controller.supportClasses.ServerMessage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -28,12 +30,17 @@ public class CentralController
 	
 	private BookingSearch bookingSearch;
 	
+	private ServerMessage serverMessageConstructor;
+	private ServerCommunicator serverCommunicator;
 	
 	public CentralController(Stage stage) throws IOException {
 		//setup();
 		screenController = new ScreenController(stage,this);
 		modelAccess = new ModelAccess();
 		location = Hotel.VAXJO; 	//TODO Default, should maybe come from server or save default so not kalmar has vaxjo as default
+		serverMessageConstructor = new ServerMessage();
+		serverCommunicator = new ServerCommunicator();
+		serverCommunicator.sendToServer(serverMessageConstructor.getAllRooms());
 	}
 	
 	public ScreenController getScreenController() {
@@ -72,9 +79,10 @@ public class CentralController
 		return modelAccess.getAllBookings();
 	}
 	
-	public Iterator<Booking> getBookings(Hotel hotel, LocalDate value)
+	public Iterator<Booking> getBookings(Hotel hotel, LocalDate date)
 	{
-		modelAccess.updateBookings(hotel, value);
+		serverCommunicator.sendToServer(serverMessageConstructor.getBookingsOfDate(hotel,  date));
+		modelAccess.updateBookings(hotel, date);
 		return modelAccess.getAllBookings();
 	}
 	
@@ -111,18 +119,32 @@ public class CentralController
 	public void sendInProgressBooking(Booking booking)
 	{
 		this.inProgressBooking = booking;
-		// TODO, need to send the in progress booking to server to "lock" the room
+		serverCommunicator.sendToServer(serverMessageConstructor.createBooking(booking));
+		serverCommunicator.receiveMessageFromServer();
+		// Todo, receive the reply and add the int as bookingID
 	}
 	
 	public void finishBooking(RealCustomer customer)
 	{
 		inProgressBooking.setCustomer(customer);
 		inProgressBooking.setBookingStatus(Booking.BookingStatus.BOOKED);
-		// TODO, send the final booking which updates the previous inProgressBooking
+		
+		serverCommunicator.sendToServer(serverMessageConstructor.createBooking(inProgressBooking));
+		// TODO, should this be updateBooking???
 	}
 	
 	public BookingSearch getBookingSearch()
 	{
 		return bookingSearch;
+	}
+	
+	public void changeBookingStatus(Booking booking, Booking.BookingStatus bookingStatus)
+	{
+		serverCommunicator.sendToServer(serverMessageConstructor.setStatus(booking, bookingStatus));
+	}
+	
+	public void changePayedBookingAmount(Booking booking, double amountPayed, double totalCost)
+	{
+		serverCommunicator.sendToServer(serverMessageConstructor.setExpence(booking,amountPayed,totalCost));
 	}
 }

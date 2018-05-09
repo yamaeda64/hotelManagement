@@ -71,6 +71,8 @@ public class MainMenuController implements Initializable{
     public void refresh()
     {
         bookingList.clear();
+        
+        updateBookingsByDate();
         Iterator<Booking> bookingIterator = centralController.getBookings();
         while(bookingIterator.hasNext())
         {
@@ -90,7 +92,7 @@ public class MainMenuController implements Initializable{
         Platform.runLater(()->
         {
             bookingList = FXCollections.observableArrayList();
-            
+            updateBookingsByDate();
             Iterator<Booking> bookingIterator = centralController.getBookings();
             while(bookingIterator.hasNext())
             {
@@ -116,6 +118,7 @@ public class MainMenuController implements Initializable{
             menu_vaxjo.setSelected(true);
             menu_kalmar.setSelected(false);
             centralController.setLocation(Hotel.VAXJO);
+            updateBookingsByDate();
         });
         
         menu_kalmar.setOnAction(event ->
@@ -123,6 +126,7 @@ public class MainMenuController implements Initializable{
             menu_kalmar.setSelected(true);
             menu_vaxjo.setSelected(false);
             centralController.setLocation(Hotel.KALMAR);
+            updateBookingsByDate();
         });
     
         
@@ -138,15 +142,7 @@ public class MainMenuController implements Initializable{
         // Action when changing date picker
         datePicker.onActionProperty().set(event ->
         {
-            
-            if(menu_vaxjo.isSelected())
-            {
-                centralController.getBookings(Hotel.VAXJO, datePicker.getValue());
-            }
-            else if(menu_kalmar.isSelected())
-            {
-                centralController.getBookings(Hotel.KALMAR, datePicker.getValue());
-            }
+            updateBookingsByDate();
         });
     
     }
@@ -169,7 +165,20 @@ public class MainMenuController implements Initializable{
                 new PropertyValueFactory<RoomWrapper, String>("bookingStatus"));
         
         bookingsTableView.getColumns().addAll(firstNameCol, lastNameCol, roomNumberCol, bookingStatusCol);
+        
         bookingsTableView.setItems(bookingList);
+    }
+    
+    private void updateBookingsByDate()
+    {
+        if(menu_vaxjo.isSelected())
+        {
+            centralController.getBookings(Hotel.VAXJO, datePicker.getValue());
+        }
+        else if(menu_kalmar.isSelected())
+        {
+            centralController.getBookings(Hotel.KALMAR, datePicker.getValue());
+        }
     }
 }
 
