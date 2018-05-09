@@ -184,8 +184,21 @@ public class SqlDAO {
 	/*
 	 * 
 	 * 
-	 * -----------------------------------------------------------------------------
-	 * ------------------- ***
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 */
@@ -208,7 +221,7 @@ public class SqlDAO {
 	}
 
 	/**
-	 * Returns all bookings within a certain timeframe. (A)
+	 * Returns all bookings within a certain timeframe.
 	 * 
 	 * @param startDate
 	 * @param endDate
@@ -226,6 +239,13 @@ public class SqlDAO {
 		}
 	}
 	
+	/**
+	 * Returns all bookings within a certain timeframe and a specific hotel.
+	 * 
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
 	public String allBookings(String hotel, String startDate, String endDate) {
 		try {
 			ResultSet bookingSet = query.bookingsForHotel(hotel, startDate, endDate);
@@ -400,6 +420,21 @@ public class SqlDAO {
 		}
 	}
 	
+	/**
+	 * Realize a booking - create a customer, add it to the booking, and set the price.
+	 * 
+	 * @param id
+	 * @param newPrice
+	 * @param firstName
+	 * @param lastName
+	 * @param telephone
+	 * @param idNumber
+	 * @param address
+	 * @param creditCard
+	 * @param powerLevel
+	 * @param passportNumber
+	 * @return
+	 */
 	public String realizeBooking(int id, int newPrice, String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, Integer powerLevel, String passportNumber) {
 		try {
 			int newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
