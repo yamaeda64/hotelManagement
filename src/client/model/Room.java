@@ -11,6 +11,7 @@ public class Room
     private boolean noSmoking;
     private BedType bedType;
     private Room adjecentRoom;
+    private int price;
     
     
     
@@ -105,5 +106,11 @@ public class Room
     public void setAdjecentRoom(Room adjecentRoom)
     {
         this.adjecentRoom = adjecentRoom;
+    }
+    public int getPrice() {
+    	return price;
+    }
+    public void setPrice(int p) {
+    	price = p;
     }
 }

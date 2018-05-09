@@ -35,9 +35,9 @@ public class ResultListController implements Initializable
     
     @FXML
     private TextField number_of_beds_field;
-    
+ 
     @FXML
-    private TextField bed_size_field;
+    private TextField price_field;
     
     @FXML
     private TextField view_field;
@@ -102,9 +102,10 @@ public class ResultListController implements Initializable
             room_number_field.setText(roomNumber);
             floor_field.setText(""+roomNumber.charAt(0));
             location_field.setText(""+selectedRoom.getHotel());
-            bed_size_field.setText(""+selectedRoom.getBedType());
+            room_size_field.setText(""+selectedRoom.getBedType());
             smoke_free_field.setText(""+selectedRoom.isNoSmoking());
             view_field.setText(selectedRoom.getView());
+            price_field.setText(""+selectedRoom.getPrice());
             
         });
         
