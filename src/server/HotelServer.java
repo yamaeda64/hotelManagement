@@ -3,12 +3,10 @@ package server;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Logger;
 
 import server.abstractServer.AbstractServer;
 import server.sql.SqlDAO;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,7 +16,6 @@ import com.google.gson.JsonParser;
 public class HotelServer extends AbstractServer
 {
     SqlDAO database;
-    private Logger logger = Logger.getLogger(HotelServer.class.getName());
     
     public HotelServer() throws SQLException {
     	// hej
@@ -105,7 +102,7 @@ public class HotelServer extends AbstractServer
         	{
         		String[] params = incoming[1].split(",");
         		sendToClient(database.updateBookingPayment(Integer.parseInt(params[0]), 
-        				Integer.parseInt(params[1]), Integer.parseInt(params[2])));
+        				Double.parseDouble(params[1]), Double.parseDouble(params[2])));
         		break;
         	}
         	

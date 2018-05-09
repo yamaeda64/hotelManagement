@@ -509,7 +509,7 @@ public class SqlDAO {
 	 *            The amount the customer is expected to pay.
 	 * @return OK if successful.
 	 */
-	public String updateBookingPayment(int id, int amountPaid, int totalPayment) {
+	public String updateBookingPayment(int id, double amountPaid, double totalPayment) {
 		try {
 			query.updateBookingPayment(id, amountPaid, totalPayment);
 			return "OK";

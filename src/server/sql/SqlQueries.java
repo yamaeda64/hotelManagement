@@ -272,7 +272,7 @@ class SqlQueries {
 		while (roomSet.next()) {
 			rooms.add(roomSet.getInt("id"));
 		}
-		
+			
 		// get bindings between a room and a booking
 		StringBuilder roomClause = new StringBuilder("SELECT * FROM hotel.roomBinding WHERE");
 		roomClause.append(" room IN (");
@@ -293,13 +293,15 @@ class SqlQueries {
 
 		// get all the affected bookings, within the correct time
 		StringBuilder bookingClause = new StringBuilder("SELECT * FROM hotel.bookings WHERE startDate < ? AND endDate > ?");
-		bookingClause.append(" AND id IN (");
-		Iterator<Integer> bindingIt = bindings.iterator();
-		while(bindingIt.hasNext()) {
-			bookingClause.append(bindingIt.next());
-			if (bindingIt.hasNext()) bookingClause.append(",");
+		if (bindings.size() > 0) {
+			bookingClause.append(" AND id IN (");
+			Iterator<Integer> bindingIt = bindings.iterator();
+			while(bindingIt.hasNext()) {
+				bookingClause.append(bindingIt.next());
+				if (bindingIt.hasNext()) bookingClause.append(",");
+			}
+			bookingClause.append(")");
 		}
-		bookingClause.append(")");
 		java.sql.Date start = new java.sql.Date(Long.parseLong(startDate));
 		java.sql.Date end = new java.sql.Date(Long.parseLong(endDate));
 		PreparedStatement bfhBookingStatement = uplink.prepareStatement(bookingClause.toString());
@@ -500,11 +502,11 @@ class SqlQueries {
 	 * @param totalPayment
 	 * @throws SQLException
 	 */
-	void updateBookingPayment(int id, int amountPaid, int totalPayment) throws SQLException {
+	void updateBookingPayment(int id, double amountPaid, double totalPayment) throws SQLException {
 		//query.updateBookingPayment(int id, int amountPaid, int totalPayment);
 		PreparedStatement ubpPrepStatement = uplink.prepareStatement("UPDATE hotel.bookings SET amountPaid=?, givenPrice=? WHERE id=?");
-		ubpPrepStatement.setInt(1, amountPaid);
-		ubpPrepStatement.setInt(2, totalPayment);
+		ubpPrepStatement.setDouble(1, amountPaid);
+		ubpPrepStatement.setDouble(2, totalPayment);
 		ubpPrepStatement.setInt(3, id);
 		ubpPrepStatement.executeQuery();
 	}
