@@ -137,20 +137,28 @@ public class HotelServer extends AbstractServer
         	
         	case "realize booking":
         	{
-        		String[] params = incoming[1].split(",", 3);
-        		int bookingID = Integer.parseInt(params[0]);
-        		int newPrice = Integer.parseInt(params[1]);
-        		JsonElement requestElement = new JsonParser().parse(params[2]);
-        		JsonObject request = requestElement.getAsJsonObject();
+
+        		JsonObject bookingJson = new JsonParser().parse(incoming[1]).getAsJsonObject();
         		
-        		String firstName = request.get("firstName").getAsString();
-        		String lastName = request.get("lastName").getAsString();
-        		String telephone = request.get("telephone").getAsString();
-        		String idNumber = request.get("idNumber").getAsString();
-        		String address = request.get("address").getAsString();
-        		String creditCard = request.get("creditCard").getAsString();
-        		String passportNumber = request.get("passportNumber").getAsString();
-        		int powerLevel = request.get("powerLevel").getAsInt();
+        		String[] params = incoming[1].split(",", 3);
+        		int bookingID = bookingJson.get("id").getAsInt(); //Integer.parseInt(params[0]);
+        		int newPrice = bookingJson.get("price").getAsInt();
+        		
+        		//JsonObject customerJson = new JsonParser().parse(params[2]).getAsJsonObject();
+        		JsonObject customerJson = bookingJson.get("customer").getAsJsonObject();
+        		
+        		String firstName = customerJson.get("firstName").getAsString();
+        		String lastName = customerJson.get("lastName").getAsString();
+        		String telephone = customerJson.get("telephoneNumber").getAsString();
+        		String idNumber = customerJson.get("personalNumber").getAsString();
+        		String address = customerJson.get("address").getAsJsonObject().toString();
+        		String creditCard = customerJson.get("creditCard").getAsJsonObject().toString();
+        		String passportNumber = customerJson.get("passportNumber").getAsString();
+        		String powerLevel = customerJson.get("powerLevel").getAsString();
+        		
+        		System.out.println("\nnuseee\n\n" + address + "\n" + creditCard + "\n\n");
+        		
+        		
         		
         		response = database.realizeBooking(bookingID, newPrice, firstName, lastName, telephone, idNumber, address, creditCard, powerLevel, passportNumber);
         		break;

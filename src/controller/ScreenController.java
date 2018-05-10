@@ -20,7 +20,9 @@ public class ScreenController {
 		RESULTS("/fxml/Result_room_list.fxml"),
 		SEARCH_ROOMS("/fxml/Search_room.fxml"),
 		BOOKING_RESULTS("/fxml/result_booking_list.fxml"),
+		CONFIRM_BOOKING("/fxml/Booking_confirmation.fxml"),
 		SEARCH_BOOKING("/fxml/Search_booking.fxml");
+	
 		
 		private String resourceLocation;
 		
@@ -43,20 +45,15 @@ public class ScreenController {
 			
 			loader = new FXMLLoader(ScreenController.class.getResource("/fxml/Main_menu.fxml"));
 			Parent root=loader.load();
-			//FXMLLoader.load(ScreenController.class.getResource("/fxml/Main_menu.fxml"));
 			MainMenuController mainMenuController = loader.getController();
 			mainMenuController.setCentralController(centralController);
 			stageM.setRoot(root);
-			//stageM.setPane(loader.load(ScreenController.class.getResource(screen.getResourceLocation())));
-			//stageM.setRoot(FXMLLoader.load(ScreenController.class.getResource(screen.getResourceLocation())));
 		}
 		else if (screen.getResourceLocation() == ScreenController.Screen.SEARCH_ROOMS.getResourceLocation()) {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			SearchRoomController searchRoomController = loader.getController();
 			searchRoomController.setCentralController(centralController);
-			//System.out.print(controller == null);
-			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);
 		}
 		else if (screen.getResourceLocation() ==  ScreenController.Screen.RESULTS.getResourceLocation()) {
@@ -64,22 +61,15 @@ public class ScreenController {
 			Parent root=loader.load();
 			ResultListController resultListController = loader.getController();
 			resultListController.setCentralController(centralController);
-			//System.out.print(controller == null);
-			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);
-			
-			//stageM.setPane(loader.load(ScreenController.class.getResource(screen.getResourceLocation())));
 		}
 		else if (screen.getResourceLocation() ==  ScreenController.Screen.CUSTOMER_FORM.getResourceLocation()) {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			CustomerFormController customerFormController = loader.getController();
 			customerFormController.setCentralController(centralController);
-			//System.out.print(controller == null);
-			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);
 			
-			//stageM.setPane(loader.load(ScreenController.class.getResource(screen.getResourceLocation())));
 		}
 		else if (screen.getResourceLocation() == ScreenController.Screen.ABOUT.getResourceLocation()) {
 			stageM.setPane(loader.load(ScreenController.class.getResource(screen.getResourceLocation())));
@@ -89,29 +79,28 @@ public class ScreenController {
 			Parent root=loader.load();
 			SearchBookingController searchBookingController = loader.getController();
 			searchBookingController.setCentralController(centralController);
-			//System.out.print(controller == null);
-			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);
-			
-			//stageM.setPane(loader.load(ScreenController.class.getResource(screen.getResourceLocation())));
 		}
 		else if (screen.getResourceLocation() == ScreenController.Screen.BOOKING_RESULTS.getResourceLocation()) {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			BookingResultsListController bookingResultsListController = loader.getController();
 			bookingResultsListController.setCentralController(centralController);
-			//System.out.print(controller == null);
-			//System.out.println(controller.hasNoCentralController());
 			stageM.setRoot(root);
-			
-			//stageM.setPane(loader.load(ScreenController.class.getResource(screen.getResourceLocation())));
+
+		}
+		else if (screen.getResourceLocation() == ScreenController.Screen.CONFIRM_BOOKING.getResourceLocation()) {
+			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
+			Parent root=loader.load();
+			BookingConfirmationController bookingConfirmationController = loader.getController();
+			bookingConfirmationController.setCentralController(centralController);
+			bookingConfirmationController.setBookingInProgress(centralController.getBookingInProgress());
+			stageM.setRoot(root);
+
 		}
 		else if (true) {
-			System.out.println("error??=?");
+			System.err.println("Unexpected error during screen switching.");
 			
-			
-			
-			//StageManager.setPaneFragment(FXMLLoader.load(ScreenController.class.getResource(screen.getResourceLocation())));
 		}
 	}
 }

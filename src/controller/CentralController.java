@@ -97,7 +97,15 @@ public class CentralController
 	/*public Iterator<Room> getRooms()
 	{
 		return modelAccess.getAllRooms();
-	}*/
+    }*/
+
+	public void updateBookingInProgress(RealCustomer c) {
+		inProgressBooking.setCustomer(c);
+	}
+	public Booking getBookingInProgress() {
+		return inProgressBooking;
+	}
+
 	
 	
 	public void setLocation(Hotel hotel)
