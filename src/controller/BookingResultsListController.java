@@ -82,9 +82,9 @@ public class BookingResultsListController implements Initializable
 	@FXML
 	public void checkInButton()
 	{
-		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_IN);
+		booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_IN);
 		// TODO, send to server
-		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
 		centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_IN);
 	}
 
@@ -101,11 +101,11 @@ public class BookingResultsListController implements Initializable
 			alert.showAndWait();
 		}
 		else {
-			booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_OUT);
+			booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_OUT);
 			// TODO, send to server
-            booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_OUT);
+            booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_OUT);
             // Todo, send to server
-            checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+            checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
             centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_OUT);		}
 		
 	}
@@ -115,8 +115,8 @@ public class BookingResultsListController implements Initializable
 	{
 
 
-		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CANCELLED);
-		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+		booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CANCELLED);
+		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
 		
 		centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CANCELLED);
 		// TODO, send to server
@@ -205,7 +205,7 @@ public class BookingResultsListController implements Initializable
 							super.updateItem(item, empty);
 							if(item != null)
 							{
-								setText(item.getCustomer().getFamilyName());
+								setText(item.getCustomer().getLastName());
 							} else
 							{
 								setText(null);
@@ -223,9 +223,9 @@ public class BookingResultsListController implements Initializable
 		{
 			if(booking_ListView.getSelectionModel().getSelectedItem() != null)
 			{
-				System.out.println(booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+				System.out.println(booking_ListView.getSelectionModel().getSelectedItem().getStatus());
 				booking_number_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingID());
-				name_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFirstName() + " " + booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFamilyName());
+				name_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFirstName() + " " + booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getLastName());
 
 				Iterator<Room> rooms = booking_ListView.getSelectionModel().getSelectedItem().getAllRooms();
 				String roomString = "";
@@ -236,7 +236,7 @@ public class BookingResultsListController implements Initializable
 				room_number_field.setText(roomString);
 				check_in_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStartDate().toString());
 				check_out_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getEndDate().toString());
-				checked_in_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus().toString());
+				checked_in_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStatus().toString());
 
 				//Cash Logic
 				amount_payed_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed());

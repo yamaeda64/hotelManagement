@@ -19,12 +19,25 @@ public class RoomWrapper
     
     public String getFirstName()
     {
-        return booking.getCustomer().getFirstName();
+        // TODO, remove if else
+        if(booking.getCustomer() != null)
+        {
+            return booking.getCustomer().getFirstName();
+        }
+        else
+            return "";
     }
     
-    public String getFamilyName()
+    public String getLastName()
     {
-        return booking.getCustomer().getFamilyName();
+        if(booking.getCustomer() != null)
+        {
+            return booking.getCustomer().getLastName();
+        }
+        else
+        {
+            return "";
+        }
     }
     public String getRoomNumbers()
     {
@@ -45,6 +58,6 @@ public class RoomWrapper
     
     public String getBookingStatus()
     {
-       return booking.getBookingStatus().toString();
+       return booking.getStatus().toString();
     }
 }

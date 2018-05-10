@@ -70,14 +70,8 @@ public class MainMenuController implements Initializable{
     @FXML
     public void refresh()
     {
-        bookingList.clear();
-        
         updateBookingsByDate();
-        Iterator<Booking> bookingIterator = centralController.getBookings();
-        while(bookingIterator.hasNext())
-        {
-            bookingList.add(new RoomWrapper(bookingIterator.next()));
-        }
+        
     }
     
     public void setCentralController(CentralController centralController)
@@ -91,16 +85,6 @@ public class MainMenuController implements Initializable{
     {
         Platform.runLater(()->
         {
-            bookingList = FXCollections.observableArrayList();
-            updateBookingsByDate();
-            Iterator<Booking> bookingIterator = centralController.getBookings();
-            while(bookingIterator.hasNext())
-            {
-                bookingList.add(new RoomWrapper(bookingIterator.next()));
-            }
-    
-            initTableView();
-    
             if(centralController.getLocation().equals(Hotel.VAXJO))
             {
                 menu_vaxjo.setSelected(true);
@@ -109,6 +93,14 @@ public class MainMenuController implements Initializable{
             {
                 menu_kalmar.setSelected(true);
             }
+            
+            bookingList = FXCollections.observableArrayList();
+           
+            
+            
+            initTableView();
+            updateBookingsByDate();
+            
            
         });
         
@@ -154,7 +146,7 @@ public class MainMenuController implements Initializable{
                 new PropertyValueFactory<RoomWrapper, String>("firstName"));
         TableColumn lastNameCol = new TableColumn("Last Name");
         lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<RoomWrapper, String>("familyName"));
+                new PropertyValueFactory<RoomWrapper, String>("lastName"));
         
         TableColumn roomNumberCol = new TableColumn("Room Number");
         roomNumberCol.setCellValueFactory(
@@ -171,13 +163,22 @@ public class MainMenuController implements Initializable{
     
     private void updateBookingsByDate()
     {
+        bookingList.clear();
+        
         if(menu_vaxjo.isSelected())
         {
+            centralController.clearBookings();
             centralController.getBookings(Hotel.VAXJO, datePicker.getValue());
         }
         else if(menu_kalmar.isSelected())
         {
+            centralController.clearBookings();
             centralController.getBookings(Hotel.KALMAR, datePicker.getValue());
+        }
+        Iterator<Booking> bookingIterator = centralController.getBookings();
+        while(bookingIterator.hasNext())
+        {
+            bookingList.add(new RoomWrapper(bookingIterator.next()));
         }
     }
 }

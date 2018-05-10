@@ -66,7 +66,7 @@ public class ResultListController implements Initializable
             System.out.println("No rooms were selected");
         }
         Booking booking = new Booking();
-        booking.setBookingStatus(Booking.BookingStatus.IN_PROGRESS);
+        booking.setStatus(Booking.BookingStatus.IN_PROGRESS);
         booking.setStartDate(centralController.getLastRoomSearch().getStartDate());
         booking.setEndDate(centralController.getLastRoomSearch().getEndDate());
         for(Room room:selectedItems)
@@ -105,19 +105,19 @@ public class ResultListController implements Initializable
             room_size_field.setText(""+selectedRoom.getBedType());
             smoke_free_field.setText(""+selectedRoom.isNoSmoking());
             view_field.setText(selectedRoom.getView());
-            price_field.setText(""+selectedRoom.getPrice());
+            price_field.setText(""+selectedRoom.getStandardPrice());
             
         });
         
         Platform.runLater(()->
         {
-            Iterator<Room> roomIterator = centralController.getRooms();
+            Iterator<Room> roomIterator = centralController.getAvailableRooms();
             while(roomIterator.hasNext())
             {
                 result_list.getItems().add(roomIterator.next());
             }
-            
         });
+       
     }
     
     private void initListView()

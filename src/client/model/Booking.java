@@ -17,7 +17,7 @@ public class Booking
     private LocalDate endDate;
     private double price;
     private Customer customer;
-    private BookingStatus bookingStatus;
+    private BookingStatus status;
     private double amountPayed;
     
     public Booking()
@@ -43,14 +43,14 @@ public class Booking
     // Getters & Setters
     
     
-    public BookingStatus getBookingStatus()
+    public BookingStatus getStatus()
     {
-        return bookingStatus;
+        return status;
     }
     
-    public void setBookingStatus(BookingStatus bookingStatus)
+    public void setStatus(BookingStatus status)
     {
-        this.bookingStatus = bookingStatus;
+        this.status = status;
     }
     
     public Iterator<Room> getAllRooms()
@@ -104,7 +104,6 @@ public class Booking
     }
     
     public void setCustomer(Customer customer)
-
     {
         this.customer = customer;
     }

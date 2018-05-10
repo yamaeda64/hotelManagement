@@ -1,9 +1,6 @@
 package controller.supportClasses;
 
 import client.model.Hotel;
-import client.model.Room;
-
-import java.time.LocalDate;
 
 public class BookingSearch
 {
@@ -14,9 +11,6 @@ public class BookingSearch
     private String telephoneNumber;
     private String bookingNumber;
     private Hotel hotel;
-    
- 
-    
     
     public BookingSearch()
     {
@@ -84,7 +78,4 @@ public class BookingSearch
         }
         this.hotel = hotel;
     }
-    
-    
-    
 }

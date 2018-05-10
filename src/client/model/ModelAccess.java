@@ -2,13 +2,11 @@ package client.model;
 
 
 import client.model.customer.Customer;
-import client.model.customer.ProxyCustomer;
-import com.google.gson.Gson;
 import controller.supportClasses.RoomSearch;
 import controller.supportClasses.ServerMessage;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 
@@ -19,7 +17,7 @@ public class ModelAccess
 {
     private ServerMessage serverMessage;
     private ArrayList<Booking> bookings;
-    private ArrayList<Room> rooms;
+    private HashMap<Integer, Room> rooms;
     
     // TODO, Maybe customer only needs to be saved in bookings in client??
     private ArrayList<Customer> customer;
@@ -27,15 +25,16 @@ public class ModelAccess
     
     public ModelAccess()
     {
-        
-        addDummyRoomData();
-        addDummyBookingData();
+        bookings = new ArrayList<>();
+        rooms = new HashMap<>();
+        //addDummyRoomData();
+       // addDummyBookingData();
        
-        Gson gson = new Gson();
+       /* Gson gson = new Gson();
         String jsonString = gson.toJson(bookings);
         System.out.println(jsonString);
-    
-        serverMessage = new ServerMessage();
+    */
+     
        
         // from json array example
         /*
@@ -50,7 +49,7 @@ public class ModelAccess
     
     public void addRoom(Room room)
     {
-        rooms.add(room);
+        rooms.put(room.getId(),room);
     }
     
     public void addBooking(Booking booking)
@@ -59,10 +58,10 @@ public class ModelAccess
     }
     
     
-    public Iterator<Room> getAllRooms()
+  /*  public Iterator<Room> getAllRooms()
     {
         return rooms.iterator();
-    }
+    } */  // todo, don't think this is needed
     
     public Iterator<Booking> getAllBookings()
     {
@@ -72,7 +71,7 @@ public class ModelAccess
     
     // TODO, adding dummy data is temp
     
-    private void addDummyRoomData()
+    /*private void addDummyRoomData()
     {
         System.out.println("Add dummy Data was called");
         rooms = new ArrayList<>();
@@ -93,7 +92,7 @@ public class ModelAccess
     
         Room room3 = new Room();
         room3.setRoomNumber(404);
-        room3.setBedType(Room.BedType.KINGSIZE);
+        room3.setBedType(Room.BedType.KING);
         room3.setHotel(Hotel.VAXJO);
         room3.setNoSmoking(true);
         room3.setView("Lake");
@@ -112,35 +111,40 @@ public class ModelAccess
         booking.setAmountPayed(145);
         booking.addRoom(rooms.get(0));
         booking.addRoom(rooms.get(1));
-        booking.setCustomer(customer);
+       // booking.setCustomer(customer);
         booking.setStartDate(LocalDate.of(2018,05,04));
         booking.setEndDate(LocalDate.of(2018,05,06));
         booking.setPrice(2000);
-        booking.setBookingStatus(Booking.BookingStatus.BOOKED);
+        booking.setStatus(Booking.BookingStatus.BOOKED);
         bookings.add(booking);
         
         Booking booking2 = new Booking();
         Customer customer2 = new ProxyCustomer("2","Ray","Kurzweil");
         booking2.addRoom(rooms.get(2));
         booking2.setAmountPayed(500);
-        booking2.setCustomer(customer2);
+       // booking2.setCustomer(customer2);
         booking2.setStartDate(LocalDate.of(2018,04,22));
         booking2.setEndDate(LocalDate.of(2018,04,25));
         booking2.setPrice(6000);
-        booking2.setBookingStatus(Booking.BookingStatus.CHECKED_IN);
+        booking2.setStatus(Booking.BookingStatus.CHECKED_IN);
         bookings.add(booking2);
     }
-    
-    public void updateBookings(Hotel hotel, LocalDate value)
-    {
-        // TODO, request all Bookings in one of the Hotels from server
-        System.out.println("Requested " + hotel.toString() + " " + value);
-    }
-    
+    */
+   
     
     public void updateBookings(RoomSearch currentSearch)
     {
        String messageToServer =  serverMessage.getRoomsFromSearch(currentSearch);
        System.out.println(messageToServer); // TODO, add send to server here
+    }
+    
+    public void clearBookings()
+    {
+        bookings.clear();
+    }
+    
+    public Room getRoomByID(int id)
+    {
+        return rooms.get(id);
     }
 }

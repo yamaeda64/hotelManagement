@@ -90,7 +90,7 @@ public class CustomerFormController implements Initializable
                 throw new IllegalArgumentException("There was no last name");
             } else
             {
-                customer.setFamilyName(last_name_field.getText());
+                customer.setLastName(last_name_field.getText());
             }
     
             Address address = new Address();
