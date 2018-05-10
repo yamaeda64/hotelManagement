@@ -19,8 +19,7 @@ public class StageManager {
         //stage.setMinHeight(600);
         FXMLLoader loader = new FXMLLoader(ScreenController.class.getResource("/fxml/Main_menu.fxml"));
         Parent root=loader.load();
-        
-        //FXMLLoader.load(ScreenController.class.getResource("/fxml/Main_menu.fxml"));
+
         MainMenuController mm = loader.getController();
         mm.setCentralController(cc);
         Scene s = new Scene(root);
