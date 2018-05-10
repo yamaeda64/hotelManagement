@@ -1,10 +1,5 @@
 package controller;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.ResourceBundle;
-
 import client.model.Booking;
 import client.model.Room;
 import client.model.customer.RealCustomer;
@@ -15,6 +10,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.ResourceBundle;
 
 public class BookingConfirmationController implements Initializable{
 	private CentralController centralController;
@@ -44,7 +44,11 @@ public class BookingConfirmationController implements Initializable{
 
     @FXML
     void bookingButton(ActionEvent event) throws IOException {
-    	centralController.finishBooking(customer);
+    	
+		//TODO, if set final price isn't blank
+		// check if right format, (maybe change , to . )
+		// if blank, do below code, else set the price to the same as the field.
+    	centralController.finalizeBooking(bookingInProgress.getPrice());
         centralController.changeScreen(Screen.MAIN);
     }
 
@@ -64,7 +68,8 @@ public class BookingConfirmationController implements Initializable{
     }
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+		
+    	text_area.setEditable(false);
 		
 		Platform.runLater(()->
         {

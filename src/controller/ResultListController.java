@@ -75,7 +75,7 @@ public class ResultListController implements Initializable
             booking.addRoom(room);
         }
 
-        centralController.sendInProgressBooking(booking);
+        centralController.createNewBooking(booking);
         centralController.changeScreen(Screen.CUSTOMER_FORM);
     }
     

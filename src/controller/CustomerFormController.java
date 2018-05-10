@@ -183,7 +183,7 @@ public class CustomerFormController implements Initializable
                 throw new IllegalArgumentException("The cvc code must be in integers only");
             }
             customer.setCreditCard(card);
-            centralController.finishBooking(customer);
+            centralController.realizeBooking(customer);
             centralController.changeScreen(Screen.MAIN);
             centralController.updateBookingInProgress(customer);
             //centralController.finishBooking(customer);

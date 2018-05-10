@@ -67,6 +67,14 @@ public class ServerMessage
         return message+json;
     }
     
+    public String finalizeBooking(Booking booking)
+    {
+        String message = "finalize booking:";
+        message += booking.getId();
+        message += booking.getPrice();
+        return message;
+    }
+    
     public String setStatus(Booking booking, Booking.BookingStatus bookingStatus)
     {
         String message = "set status:";

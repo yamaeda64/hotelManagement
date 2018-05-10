@@ -137,12 +137,10 @@ public class CentralController
 		return lastRoomSearch;
 	}
 	
-	public void sendInProgressBooking(Booking booking)
+	public void createNewBooking(Booking booking)
 	{
 		this.inProgressBooking = booking;
 		serverCommunicator.sendToServer(serverMessageConstructor.createBooking(booking));
-		//serverCommunicator.receiveMessageFromServer();
-		// Todo, receive the reply and add the int as bookingID
 	}
 	
 	public void setInProgressBookingID(int id)
@@ -150,13 +148,20 @@ public class CentralController
 		this.inProgressBooking.setId(id);
 	}
 	
-	public void finishBooking(RealCustomer customer)
+	public void realizeBooking(RealCustomer customer)
 	{
 		inProgressBooking.setCustomer(customer);
 		inProgressBooking.setStatus(Booking.BookingStatus.BOOKED);
 		
 		serverCommunicator.sendToServer(serverMessageConstructor.createBooking(inProgressBooking));
-		// TODO, should this be updateBooking???
+		
+	}
+	
+	public void finalizeBooking(double finalPrice)
+	{
+		inProgressBooking.setPrice(finalPrice);
+		
+		serverCommunicator.sendToServer(serverMessageConstructor.finalizeBooking(inProgressBooking));
 	}
 	
 	public BookingSearch getBookingSearch()
