@@ -47,7 +47,7 @@ public class CreditCard
         return cvc;
     }
     
-    public void setCvc(int cvv)
+    public void setCvc(int cvc)
     {
         this.cvc = cvc;
     }
