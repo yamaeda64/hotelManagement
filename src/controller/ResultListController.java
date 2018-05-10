@@ -97,16 +97,18 @@ public class ResultListController implements Initializable
         
         result_list.setOnMouseClicked(event ->
         {
-            Room selectedRoom = result_list.getSelectionModel().getSelectedItem();
-            String roomNumber = "" + selectedRoom.getRoomNumber();
-            room_number_field.setText(roomNumber);
-            floor_field.setText(""+roomNumber.charAt(0));
-            location_field.setText(""+selectedRoom.getHotel());
-            room_size_field.setText(""+selectedRoom.getBedType());
-            smoke_free_field.setText(""+selectedRoom.isNoSmoking());
-            view_field.setText(selectedRoom.getView());
-            price_field.setText(""+selectedRoom.getStandardPrice());
-            
+            if(result_list.getSelectionModel().getSelectedItem()!= null)
+            {
+                Room selectedRoom = result_list.getSelectionModel().getSelectedItem();
+                String roomNumber = "" + selectedRoom.getRoomNumber();
+                room_number_field.setText(roomNumber);
+                floor_field.setText("" + roomNumber.charAt(0));
+                location_field.setText("" + selectedRoom.getHotel());
+                room_size_field.setText("" + selectedRoom.getBedType());
+                smoke_free_field.setText("" + selectedRoom.isNoSmoking());
+                view_field.setText(selectedRoom.getView());
+                price_field.setText("" + selectedRoom.getStandardPrice());
+            }
         });
         
         Platform.runLater(()->

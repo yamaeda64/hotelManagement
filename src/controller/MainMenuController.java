@@ -39,9 +39,6 @@ public class MainMenuController implements Initializable{
 	@FXML private DatePicker datePicker;
 	@FXML private TableView<RoomWrapper> bookingsTableView;
 	@FXML private Button refresh;
-	
-    
-    
 
     @FXML
     public void new_booking_button() throws IOException {
@@ -103,8 +100,7 @@ public class MainMenuController implements Initializable{
             
            
         });
-        
-        
+
         menu_vaxjo.setOnAction(event ->
         {
             menu_vaxjo.setSelected(true);
@@ -120,8 +116,23 @@ public class MainMenuController implements Initializable{
             centralController.setLocation(Hotel.KALMAR);
             updateBookingsByDate();
         });
-    
-        
+        bookingsTableView.setOnMouseClicked(event ->
+        {
+            if(event.getClickCount() > 1)
+            {
+                centralController.clearBookings();
+                centralController.addBooking(bookingsTableView.getSelectionModel().getSelectedItem().getBooking());
+                
+                try
+                {
+                    centralController.changeScreen(Screen.BOOKING_RESULTS);
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
         
         /* Date picker setup for dafault as today, and Swedish date format. */
         datePicker.setValue(LocalDate.now());

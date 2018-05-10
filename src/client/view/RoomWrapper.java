@@ -60,4 +60,9 @@ public class RoomWrapper
     {
        return booking.getStatus().toString();
     }
+    
+    public Booking getBooking()
+    {
+        return booking;
+    }
 }

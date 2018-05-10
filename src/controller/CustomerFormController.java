@@ -184,9 +184,9 @@ public class CustomerFormController implements Initializable
             }
             customer.setCreditCard(card);
             centralController.realizeBooking(customer);
-            centralController.changeScreen(Screen.MAIN);
+            
             centralController.updateBookingInProgress(customer);
-            //centralController.finishBooking(customer);
+            
             centralController.changeScreen(Screen.CONFIRM_BOOKING);
         }
         catch(IllegalArgumentException e)

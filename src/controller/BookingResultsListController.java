@@ -237,93 +237,72 @@ public class BookingResultsListController implements Initializable
 					return cell;
 				}
 			});
-
-
+		booking_ListView.getSelectionModel().selectFirst();
+		updateFields();
 		});
 
 		booking_ListView.setOnMouseClicked(event ->
 		{
-			if(booking_ListView.getSelectionModel().getSelectedItem() != null)
+			updateFields();
+			
+			//When an item in the list has been double-clicked.
+			
+			if(event.getClickCount() == 2)
 			{
-				System.out.println(booking_ListView.getSelectionModel().getSelectedItem().getStatus());
-				booking_number_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getId());
-				name_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFirstName() + " " + booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getLastName());
-
-				Iterator<Room> rooms = booking_ListView.getSelectionModel().getSelectedItem().getAllRooms();
-				String roomString = "";
-				while(rooms.hasNext())
+				Stage infoStage = new Stage();
+				FXMLLoader loader = new FXMLLoader(ScreenController.class.getResource("/fxml/Customer_information_form.fxml"));
+				Parent root = null;
+				try
 				{
-					roomString += Integer.toString(rooms.next().getRoomNumber()) + ", ";
+					root = loader.load();
+				} catch(IOException e)
+				{
+					e.printStackTrace();
 				}
-				room_number_field.setText(roomString);
-				check_in_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStartDate().toString());
-				check_out_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getEndDate().toString());
-				checked_in_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStatus().toString());
-
-				//Cash Logic
-
-				amount_paid_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
+				CustomerInformationFormController Controller = loader.getController();
+				Controller.setBooking(booking_ListView.getSelectionModel().getSelectedItem());
+				Controller.setStage(infoStage);
+				if(root != null)
+				{
+					Scene s = new Scene(root);
+					infoStage.setScene(s);
+					infoStage.show();
+				} else
+				{
+					System.err.println("File not found");
+				}
 				
-
-					if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == null) {		//Preventing Nullpointer exception.
-						amount_remaining_field.setText(""+(booking_ListView.getSelectionModel().getSelectedItem().getPrice() - booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
-					}
-					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.NONE) {
-						amount_remaining_field.setText(""+(booking_ListView.getSelectionModel().getSelectedItem().getPrice() - booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
-					}
-					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.BRONZE) {
-						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.95)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
-					}
-					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.SILVER) {
-						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.90)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
-					}
-					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.GOLD) {
-						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.85)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
-					}
-					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.PLATINUM) {
-						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.80)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
-					}
-					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.DIAMOND) {
-						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.75)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
-					}
-
-
-				//When an item in the list has been double-clicked.
-
-				if(event.getClickCount() == 2)
-				{
-					System.out.println("Double Clicked");
-					Stage infoStage = new Stage();
-					FXMLLoader loader = new FXMLLoader(ScreenController.class.getResource("/fxml/Customer_information_form.fxml"));
-					Parent root = null;
-					try
-					{
-						root = loader.load();
-					} catch(IOException e)
-					{
-						e.printStackTrace();
-					}
-					CustomerInformationFormController Controller = loader.getController();
-					Controller.setBooking(booking_ListView.getSelectionModel().getSelectedItem());
-					Controller.setStage(infoStage);
-					if(root != null)
-					{
-						Scene s = new Scene(root);
-						infoStage.setScene(s);
-						infoStage.show();
-					} else
-					{
-						System.err.println("File not found");
-					}
-
-
-				}
-			}
-			//Handling the return to menu bug.
-			else
-			{
-				System.out.println("Nothing was selected");
+				
 			}
 		});
+	}
+	
+	private void updateFields()
+	{
+		if(booking_ListView.getSelectionModel().getSelectedItem() != null)
+		{
+			booking_number_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getId());
+			name_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFirstName() + " " + booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getLastName());
+			
+			Iterator<Room> rooms = booking_ListView.getSelectionModel().getSelectedItem().getAllRooms();
+			String roomString = "";
+			while(rooms.hasNext())
+			{
+				roomString += Integer.toString(rooms.next().getRoomNumber()) + ", ";
+			}
+			room_number_field.setText(roomString);
+			check_in_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStartDate().toString());
+			check_out_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getEndDate().toString());
+			checked_in_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStatus().toString());
+			
+			amount_paid_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
+			
+			
+			
+		}
+		else 		// when nothing is selected
+		{
+			
+		}
 	}
 }

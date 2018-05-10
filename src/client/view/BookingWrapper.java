@@ -47,4 +47,9 @@ public class BookingWrapper
     {
        return booking.getStatus().toString();
     }
+    
+    public Booking getBooking()
+    {
+        return booking;
+    }
 }
