@@ -72,7 +72,7 @@ public class BookingConfirmationController implements Initializable{
     		customer = (RealCustomer)bookingInProgress.getCustomer();
         	totalCost = ""+bookingInProgress.getPrice();
         	firstName = customer.getFirstName();
-        	lastName = customer.getFamilyName();
+        	lastName = customer.getLastName();
         	phoneNumber = customer.getTelephoneNumber();
         	Iterator<Room> itr = bookingInProgress.getAllRooms();
         	StringBuilder sb = new StringBuilder();

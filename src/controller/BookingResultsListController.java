@@ -109,7 +109,7 @@ public class BookingResultsListController implements Initializable
 		else {
 			booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_OUT);
 			// TODO, send to server
-			checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+			checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
 			centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_OUT);
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Check out succeded");
@@ -178,7 +178,7 @@ public class BookingResultsListController implements Initializable
 			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.75);
 		}
   
-    amount_payed_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
+    amount_paid_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Payment succeded");
 		alert.setHeaderText(null);
@@ -262,7 +262,7 @@ public class BookingResultsListController implements Initializable
 
 				//Cash Logic
 
-				amount_payed_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
+				amount_paid_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
 				
 
 					if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == null) {		//Preventing Nullpointer exception.
