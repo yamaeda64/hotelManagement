@@ -13,7 +13,7 @@ public class ServerCommunicator extends AbstractClient
     
     public ServerCommunicator()
     {
-        InetSocketAddress socketAddress = new InetSocketAddress(6464);
+        InetSocketAddress socketAddress = new InetSocketAddress("sixey.es",6464);
         setLogLevel(Level.OFF);
         ConsoleHandler handler = new ConsoleHandler();
         handler.setLevel(Level.OFF);

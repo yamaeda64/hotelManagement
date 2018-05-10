@@ -182,9 +182,9 @@ public class CustomerFormController implements Initializable
             {
                 throw new IllegalArgumentException("The cvc code must be in integers only");
             }
-            
-            centralController.finishBooking(customer);
-            centralController.changeScreen(Screen.MAIN);
+            centralController.updateBookingInProgress(customer);
+            //centralController.finishBooking(customer);
+            centralController.changeScreen(Screen.CONFIRM_BOOKING);
         }
         catch(IllegalArgumentException e)
         {

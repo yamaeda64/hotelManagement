@@ -32,9 +32,9 @@
                 <TextField fx:id="check_out_date_field" editable="false" layoutX="209.0" layoutY="150.0" />
                 <Text layoutX="23.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-in date" />
                 <Text layoutX="207.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check-out date" />
-                <TextField fx:id="amount_payed_field" editable="false" layoutX="22.0" layoutY="249.0" />
+                <TextField fx:id="amount_paid_field" editable="false" layoutX="22.0" layoutY="249.0" />
                 <TextField fx:id="amount_remaining_field" editable="false" layoutX="209.0" layoutY="249.0" />
-                <Text layoutX="20.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount payed" />
+                <Text layoutX="20.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount paid" />
                 <Text layoutX="209.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount remaining" />
             <Button fx:id="pay_button" layoutX="284.0" layoutY="419.0" mnemonicParsing="false" onAction="#payButton" prefHeight="40.0" prefWidth="108.0" text="Pay" />
             </children></AnchorPane>

@@ -25,7 +25,7 @@ public abstract class AbstractClient
     private OutputStream outputStream;
     
     /**
-     * Opens a onnection to server, the input is a InetSocketAddress to the server.
+     * Opens a connection to server, the input is a InetSocketAddress to the server.
      * Using the connectionException method in case of exception.
      *
      * @param serverAddress the server address
