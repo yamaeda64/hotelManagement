@@ -3,6 +3,8 @@ package server;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import server.abstractServer.AbstractServer;
 import server.sql.SqlDAO;
@@ -16,9 +18,10 @@ import com.google.gson.JsonParser;
 public class HotelServer extends AbstractServer
 {
     SqlDAO database;
+
+    private Logger logger = Logger.getLogger(HotelServer.class.getName());
     
     public HotelServer() throws SQLException {
-    	// hej
     	try {
 			database = new SqlDAO();
 		} catch (ClassNotFoundException e) {
@@ -30,22 +33,25 @@ public class HotelServer extends AbstractServer
     @Override
     protected void handleMessageFromClient(String message)
     {
+        logger.log(Level.INFO, "incoming\n-------------\n");
+        String response = "ERROR did not understand the request!";
         if(message.indexOf(':') >= 0) {
         	String[] incoming = message.split(":", 2);
         	switch(incoming[0]) {
         	
         	case "list rooms":
-        		sendToClient(database.getAllRooms());
+        		response = database.getAllRooms();
         		break;
         		
         	case "list bookings":
         	{
         		String[] params = incoming[1].split(",");
-        		sendToClient(database.allBookings(params[0], params[1], params[1]));
+        		logger.log(Level.SEVERE, "PARAM0: " + params[0]);
+        		response = database.allBookingsForHotel(params[0], params[1], params[1]);
         		break;
         	}	
         	case "full customer":
-        		sendToClient(database.fullCustomer(Integer.parseInt(incoming[1])));
+        		response = database.fullCustomer(Integer.parseInt(incoming[1]));
         		break;
         		
         	case "search rooms":
@@ -58,11 +64,15 @@ public class HotelServer extends AbstractServer
         		String startDate = request.get("startDate").getAsString();
         		String endDate = request.get("endDate").getAsString();
         		
-        		String bedType = request.get("bedType").getAsString();
-        		if (bedType.isEmpty()) bedType = null;
+        		JsonElement bedStep = request.get("bedType");
+        		String bedType = null;
+        		try {
+        			bedType = bedStep.getAsString();
+        		} catch (NullPointerException e) {
+        			logger.log(Level.FINE, "-- a bed was null so i catched that");
+        		}
         		
-        		String response = database.findFreeRooms(hotel, bedType, noSmoking, adjacent, startDate, endDate);
-        		sendToClient(response);
+    			response = database.findFreeRooms(hotel, bedType, noSmoking, adjacent, startDate, endDate);
         		break;
         	}
         	case "search bookings":
@@ -86,23 +96,22 @@ public class HotelServer extends AbstractServer
         			bID = Integer.getInteger(bookingID);
         		}
         		
-        		String response = database.findBookings(firstName, lastName, telephoneNumber, passportNumber, bID);
-        		sendToClient(response);
+        		response = database.findBookings(firstName, lastName, telephoneNumber, passportNumber, bID);
         		break;
         	}
         	
         	case "set status":
         	{
         		String[] params = incoming[1].split(",");
-        		sendToClient(database.updateBookingStatus(Integer.parseInt(params[0]), params[1]));
+        		response = database.updateBookingStatus(Integer.parseInt(params[0]), params[1]);
         		break;
         	}
         	
         	case "set expense":
         	{
         		String[] params = incoming[1].split(",");
-        		sendToClient(database.updateBookingPayment(Integer.parseInt(params[0]), 
-        				Double.parseDouble(params[1]), Double.parseDouble(params[2])));
+        		response = database.updateBookingPayment(Integer.parseInt(params[0]), 
+        				Double.parseDouble(params[1]), Double.parseDouble(params[2]));
         		break;
         	}
         	
@@ -122,34 +131,44 @@ public class HotelServer extends AbstractServer
         			rooms.add(room.get("id").getAsInt());
         		}
         		
-        		sendToClient(database.createBooking(rooms, startDate, endDate));
+        		response = database.createBooking(rooms, startDate, endDate);
         		break;
         	}
         	
         	case "realize booking":
         	{
+
+        		JsonObject bookingJson = new JsonParser().parse(incoming[1]).getAsJsonObject();
+        		
         		String[] params = incoming[1].split(",", 3);
-        		int bookingID = Integer.parseInt(params[0]);
-        		int newPrice = Integer.parseInt(params[1]);
-        		JsonElement requestElement = new JsonParser().parse(params[2]);
-        		JsonObject request = requestElement.getAsJsonObject();
+        		int bookingID = bookingJson.get("id").getAsInt(); //Integer.parseInt(params[0]);
+        		int newPrice = bookingJson.get("price").getAsInt();
         		
-        		String firstName = request.get("firstName").getAsString();
-        		String lastName = request.get("lastName").getAsString();
-        		String telephone = request.get("telephone").getAsString();
-        		String idNumber = request.get("idNumber").getAsString();
-        		String address = request.get("address").getAsString();
-        		String creditCard = request.get("creditCard").getAsString();
-        		String passportNumber = request.get("passportNumber").getAsString();
-        		int powerLevel = request.get("powerLevel").getAsInt();
+        		//JsonObject customerJson = new JsonParser().parse(params[2]).getAsJsonObject();
+        		JsonObject customerJson = bookingJson.get("customer").getAsJsonObject();
         		
-        		sendToClient(database.realizeBooking(bookingID, newPrice, firstName, lastName, telephone, idNumber, address, creditCard, powerLevel, passportNumber));
+        		String firstName = customerJson.get("firstName").getAsString();
+        		String lastName = customerJson.get("lastName").getAsString();
+        		String telephone = customerJson.get("telephoneNumber").getAsString();
+        		String idNumber = customerJson.get("personalNumber").getAsString();
+        		String address = customerJson.get("address").getAsJsonObject().toString();
+        		String creditCard = customerJson.get("creditCard").getAsJsonObject().toString();
+        		String passportNumber = customerJson.get("passportNumber").getAsString();
+        		String powerLevel = customerJson.get("powerLevel").getAsString();
+        		
+        		System.out.println("\nnuseee\n\n" + address + "\n" + creditCard + "\n\n");
+        		
+        		
+        		
+        		response = database.realizeBooking(bookingID, newPrice, firstName, lastName, telephone, idNumber, address, creditCard, powerLevel, passportNumber);
         		break;
         	}
         	
+        	} // end case
         	
-        	
-        	}
+            logger.log(Level.INFO, response);
+            logger.log(Level.INFO, "--------------------");
+        	sendToClient(response);
         }
         else
         {

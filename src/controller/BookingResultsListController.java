@@ -82,9 +82,9 @@ public class BookingResultsListController implements Initializable
 	@FXML
 	public void checkInButton()
 	{
-		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_IN);
+		booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_IN);
 		// TODO, send to server
-		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
+		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
 		centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_IN);
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Check in successful");
@@ -107,10 +107,8 @@ public class BookingResultsListController implements Initializable
 			alert.showAndWait();
 		}
 		else {
-			booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_OUT);
+			booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_OUT);
 			// TODO, send to server
-			booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CHECKED_OUT);
-			// Todo, send to server
 			checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
 			centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_OUT);
 			Alert alert = new Alert(AlertType.INFORMATION);
@@ -120,18 +118,17 @@ public class BookingResultsListController implements Initializable
 			alert.showAndWait();
 		}
 
+
 	}
 
 	@FXML
 	public void cancelBookingButton()
 	{
-
-
-		booking_ListView.getSelectionModel().getSelectedItem().setBookingStatus(BookingStatus.CANCELLED);
-		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
-
+		booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CANCELLED);
+		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
 		centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CANCELLED);
-		// TODO, send to server
+		
+    // TODO, send to server
 		LocalDate bookingStart = booking_ListView.getSelectionModel().getSelectedItem().getStartDate();
 		LocalDate current = LocalDate.now();
 		if(bookingStart.isAfter(current.minusDays(2)) && bookingStart.isBefore(current.plusDays(1)))
@@ -157,30 +154,31 @@ public class BookingResultsListController implements Initializable
 	public void payButton() {
 
 		//TODO Fix database access connection.
-		booking_ListView.getSelectionModel().getSelectedItem().setAmountPayed(booking_ListView.getSelectionModel().getSelectedItem().getPrice());
+		booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice());
 		amount_remaining_field.setText("0.0");
 		if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == null) {		//Preventing Nullpointer exception.
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPayed(booking_ListView.getSelectionModel().getSelectedItem().getPrice());
+			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice());
 		}
 		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.NONE) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPayed(booking_ListView.getSelectionModel().getSelectedItem().getPrice());
+			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice());
 		}
 		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.BRONZE) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPayed(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.95);
+			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.95);
 		}
 		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.SILVER) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPayed(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.90);
+			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.90);
 		}
 		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.GOLD) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPayed(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.85);
+			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.85);
 		}
 		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.PLATINUM) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPayed(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.80);
+			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.80);
 		}
 		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.DIAMOND) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPayed(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.75);
+			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.75);
 		}
-		amount_paid_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed());
+  
+    amount_payed_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Payment succeded");
 		alert.setHeaderText(null);
@@ -229,7 +227,7 @@ public class BookingResultsListController implements Initializable
 							super.updateItem(item, empty);
 							if(item != null)
 							{
-								setText(item.getCustomer().getFamilyName());
+								setText(item.getCustomer().getLastName());
 							} else
 							{
 								setText(null);
@@ -247,9 +245,9 @@ public class BookingResultsListController implements Initializable
 		{
 			if(booking_ListView.getSelectionModel().getSelectedItem() != null)
 			{
-				System.out.println(booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus());
-				booking_number_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getBookingID());
-				name_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFirstName() + " " + booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFamilyName());
+				System.out.println(booking_ListView.getSelectionModel().getSelectedItem().getStatus());
+				booking_number_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getId());
+				name_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getFirstName() + " " + booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getLastName());
 
 				Iterator<Room> rooms = booking_ListView.getSelectionModel().getSelectedItem().getAllRooms();
 				String roomString = "";
@@ -260,33 +258,34 @@ public class BookingResultsListController implements Initializable
 				room_number_field.setText(roomString);
 				check_in_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStartDate().toString());
 				check_out_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getEndDate().toString());
-				checked_in_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getBookingStatus().toString());
+				checked_in_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStatus().toString());
 
 				//Cash Logic
-				amount_paid_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed());
 
+				amount_payed_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
+				
 
-				if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == null) {		//Preventing Nullpointer exception.
-					amount_remaining_field.setText(""+(booking_ListView.getSelectionModel().getSelectedItem().getPrice() - booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
-				}
-				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.NONE) {
-					amount_remaining_field.setText(""+(booking_ListView.getSelectionModel().getSelectedItem().getPrice() - booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
-				}
-				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.BRONZE) {
-					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.95)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
-				}
-				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.SILVER) {
-					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.90)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
-				}
-				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.GOLD) {
-					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.85)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
-				}
-				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.PLATINUM) {
-					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.80)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
-				}
-				else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.DIAMOND) {
-					amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.75)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPayed()));
-				}
+					if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == null) {		//Preventing Nullpointer exception.
+						amount_remaining_field.setText(""+(booking_ListView.getSelectionModel().getSelectedItem().getPrice() - booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
+					}
+					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.NONE) {
+						amount_remaining_field.setText(""+(booking_ListView.getSelectionModel().getSelectedItem().getPrice() - booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
+					}
+					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.BRONZE) {
+						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.95)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
+					}
+					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.SILVER) {
+						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.90)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
+					}
+					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.GOLD) {
+						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.85)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
+					}
+					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.PLATINUM) {
+						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.80)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
+					}
+					else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.DIAMOND) {
+						amount_remaining_field.setText(""+((booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.75)- booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()));
+					}
 
 
 				//When an item in the list has been double-clicked.

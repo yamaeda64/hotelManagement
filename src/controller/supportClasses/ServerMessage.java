@@ -4,6 +4,9 @@ import client.model.Booking;
 import client.model.Hotel;
 import client.model.customer.Customer;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import controller.supportClasses.parsing.CustomerJsonAdapter;
+import controller.supportClasses.parsing.LocalDateJsonAdapter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,7 +18,9 @@ public class ServerMessage
     
     public ServerMessage()
     {
-        gsonParser = new Gson();
+        gsonParser = new GsonBuilder()
+                .registerTypeAdapter(Customer.class, new CustomerJsonAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateJsonAdapter()).create();
     }
     
     public String getAllRooms()
@@ -49,7 +54,15 @@ public class ServerMessage
     
     public String createBooking(Booking booking)
     {
-        String message = "create booking:";
+        String message;
+        if(booking.getId() == 0)
+        {
+            message = "create booking:";
+        }
+        else
+        {
+            message = "realize booking:";
+        }
         String json = gsonParser.toJson(booking);
         return message+json;
     }
@@ -57,7 +70,7 @@ public class ServerMessage
     public String setStatus(Booking booking, Booking.BookingStatus bookingStatus)
     {
         String message = "set status:";
-        String bookingID = ""+booking.getBookingID();
+        String bookingID = ""+booking.getId();
         String status = bookingStatus.toString();
         return message+bookingID+ "," +status;
     }
@@ -65,13 +78,13 @@ public class ServerMessage
     public String setExpence(Booking booking, double paidAmount, double roomTotalAmount)
     {
         String message = "set expense:";
-        String bookingID = ""+booking.getBookingID();
+        String bookingID = ""+booking.getId();
         return message+bookingID+ "," + paidAmount + "," + roomTotalAmount;
     }
     
     public String getCustomerDetails(Customer customer)
     {
-        String message ="full customer:";
+        String message = "full customer:";
         String customerID = customer.getID();
         return  message+customerID;
     }

@@ -12,13 +12,13 @@ public class Booking
 {
     private ArrayList<Room> bookedRooms;
     
-    private long bookingID;
+    private int id;
     private LocalDate startDate;
     private LocalDate endDate;
     private double price;
     private Customer customer;
-    private BookingStatus bookingStatus;
-    private double amountPayed;
+    private BookingStatus status;
+    private double amountPaid;
     
     public Booking()
     {
@@ -43,14 +43,14 @@ public class Booking
     // Getters & Setters
     
     
-    public BookingStatus getBookingStatus()
+    public BookingStatus getStatus()
     {
-        return bookingStatus;
+        return status;
     }
     
-    public void setBookingStatus(BookingStatus bookingStatus)
+    public void setStatus(BookingStatus status)
     {
-        this.bookingStatus = bookingStatus;
+        this.status = status;
     }
     
     public Iterator<Room> getAllRooms()
@@ -58,14 +58,14 @@ public class Booking
         return bookedRooms.iterator();
     }
     
-    public long getBookingID()
+    public int getId()
     {
-        return bookingID;
+        return id;
     }
     
-    public void setBookingID(long bookingID)
+    public void setId(int id)
     {
-        this.bookingID = bookingID;
+        this.id = id;
     }
     
     public LocalDate getStartDate()
@@ -104,15 +104,14 @@ public class Booking
     }
     
     public void setCustomer(Customer customer)
-
     {
         this.customer = customer;
     }
-    public double getAmountPayed() {
-    	return amountPayed;
+    public double getAmountPaid() {
+    	return amountPaid;
     }
-    public void setAmountPayed(double amount) {
-    	amountPayed = amount;
+    public void setAmountPaid(double amount) {
+    	amountPaid = amount;
     }
     
 }

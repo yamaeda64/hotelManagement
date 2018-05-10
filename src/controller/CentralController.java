@@ -15,10 +15,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CentralController
 {
+	
 	private ScreenController screenController;
 	private StageManager stageM;
 	private Stage stage;
@@ -33,28 +35,34 @@ public class CentralController
 	private ServerMessage serverMessageConstructor;
 	private ServerCommunicator serverCommunicator;
 	
-	public CentralController(Stage stage) throws IOException {
+	private ArrayList<Room> availableRooms;
+	
+	public CentralController(Stage stage) throws IOException
+	{
 		//setup();
-		screenController = new ScreenController(stage,this);
+		screenController = new ScreenController(stage, this);
 		modelAccess = new ModelAccess();
-		location = Hotel.VAXJO; 	//TODO Default, should maybe come from server or save default so not kalmar has vaxjo as default
+		location = Hotel.VAXJO;    //TODO Default, should maybe come from server or save default so not kalmar has vaxjo as default
 		serverMessageConstructor = new ServerMessage();
-		serverCommunicator = new ServerCommunicator();
+		serverCommunicator = new ServerCommunicator(this);
 		serverCommunicator.sendToServer(serverMessageConstructor.getAllRooms());
+		availableRooms = new ArrayList<>();
 	}
 	
-	public ScreenController getScreenController() {
+	public ScreenController getScreenController()
+	{
 		return screenController;
 	}
-	public StageManager getStageManager() {
+	
+	public StageManager getStageManager()
+	{
 		return stageM;
 	}
-	public void changeScreen(Screen screen) throws IOException {
+	
+	public void changeScreen(Screen screen) throws IOException
+	{
 		screenController.setScreen(screen);
 	}
-	
-	
-	
 	
 	
 	/*
@@ -81,27 +89,30 @@ public class CentralController
 	
 	public Iterator<Booking> getBookings(Hotel hotel, LocalDate date)
 	{
-		serverCommunicator.sendToServer(serverMessageConstructor.getBookingsOfDate(hotel,  date));
-		modelAccess.updateBookings(hotel, date);
+		serverCommunicator.sendToServer(serverMessageConstructor.getBookingsOfDate(hotel, date));
+		//TODO modelAccess.updateBookings(hotel, date);
 		return modelAccess.getAllBookings();
 	}
 	
-	public Iterator<Room> getRooms()
+	/*public Iterator<Room> getRooms()
 	{
 		return modelAccess.getAllRooms();
-	}
+    }*/
+
 	public void updateBookingInProgress(RealCustomer c) {
 		inProgressBooking.setCustomer(c);
 	}
 	public Booking getBookingInProgress() {
 		return inProgressBooking;
 	}
+
 	
 	
 	public void setLocation(Hotel hotel)
 	{
 		this.location = hotel;
 	}
+	
 	public Hotel getLocation()
 	{
 		return location;
@@ -110,8 +121,12 @@ public class CentralController
 	public void updateModel(RoomSearch currentSearch)
 	{
 		this.lastRoomSearch = currentSearch;
-		modelAccess.updateBookings(currentSearch);
+		
+		serverCommunicator.sendToServer(serverMessageConstructor.getRoomsFromSearch(currentSearch));
+		//modelAccess.updateBookings(currentSearch);
+		
 	}
+	
 	public void updateModel(BookingSearch booking)
 	{
 		this.bookingSearch = booking;
@@ -126,14 +141,19 @@ public class CentralController
 	{
 		this.inProgressBooking = booking;
 		serverCommunicator.sendToServer(serverMessageConstructor.createBooking(booking));
-		serverCommunicator.receiveMessageFromServer();
+		//serverCommunicator.receiveMessageFromServer();
 		// Todo, receive the reply and add the int as bookingID
+	}
+	
+	public void setInProgressBookingID(int id)
+	{
+		this.inProgressBooking.setId(id);
 	}
 	
 	public void finishBooking(RealCustomer customer)
 	{
 		inProgressBooking.setCustomer(customer);
-		inProgressBooking.setBookingStatus(Booking.BookingStatus.BOOKED);
+		inProgressBooking.setStatus(Booking.BookingStatus.BOOKED);
 		
 		serverCommunicator.sendToServer(serverMessageConstructor.createBooking(inProgressBooking));
 		// TODO, should this be updateBooking???
@@ -149,8 +169,49 @@ public class CentralController
 		serverCommunicator.sendToServer(serverMessageConstructor.setStatus(booking, bookingStatus));
 	}
 	
-	public void changePayedBookingAmount(Booking booking, double amountPayed, double totalCost)
+	public void changePayedBookingAmount(Booking booking, double amountPaid, double totalCost)
 	{
-		serverCommunicator.sendToServer(serverMessageConstructor.setExpence(booking,amountPayed,totalCost));
+		serverCommunicator.sendToServer(serverMessageConstructor.setExpence(booking, amountPaid, totalCost));
+	}
+	
+	public void showError(String errorMsg)
+	{
+		
+	}
+	
+	public void addBooking(Booking booking)
+	{
+		modelAccess.addBooking(booking);
+	}
+	
+	public void addRoom(Room room)
+	{
+		modelAccess.addRoom(room);
+	}
+	
+	public void clearBookings()
+	{
+		modelAccess.clearBookings();
+	}
+	
+	public void addAvailableRoom(Room room)
+	{
+		System.out.println("added available room");
+		this.availableRooms.add(room);
+	}
+	
+	public void clearAvailableRooms()
+	{
+		availableRooms.clear();
+	}
+	
+	public Iterator<Room> getAvailableRooms()
+	{
+		return availableRooms.iterator();
+	}
+	
+	public Room getRoomByID(int id)
+	{
+		return modelAccess.getRoomByID(id);
 	}
 }

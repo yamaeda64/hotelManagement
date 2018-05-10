@@ -3,7 +3,7 @@ package client.model;
 
 public class Room
 {
-    private int roomID;
+    private int id;
     private Hotel hotel;
     private int roomNumber;
     private String view;
@@ -11,7 +11,7 @@ public class Room
     private boolean noSmoking;
     private BedType bedType;
     private Room adjecentRoom;
-    private int price;
+    private int standardPrice;
     
     
     
@@ -19,7 +19,7 @@ public class Room
     {
         SINGLE,
         TWIN,
-        KINGSIZE
+        KING
     }
     public enum QualityLevel
     {
@@ -28,14 +28,14 @@ public class Room
     
     // Getters & Setters
     
-    public int getRoomID()
+    public int getId()
     {
-        return roomID;
+        return id;
     }
     
-    public void setRoomID(int roomID)
+    public void setId(int id)
     {
-        this.roomID = roomID;
+        this.id = id;
     }
     
     public Hotel getHotel()
@@ -107,10 +107,10 @@ public class Room
     {
         this.adjecentRoom = adjecentRoom;
     }
-    public int getPrice() {
-    	return price;
+    public int getStandardPrice() {
+    	return standardPrice;
     }
-    public void setPrice(int p) {
-    	price = p;
+    public void setStandardPrice(int price) {
+    	standardPrice = price;
     }
 }

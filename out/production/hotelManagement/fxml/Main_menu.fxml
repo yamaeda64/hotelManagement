@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainMenuController">
+  <children>
+    <MenuBar prefHeight="0.0" prefWidth="625.0" VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem fx:id="menu_new_booking" mnemonicParsing="false" onAction="#new_booking_button" text="New booking" />
+            <MenuItem fx:id="menu_find_existing" mnemonicParsing="false" onAction="#find_existing_button" text="Find existing" />
+            <MenuItem fx:id="menu_preferences" mnemonicParsing="false" text="Preferences…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="menu_quit" mnemonicParsing="false" onAction="#menu_quit" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem fx:id="menu_about" mnemonicParsing="false" text="About this application" />
+          </items>
+        </Menu>
+            <Menu mnemonicParsing="false" text="Location">
+              <items>
+                  <CheckMenuItem fx:id="menu_vaxjo" mnemonicParsing="false" text="Växjö Hotel" />
+                  <CheckMenuItem fx:id="menu_kalmar" mnemonicParsing="false" text="Kalmar Hotel" />
+              </items>
+            </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" VBox.vgrow="ALWAYS">
+      <children>
+        <Label alignment="CENTER" layoutX="155.0" layoutY="177.0" style="&#10;" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+          <font>
+            <Font size="18.0" />
+          </font>
+        </Label>
+            <SplitPane dividerPositions="0.29797979797979796" prefHeight="518.0" prefWidth="640.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <Button fx:id="new_booking_button" layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#new_booking_button" prefHeight="42.0" prefWidth="144.0" text="New booking" />
+                        <Button fx:id="find_existing_button" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" onAction="#find_existing_button" prefHeight="42.0" prefWidth="144.0" text="Find existing" />
+                     </children>
+                  </AnchorPane>
+                <AnchorPane id="datePicker" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <Text layoutX="34.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date: " wrappingWidth="40" />
+                        <DatePicker fx:id="datePicker" layoutX="88.0" layoutY="23.0" />
+                        <TableView id="bookingsTableView" fx:id="bookingsTableView" layoutX="11.0" layoutY="68.0" prefHeight="438.0" prefWidth="424.0" />
+                        <Button fx:id="refresh" layoutX="313.0" layoutY="23.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>

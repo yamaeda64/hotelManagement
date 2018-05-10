@@ -10,8 +10,7 @@ public class RoomSearch
     
     private LocalDate startDate;
     private LocalDate endDate;
-        
-    private int numberOfBeds;
+    
     private Hotel hotel;
     private Room.BedType bedType;
     
@@ -66,16 +65,6 @@ public class RoomSearch
             throw new IllegalArgumentException("Check-out cannot be before Check-in");
         }
         this.endDate = endDate;
-    }
-    
-    public int getNumberOfBeds()
-    {
-        return numberOfBeds;
-    }
-    
-    public void setNumberOfBeds(int numberOfBeds)
-    {
-        this.numberOfBeds = numberOfBeds;
     }
     
     public Hotel getHotel()

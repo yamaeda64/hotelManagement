@@ -8,7 +8,7 @@ public class RealCustomer implements Customer
     private String customerID;
     
     private String firstName;
-    private String familyName;
+    private String lastName;
     private Address address;
     private String telephoneNumber;
     private String personalNumber;
@@ -16,7 +16,10 @@ public class RealCustomer implements Customer
     private CreditCard creditCard;
     private PowerLevel powerLevel;
     
-    
+    public RealCustomer()
+    {
+        
+    }
     
     public enum PowerLevel
     {
@@ -40,9 +43,9 @@ public class RealCustomer implements Customer
         this.firstName = firstName;
     }
     
-    public void setFamilyName(String familyName)
+    public void setLastName(String lastName)
     {
-        this.familyName = familyName;
+        this.lastName = lastName;
     }
     
     public void setAddress(Address address)
@@ -88,9 +91,9 @@ public class RealCustomer implements Customer
     }
     
     @Override
-    public String getFamilyName()
+    public String getLastName()
     {
-        return familyName;
+        return lastName;
     }
     
     @Override
@@ -121,6 +124,12 @@ public class RealCustomer implements Customer
     public CreditCard getCreditCard()
     {
         return creditCard;
+    }
+    
+    @Override
+    public void setID(String id)
+    {
+        this.customerID = id;
     }
     
     @Override

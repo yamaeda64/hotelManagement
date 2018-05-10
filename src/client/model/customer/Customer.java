@@ -5,12 +5,15 @@ public interface Customer
 {
     public String getID();
     public String getFirstName();
-    public String getFamilyName();
+    public String getLastName();
     public Address getAddress();
     public String getTelephoneNumber();
     public String getPersonalNumber();
     public String getPassportNumber();
     public CreditCard getCreditCard();
+    public void setID(String id);
+    public void setFirstName(String firstName);
+    public void setLastName(String lastName);
     
     /**
      * Clients can have different powerlevels, high level results in better prices and special offers.

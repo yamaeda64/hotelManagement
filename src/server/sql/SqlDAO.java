@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class SqlDAO {
 	private SqlQueries query;
@@ -17,29 +18,25 @@ public class SqlDAO {
 	 * 
 	 * @param room
 	 *            a ResultSet containing the specific room.
-	 * @param parseAdjacent
-	 *            specifies if a value in the adjacentRoom column should be
-	 *            substituted with that room object as a json.
+	 * @param idOnly
+	 *            if true, only the id of a room will be returned.
 	 * @return json string.
 	 * @throws SQLException
 	 */
-	private String packRoom(ResultSet room, boolean parseAdjacent) throws SQLException {
+	private String packRoom(ResultSet room, boolean idOnly) throws SQLException {
 		String[] keys = new String[] { "id", "hotel", "roomNumber", "bedType", "noSmoking", "adjacentRoom",
-				"view" };
+				"view", "standardPrice" };
+		
+		if (idOnly) {
+			return room.getString("id");
+		}
+		
 		StringBuilder output = new StringBuilder("{");
 		int i = 0;
 		for (String key : keys) {
 			if (key.equals("adjacentRoom")) {
-				String adjacentRoom = room.getString("adjacentRoom");
-				if (!(adjacentRoom == null || adjacentRoom.equals("null"))) {
-					if (parseAdjacent) {
-						ResultSet adjRoom = query.getRoom(Integer.parseInt(adjacentRoom));
-						adjRoom.next();
-						output.append("\"adjacentRoom\":\"").append(packRoom(adjRoom, false));
-					}
-				} else {
-					// should i send back an empty string?
-				}
+				int adjacentRoom = room.getInt("adjacentRoom");
+				output.append("\"adjacentRoom\":\"" + adjacentRoom + "\"");
 			} else {
 				output.append("\"").append(key).append("\": \"").append(room.getString(key)).append("\"");
 			}
@@ -58,19 +55,21 @@ public class SqlDAO {
 	 * @return a json string.
 	 * @throws SQLException
 	 */
-	private String packRooms(ResultSet rooms) throws SQLException {
-		StringBuilder output = new StringBuilder("[");
+	private String packRooms(ResultSet rooms, boolean idOnly) throws SQLException {
+		StringBuilder output = new StringBuilder("");
+		output.append("[");
 		rooms.beforeFirst();
 		while (rooms.next()) {
-			output.append(packRoom(rooms, true));
-			if (rooms.isLast()) {
-				output.append("");
-			} else {
+			output.append(packRoom(rooms, idOnly));
+			if (!rooms.isLast()) {
 				output.append(",");
 			}
 		}
 		output.append("]");
 		return output.toString();
+	}
+	private String packRooms(ResultSet rooms) throws SQLException {
+		return packRooms(rooms, true); // true
 	}
 
 	/**
@@ -133,7 +132,7 @@ public class SqlDAO {
 	 * @throws SQLException
 	 */
 	private String packBooking(ResultSet booking) throws SQLException {
-		String[] bookingKeys = new String[] { "id", "customer", "givenPrice", "amountPaid", "startDate", "endDate" };
+		String[] bookingKeys = new String[] { "id", "customer", "givenPrice", "amountPaid", "startDate", "endDate", "status" };
 
 		StringBuilder output = new StringBuilder("{");
 		int i = 0;
@@ -146,8 +145,8 @@ public class SqlDAO {
 			} else {
 				output.append("\"").append(booking.getString(key)).append("\"");
 			}
-			if (i++ < (bookingKeys.length - 1))
-				output.append(", ");
+			//if (i++ < (bookingKeys.length - 1))
+			output.append(", ");
 		}
 
 		// rooms is a bit special because it's not a real key
@@ -212,7 +211,7 @@ public class SqlDAO {
 	public String getAllRooms() {
 		try {
 			ResultSet roomSet = query.allRooms();
-			String rooms = packRooms(roomSet);
+			String rooms = packRooms(roomSet, false);
 			return "rooms: " + rooms;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -246,9 +245,11 @@ public class SqlDAO {
 	 * @param endDate
 	 * @return
 	 */
-	public String allBookings(String hotel, String startDate, String endDate) {
+	public String allBookingsForHotel(String hotel, String startDate, String endDate) {
 		try {
+			System.out.println("--allbookingsforhotel--");
 			ResultSet bookingSet = query.bookingsForHotel(hotel, startDate, endDate);
+			if (bookingSet == null) return "bookings:[]";
 			bookingSet.beforeFirst();
 			String response = "bookings:" + packBookings(bookingSet);
 			return response;
@@ -275,12 +276,7 @@ public class SqlDAO {
 		try {
 			// bedtype can be null!
 			ResultSet rooms = query.findFreeRooms(hotel, bedType, noSmoking, adjacent, startDate, endDate);
-//			StringBuilder ret = new StringBuilder("OK");
-//			for (int room : rooms) {
-//				ret.append(' ').append(room);
-//			}
-//			return rooms.toString();
-			return "rooms:" + packRooms(rooms);
+			return "available rooms:" + packRooms(rooms);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR";
@@ -435,7 +431,7 @@ public class SqlDAO {
 	 * @param passportNumber
 	 * @return
 	 */
-	public String realizeBooking(int id, int newPrice, String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, Integer powerLevel, String passportNumber) {
+	public String realizeBooking(int id, int newPrice, String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, String powerLevel, String passportNumber) {
 		try {
 			int newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
 					powerLevel, passportNumber);
@@ -465,7 +461,7 @@ public class SqlDAO {
 	 * @return
 	 */
 	public String createCustomer(String firstName, String lastName, String telephone, String idNumber, String address,
-			String creditCard, Integer powerLevel, String passportNumber) {
+			String creditCard, String powerLevel, String passportNumber) {
 		int newCustomerId;
 		try {
 			newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
@@ -519,3 +515,4 @@ public class SqlDAO {
 		}
 	}
 }
+

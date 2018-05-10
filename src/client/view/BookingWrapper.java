@@ -22,9 +22,9 @@ public class BookingWrapper
         return booking.getCustomer().getFirstName();
     }
     
-    public String getFamilyName()
+    public String getLastName()
     {
-        return booking.getCustomer().getFamilyName();
+        return booking.getCustomer().getLastName();
     }
     public String getRoomNumbers()
     {
@@ -45,6 +45,6 @@ public class BookingWrapper
     
     public String getBookingStatus()
     {
-       return booking.getBookingStatus().toString();
+       return booking.getStatus().toString();
     }
 }

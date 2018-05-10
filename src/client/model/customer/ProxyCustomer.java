@@ -1,10 +1,5 @@
 package client.model.customer;
 
-import client.model.customer.RealCustomer.PowerLevel;
-
-import controller.supportClasses.ServerCommunicator;
-import controller.supportClasses.ServerMessage;
-
 /**
  * Proxy customer is a lightweight Customer which loads more customer
  * data if no realCustomer (full customer details) is available.
@@ -13,22 +8,29 @@ import controller.supportClasses.ServerMessage;
  */
 public class ProxyCustomer implements Customer
 {
+    
     private String customerID;
     private RealCustomer realCustomer;
     private String firstName;
-    private String familyName;
+    private String lastName;
+    
+    
+    public ProxyCustomer()
+    {
+        
+    }
     
     
     /**
-     * The constructor of the proxy takes the inputs of ID, first name, and family name
+     * The constructor of the proxy takes the inputs of ID, first name, and last name
      * @param ID ID which is used as database referece
      * @param firstName
-     * @param familyName
+     * @param lastName
      */
-    public ProxyCustomer(String ID, String firstName, String familyName)
+    public ProxyCustomer(String ID, String firstName, String lastName)
     {
         this.firstName = firstName;
-        this.familyName = familyName;
+        this.lastName = lastName;
         this.customerID = ID;
     }
     
@@ -45,9 +47,9 @@ public class ProxyCustomer implements Customer
     }
     
     @Override
-    public String getFamilyName()
+    public String getLastName()
     {
-        return familyName;
+        return lastName;
     }
     
     @Override
@@ -101,6 +103,24 @@ public class ProxyCustomer implements Customer
     }
     
     @Override
+    public void setID(String id)
+    {
+        this.customerID = id;
+    }
+    
+    @Override
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
+    
+    @Override
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
+    }
+    
+    @Override
     public RealCustomer.PowerLevel getPowerLevel()
     {
         if(realCustomer == null)
@@ -118,11 +138,11 @@ public class ProxyCustomer implements Customer
         
         realCustomer.setCustomerID(customerID);
         realCustomer.setFirstName(firstName);
-        realCustomer.setFamilyName(familyName);
+        realCustomer.setLastName(lastName);
        
-        ServerMessage message = new ServerMessage();
+       /* ServerMessage message = new ServerMessage();
         ServerCommunicator communicator = new ServerCommunicator();
         communicator.sendToServer(message.getCustomerDetails(this));
-        
+        */
     }
 }

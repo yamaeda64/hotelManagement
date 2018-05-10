@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
 
 class SqlQueries {
 	private final String db_url = "jdbc:mysql://" + SqlLogin.db_hostname + ":" + SqlLogin.db_port + "/" + SqlLogin.db_dbname + "?user=" + SqlLogin.db_username + "&password=" + SqlLogin.db_password;
@@ -39,18 +40,22 @@ class SqlQueries {
 	 * @return the assigned ID for the new customer.
 	 * @throws SQLException
 	 */
-	int createCustomer(String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, int powerLevel, String passportNumber) throws SQLException {
-		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.customers(firstName, lastName, telephone, idNumber, address, creditCard, powerLevel) values (?, ?, ?, ?, ?, ?, ?); SELECT LAST_INSERT_ID();");
+	int createCustomer(String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, String powerLevel, String passportNumber) throws SQLException {
+		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.customers(firstName, lastName, telephone, idNumber, address, creditCard, powerLevel, passportNumber) values (?, ?, ?, ?, ?, ?, ?, ?);");
 		prepStatement.setString(1, firstName);
 		prepStatement.setString(2, lastName);
 		prepStatement.setString(3, telephone);
 		prepStatement.setString(4, idNumber);
 		prepStatement.setString(5, address);
 		prepStatement.setString(6, creditCard);
-		prepStatement.setInt(7, powerLevel);
+		prepStatement.setString(7, powerLevel);
 		prepStatement.setString(8, passportNumber);
-		ResultSet cre8ed = prepStatement.executeQuery();
-		return cre8ed.getInt(0);
+		prepStatement.executeUpdate();
+		
+		PreparedStatement getIdStatement = uplink.prepareStatement("SELECT LAST_INSERT_ID();");
+		ResultSet cre8ed = getIdStatement.executeQuery();
+		cre8ed.next();
+		return cre8ed.getInt(1);
 	}
 	
 	/**
@@ -202,23 +207,28 @@ class SqlQueries {
 		java.sql.Date start = new java.sql.Date(Long.parseLong(startDate));
 		java.sql.Date end = new java.sql.Date(Long.parseLong(startDate));
 		
-		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.bookings(customer, givenPrice, amountPaid, startDate, endDate, status) values (?, ?, ?, ?, ?, ?, 'IN_PROGRESS');"
-				+ " SELECT LAST_INSERT_ID();");
+		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.bookings(customer, givenPrice, amountPaid, startDate, endDate, status) values (?, ?, ?, ?, ?, 'IN_PROGRESS');"
+				+ " ");
 		prepStatement.setInt(1, customer);
 		prepStatement.setInt(2, givenPrice);
 		prepStatement.setInt(3, amountPaid);
 		prepStatement.setDate(4, start);
 		prepStatement.setDate(5, end);
-		ResultSet svar = prepStatement.executeQuery();
+		prepStatement.executeUpdate();
+		
+		// /home/musho/Desktop/hotelserver.jar No value specified for parameter 6
+		
+		PreparedStatement idStatement = uplink.prepareStatement("SELECT LAST_INSERT_ID();");
+		ResultSet svar = idStatement.executeQuery();
 		
 		svar.next();
-		int bookingId = svar.getInt(0);
+		int bookingId = svar.getInt(1); //svar.getInt("LAST_INSERT_ID()");
 		
 		prepStatement = uplink.prepareStatement("insert into hotel.roomBinding(booking, room) values (?, ?)");
 		for(int room : rooms) {
 			prepStatement.setInt(1, bookingId);
 			prepStatement.setInt(2, room);
-			prepStatement.executeQuery();
+			prepStatement.executeUpdate();
 		}
 		return bookingId;
 	}
@@ -264,7 +274,8 @@ class SqlQueries {
 	 * @throws SQLException
 	 */
 	ResultSet bookingsForHotel(String hotel, String startDate, String endDate) throws SQLException {
-		// get rooms in the hotel
+		// get rooms in the hotelt
+
 		PreparedStatement bfhPrepStatement = uplink.prepareStatement("SELECT * FROM hotel.rooms WHERE hotel=?");
 		bfhPrepStatement.setString(1, hotel);
 		ResultSet roomSet = bfhPrepStatement.executeQuery();
@@ -272,7 +283,8 @@ class SqlQueries {
 		while (roomSet.next()) {
 			rooms.add(roomSet.getInt("id"));
 		}
-			
+		
+		
 		// get bindings between a room and a booking
 		StringBuilder roomClause = new StringBuilder("SELECT * FROM hotel.roomBinding WHERE");
 		roomClause.append(" room IN (");
@@ -282,6 +294,7 @@ class SqlQueries {
 			if (roomIt.hasNext()) roomClause.append(",");
 		}
 		roomClause.append(")");
+
 		
 		PreparedStatement bindingStatement = uplink.prepareStatement(roomClause.toString());
 		ResultSet bindingSet = bindingStatement.executeQuery();
@@ -290,18 +303,21 @@ class SqlQueries {
 			bindings.add(bindingSet.getInt("booking"));
 		}
 		
+		if (bindings.size() <= 0) {
+			System.out.println("-- booking size 0 return");
+			return null;
+		}
 
 		// get all the affected bookings, within the correct time
 		StringBuilder bookingClause = new StringBuilder("SELECT * FROM hotel.bookings WHERE startDate < ? AND endDate > ?");
-		if (bindings.size() > 0) {
-			bookingClause.append(" AND id IN (");
-			Iterator<Integer> bindingIt = bindings.iterator();
-			while(bindingIt.hasNext()) {
-				bookingClause.append(bindingIt.next());
-				if (bindingIt.hasNext()) bookingClause.append(",");
-			}
-			bookingClause.append(")");
+		bookingClause.append(" AND id IN (");
+		Iterator<Integer> bindingIt = bindings.iterator();
+		while(bindingIt.hasNext()) {
+			bookingClause.append(bindingIt.next());
+			if (bindingIt.hasNext()) bookingClause.append(",");
 		}
+		bookingClause.append(")");
+		
 		java.sql.Date start = new java.sql.Date(Long.parseLong(startDate));
 		java.sql.Date end = new java.sql.Date(Long.parseLong(endDate));
 		PreparedStatement bfhBookingStatement = uplink.prepareStatement(bookingClause.toString());
@@ -355,21 +371,23 @@ class SqlQueries {
 		// 3. return a result set.
 		ResultSet bookingSet = this.bookingsInsideTimeframe(startDate, endDate);
 		ResultSet roomSet = roomBindingsForMultipleBookings(bookingSet);
-		Set<Integer> occupiedRooms = new HashSet<>();
-		while(roomSet.next()) {
-			occupiedRooms.add(roomSet.getInt("room"));
-		}
 		StringBuilder bookingClause = new StringBuilder("");
-		if (occupiedRooms.size() > 0) {
-			Iterator<Integer> bookingIterator = occupiedRooms.iterator();
-			bookingClause.append(" AND id NOT IN (");
-			while(bookingIterator.hasNext()) {
-				bookingClause.append(bookingIterator.next());
-				if (bookingIterator.hasNext()) {
-					bookingClause.append(", ");
-				}
+		if (roomSet != null) {
+			Set<Integer> occupiedRooms = new HashSet<>();
+			while(roomSet.next()) {
+				occupiedRooms.add(roomSet.getInt("room"));
 			}
-			bookingClause.append(")");
+			if (occupiedRooms.size() > 0) {
+				Iterator<Integer> bookingIterator = occupiedRooms.iterator();
+				bookingClause.append(" AND id NOT IN (");
+				while(bookingIterator.hasNext()) {
+					bookingClause.append(bookingIterator.next());
+					if (bookingIterator.hasNext()) {
+						bookingClause.append(", ");
+					}
+				}
+				bookingClause.append(")");
+			}
 		}
 		String adjSearch = ""; //" AND adjacentRoom IS NULL"; <---- NO, we want to allow it, right?
 		if (adjacent) {
@@ -399,6 +417,9 @@ class SqlQueries {
 		Set<Integer> bookingIDs = new HashSet<Integer>();
 		while (bookings.next()) {
 			bookingIDs.add(bookings.getInt("id"));
+		}
+		if (bookingIDs.size() <= 0) {
+			return null;
 		}
 		StringBuilder bindingQuery = new StringBuilder("SELECT * FROM hotel.roomBinding WHERE booking IN (");
 		Iterator<Integer> bindingIterator = bookingIDs.iterator();
@@ -491,7 +512,7 @@ class SqlQueries {
 		PreparedStatement ubsPrepStatement = uplink.prepareStatement("UPDATE hotel.bokings SET status=? WHERE id=?");
 		ubsPrepStatement.setString(1, status);
 		ubsPrepStatement.setInt(2,id);
-		ubsPrepStatement.executeQuery();
+		ubsPrepStatement.executeUpdate();
 	}
 	
 	/**
@@ -508,7 +529,7 @@ class SqlQueries {
 		ubpPrepStatement.setDouble(1, amountPaid);
 		ubpPrepStatement.setDouble(2, totalPayment);
 		ubpPrepStatement.setInt(3, id);
-		ubpPrepStatement.executeQuery();
+		ubpPrepStatement.executeUpdate();
 	}
 	
 	
@@ -564,8 +585,10 @@ class SqlQueries {
 		PreparedStatement scobPrepStatement = uplink.prepareStatement("UPDATE hotel.bokings SET customer=? WHERE id=?");
 		scobPrepStatement.setInt(1, customerID);
 		scobPrepStatement.setInt(2, bookingID);
-		scobPrepStatement.executeQuery();
+		scobPrepStatement.executeUpdate();
 	}
+	
+	
 	
 
 }
