@@ -53,7 +53,7 @@ public class SearchRoomController implements Initializable
             currentSearch.setHotel(location_box.getValue());
             currentSearch.setBedType(room_size_box.getValue());
             currentSearch.setSmokingAllowed(smoking_allowed_box.isSelected());
-            currentSearch.setAdjecentRoomAvailable(smoking_allowed_box.isSelected());
+            currentSearch.setAdjecentRoomAvailable(neighboring_room_box.isSelected());
             currentSearch.setStartDate(check_in_datepicker.getValue());
             currentSearch.setEndDate(check_out_datepicker.getValue());
             

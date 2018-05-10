@@ -112,8 +112,10 @@ public class ResultListController implements Initializable
         Platform.runLater(()->
         {
             Iterator<Room> roomIterator = centralController.getAvailableRooms();
+            
             while(roomIterator.hasNext())
             {
+                
                 result_list.getItems().add(roomIterator.next());
             }
         });

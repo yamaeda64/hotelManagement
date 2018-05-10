@@ -46,7 +46,7 @@ public class CentralController
 		serverMessageConstructor = new ServerMessage();
 		serverCommunicator = new ServerCommunicator(this);
 		serverCommunicator.sendToServer(serverMessageConstructor.getAllRooms());
-		
+		availableRooms = new ArrayList<>();
 	}
 	
 	public ScreenController getScreenController()
@@ -133,8 +133,13 @@ public class CentralController
 	{
 		this.inProgressBooking = booking;
 		serverCommunicator.sendToServer(serverMessageConstructor.createBooking(booking));
-		serverCommunicator.receiveMessageFromServer();
+		//serverCommunicator.receiveMessageFromServer();
 		// Todo, receive the reply and add the int as bookingID
+	}
+	
+	public void setInProgressBookingID(int id)
+	{
+		this.inProgressBooking.setId(id);
 	}
 	
 	public void finishBooking(RealCustomer customer)
@@ -156,9 +161,9 @@ public class CentralController
 		serverCommunicator.sendToServer(serverMessageConstructor.setStatus(booking, bookingStatus));
 	}
 	
-	public void changePayedBookingAmount(Booking booking, double amountPayed, double totalCost)
+	public void changePayedBookingAmount(Booking booking, double amountPaid, double totalCost)
 	{
-		serverCommunicator.sendToServer(serverMessageConstructor.setExpence(booking, amountPayed, totalCost));
+		serverCommunicator.sendToServer(serverMessageConstructor.setExpence(booking, amountPaid, totalCost));
 	}
 	
 	public void showError(String errorMsg)
@@ -183,6 +188,7 @@ public class CentralController
 	
 	public void addAvailableRoom(Room room)
 	{
+		System.out.println("added available room");
 		this.availableRooms.add(room);
 	}
 	

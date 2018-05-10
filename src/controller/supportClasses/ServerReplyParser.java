@@ -46,7 +46,7 @@ public class ServerReplyParser
             case "bookings":
                 System.out.println("bookings message: " + splittedMessage[1]);
     
-                //  String abc = "[{\"bookedRooms\":[{\"roomID\":0,\"hotel\":\"VAXJO\",\"roomNumber\":201,\"view\":\"Castle\",\"noSmoking\":true,\"bedType\":\"TWIN\"},{\"roomID\":0,\"hotel\":\"VAXJO\",\"roomNumber\":202,\"view\":\"Castle\",\"noSmoking\":true,\"bedType\":\"SINGLE\"}],\"bookingID\":0,\"startDate\":{\"year\":2018,\"month\":5,\"day\":4},\"endDate\":{\"year\":2018,\"month\":5,\"day\":6},\"price\":2000.0,\"customer\":{\"customerID\":\"1\",\"firstName\":\"John\",\"lastName\":\"Doe\"},\"bookingStatus\":\"BOOKED\",\"amountPayed\":145.0},{\"bookedRooms\":[{\"roomID\":0,\"hotel\":\"VAXJO\",\"roomNumber\":404,\"view\":\"Lake\",\"noSmoking\":true,\"bedType\":\"KINGSIZE\"}],\"bookingID\":0,\"startDate\":{\"year\":2018,\"month\":4,\"day\":22},\"endDate\":{\"year\":2018,\"month\":4,\"day\":25},\"price\":6000.0,\"customer\":{\"customerID\":\"2\",\"firstName\":\"Ray\",\"lastName\":\"Kurzweil\"},\"bookingStatus\":\"CHECKED_IN\",\"amountPayed\":500.0}]";
+                //  String abc = "[{\"bookedRooms\":[{\"roomID\":0,\"hotel\":\"VAXJO\",\"roomNumber\":201,\"view\":\"Castle\",\"noSmoking\":true,\"bedType\":\"TWIN\"},{\"roomID\":0,\"hotel\":\"VAXJO\",\"roomNumber\":202,\"view\":\"Castle\",\"noSmoking\":true,\"bedType\":\"SINGLE\"}],\"bookingID\":0,\"startDate\":{\"year\":2018,\"month\":5,\"day\":4},\"endDate\":{\"year\":2018,\"month\":5,\"day\":6},\"price\":2000.0,\"customer\":{\"customerID\":\"1\",\"firstName\":\"John\",\"lastName\":\"Doe\"},\"bookingStatus\":\"BOOKED\",\"amountPaid\":145.0},{\"bookedRooms\":[{\"roomID\":0,\"hotel\":\"VAXJO\",\"roomNumber\":404,\"view\":\"Lake\",\"noSmoking\":true,\"bedType\":\"KINGSIZE\"}],\"bookingID\":0,\"startDate\":{\"year\":2018,\"month\":4,\"day\":22},\"endDate\":{\"year\":2018,\"month\":4,\"day\":25},\"price\":6000.0,\"customer\":{\"customerID\":\"2\",\"firstName\":\"Ray\",\"lastName\":\"Kurzweil\"},\"bookingStatus\":\"CHECKED_IN\",\"amountPaid\":500.0}]";
                 //  System.out.println("to be parsed" + abc);
                 //  ArrayList<Booking> bookingArray = gson.fromJson(splittedMessage[1], new TypeToken<List<Booking>>(){}.getType());
                 //Booking[] bookingArray = gson.fromJson(abc, Booking[].class);
@@ -74,7 +74,6 @@ public class ServerReplyParser
                 ArrayList<Room> roomArray = gson.fromJson(splittedMessage[1], listTypeRoom);
                 for(Room room : roomArray)
                 {
-    
                     centralController.addRoom(room);
                 }
     
@@ -86,14 +85,24 @@ public class ServerReplyParser
                 centralController.showError(splittedMessage[1]);
                 break;
     
-            case "available rooms:":
+            case "available rooms":
+                
                 centralController.clearAvailableRooms();
-                String[] requestedRooms = splittedMessage[1].split(",");
+                
+                String roomsString = splittedMessage[1].substring(1,splittedMessage[1].length()-1);
+                String[] requestedRooms = roomsString.split(",");
+                
                 for(String id : requestedRooms)
                 {
                     centralController.addAvailableRoom(centralController.getRoomByID(Integer.parseInt(id)));
                 }
                 break;
+                
+                
+            case "new booking":
+                
+                int newID = Integer.parseInt(splittedMessage[1]);
+                centralController.setInProgressBookingID(newID);
         }
     }
 }

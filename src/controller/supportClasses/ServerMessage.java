@@ -55,7 +55,7 @@ public class ServerMessage
     public String createBooking(Booking booking)
     {
         String message;
-        if(booking.getBookingID() == 0)
+        if(booking.getId() == 0)
         {
             message = "create booking:";
         }
@@ -70,7 +70,7 @@ public class ServerMessage
     public String setStatus(Booking booking, Booking.BookingStatus bookingStatus)
     {
         String message = "set status:";
-        String bookingID = ""+booking.getBookingID();
+        String bookingID = ""+booking.getId();
         String status = bookingStatus.toString();
         return message+bookingID+ "," +status;
     }
@@ -78,7 +78,7 @@ public class ServerMessage
     public String setExpence(Booking booking, double paidAmount, double roomTotalAmount)
     {
         String message = "set expense:";
-        String bookingID = ""+booking.getBookingID();
+        String bookingID = ""+booking.getId();
         return message+bookingID+ "," + paidAmount + "," + roomTotalAmount;
     }
     
