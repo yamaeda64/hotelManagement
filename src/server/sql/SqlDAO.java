@@ -57,7 +57,7 @@ public class SqlDAO {
 	 */
 	private String packRooms(ResultSet rooms, boolean idOnly) throws SQLException {
 		StringBuilder output = new StringBuilder("");
-		if (!idOnly) output.append("[");
+		output.append("[");
 		rooms.beforeFirst();
 		while (rooms.next()) {
 			output.append(packRoom(rooms, idOnly));
@@ -65,11 +65,11 @@ public class SqlDAO {
 				output.append(",");
 			}
 		}
-		if (!idOnly) output.append("]");
+		output.append("]");
 		return output.toString();
 	}
 	private String packRooms(ResultSet rooms) throws SQLException {
-		return packRooms(rooms, false);
+		return packRooms(rooms, true); // true
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class SqlDAO {
 	public String getAllRooms() {
 		try {
 			ResultSet roomSet = query.allRooms();
-			String rooms = packRooms(roomSet, true);
+			String rooms = packRooms(roomSet, false);
 			return "rooms: " + rooms;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -249,7 +249,7 @@ public class SqlDAO {
 		try {
 			System.out.println("--allbookingsforhotel--");
 			ResultSet bookingSet = query.bookingsForHotel(hotel, startDate, endDate);
-			if (bookingSet == null) return "OK []";
+			if (bookingSet == null) return "bookings:[]";
 			bookingSet.beforeFirst();
 			String response = "bookings:" + packBookings(bookingSet);
 			return response;
@@ -276,12 +276,7 @@ public class SqlDAO {
 		try {
 			// bedtype can be null!
 			ResultSet rooms = query.findFreeRooms(hotel, bedType, noSmoking, adjacent, startDate, endDate);
-//			StringBuilder ret = new StringBuilder("OK");
-//			for (int room : rooms) {
-//				ret.append(' ').append(room);
-//			}
-//			return rooms.toString();
-			return "rooms:" + packRooms(rooms);
+			return "available rooms:" + packRooms(rooms);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR";
@@ -436,7 +431,7 @@ public class SqlDAO {
 	 * @param passportNumber
 	 * @return
 	 */
-	public String realizeBooking(int id, int newPrice, String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, Integer powerLevel, String passportNumber) {
+	public String realizeBooking(int id, int newPrice, String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, String powerLevel, String passportNumber) {
 		try {
 			int newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
 					powerLevel, passportNumber);
@@ -466,7 +461,7 @@ public class SqlDAO {
 	 * @return
 	 */
 	public String createCustomer(String firstName, String lastName, String telephone, String idNumber, String address,
-			String creditCard, Integer powerLevel, String passportNumber) {
+			String creditCard, String powerLevel, String passportNumber) {
 		int newCustomerId;
 		try {
 			newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
@@ -520,3 +515,4 @@ public class SqlDAO {
 		}
 	}
 }
+
