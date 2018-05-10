@@ -45,26 +45,30 @@ public class SearchRoomController implements Initializable
     @FXML
     public void findRoomsButton() throws IOException
     {
-    
-        RoomSearch currentSearch = new RoomSearch();
-    
-        try
+        if(check_in_datepicker.getValue() == null || check_out_datepicker.getValue() == null)
         {
-            currentSearch.setHotel(location_box.getValue());
-            currentSearch.setBedType(room_size_box.getValue());
-            currentSearch.setSmokingAllowed(smoking_allowed_box.isSelected());
-            currentSearch.setAdjecentRoomAvailable(neighboring_room_box.isSelected());
-            currentSearch.setStartDate(check_in_datepicker.getValue());
-            currentSearch.setEndDate(check_out_datepicker.getValue());
-            
-            centralController.updateModel(currentSearch);
-            centralController.changeScreen(Screen.RESULTS);
+            centralController.showError("Date error", "Both start date and end date needs to be set");
         }
-        catch(IllegalArgumentException e)
+        else
         {
-            System.out.println(e.getMessage());  // TODO, this should be GUI error message
-        }
+            RoomSearch currentSearch = new RoomSearch();
+    
+            try
+            {
+                currentSearch.setHotel(location_box.getValue());
+                currentSearch.setBedType(room_size_box.getValue());
+                currentSearch.setSmokingAllowed(smoking_allowed_box.isSelected());
+                currentSearch.setAdjecentRoomAvailable(neighboring_room_box.isSelected());
+                currentSearch.setStartDate(check_in_datepicker.getValue());
+                currentSearch.setEndDate(check_out_datepicker.getValue());
         
+                centralController.updateModel(currentSearch);
+                centralController.changeScreen(Screen.RESULTS);
+            } catch(IllegalArgumentException e)
+            {
+                centralController.showError("The search wasn't complete", e.getMessage());
+            }
+        }
     }
     @FXML
     public void cancelButton() throws IOException {

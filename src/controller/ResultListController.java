@@ -62,21 +62,23 @@ public class ResultListController implements Initializable
         ObservableList<Room> selectedItems = result_list.getSelectionModel().getSelectedItems();
         if(selectedItems.size() == 0)
         {
-            //TODO, show error that no rooms were selected
-            System.out.println("No rooms were selected");
+            centralController.showError("Selection problem","No rooms were selected");
         }
-        Booking booking = new Booking();
-        booking.setStatus(Booking.BookingStatus.IN_PROGRESS);
-        booking.setStartDate(centralController.getLastRoomSearch().getStartDate());
-        booking.setEndDate(centralController.getLastRoomSearch().getEndDate());
-        for(Room room:selectedItems)
+        else
         {
-            System.out.println("added room");
-            booking.addRoom(room);
+            Booking booking = new Booking();
+            booking.setStatus(Booking.BookingStatus.IN_PROGRESS);
+            booking.setStartDate(centralController.getLastRoomSearch().getStartDate());
+            booking.setEndDate(centralController.getLastRoomSearch().getEndDate());
+            for(Room room : selectedItems)
+            {
+                System.out.println("added room");
+                booking.addRoom(room);
+            }
+    
+            centralController.createNewBooking(booking);
+            centralController.changeScreen(Screen.CUSTOMER_FORM);
         }
-
-        centralController.createNewBooking(booking);
-        centralController.changeScreen(Screen.CUSTOMER_FORM);
     }
     
     public void setCentralController(controller.CentralController cc) {

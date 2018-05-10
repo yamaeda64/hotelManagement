@@ -11,6 +11,7 @@ import controller.supportClasses.RoomSearch;
 import controller.supportClasses.ServerCommunicator;
 import controller.supportClasses.ServerMessage;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -179,9 +180,12 @@ public class CentralController
 		serverCommunicator.sendToServer(serverMessageConstructor.setExpence(booking, amountPaid, totalCost));
 	}
 	
-	public void showError(String errorMsg)
+	public void showError(String errorHeader, String errorMsg)
 	{
-		
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setHeaderText(errorHeader);
+		alert.setContentText(errorMsg);
+		alert.show();
 	}
 	
 	public void addBooking(Booking booking)

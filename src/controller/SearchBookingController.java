@@ -48,7 +48,7 @@ public class SearchBookingController implements Initializable{
     @FXML
     public void findBookingButton() throws IOException {
         if (first_name_field.getText() == null && last_name_field.getText() == null && telephone_number_field.getText() == null && booking_number_field.getText() == null && passport_number_field.getText() == null) {
-            throw new IllegalArgumentException("You have to define one or more search parameters.");
+            centralController.showError("Search problem", "You need to fill in at least one field to do a search");
         }
         else {
             BookingSearch booking = new BookingSearch();

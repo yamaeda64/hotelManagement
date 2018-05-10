@@ -76,7 +76,7 @@ public class ServerReplyParser
                 break;
     
             case "error":
-                centralController.showError(splittedMessage[1]);
+                centralController.showError("An error occured", splittedMessage[1]);
                 break;
     
             case "available rooms":
