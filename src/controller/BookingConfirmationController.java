@@ -71,7 +71,7 @@ public class BookingConfirmationController implements Initializable{
 			priceOverrided = true;
 			updateCompleteString();
 			text_area.setText(completeString);
-			bookingInProgress.setPrice(newPrice);
+			bookingInProgress.setGivenPrice(newPrice);
 			}
 			catch (NumberFormatException e) {
 				centralController.showError("Faulty input", "Digits and one dot only");
@@ -89,7 +89,7 @@ public class BookingConfirmationController implements Initializable{
 		//TODO, if set final price isn't blank
 		// check if right format, (maybe change , to . )
 		// if blank, do below code, else set the price to the same as the field.
-		centralController.finalizeBooking(bookingInProgress.getPrice());
+		centralController.finalizeBooking(bookingInProgress.getGivenPrice());
 		centralController.changeScreen(Screen.MAIN);
 	}
 
@@ -128,7 +128,7 @@ public class BookingConfirmationController implements Initializable{
 		{
 			bookingInProgress = centralController.getBookingInProgress();
 			customer = (RealCustomer)bookingInProgress.getCustomer();
-			totalCost = ""+bookingInProgress.getPrice();
+			totalCost = ""+bookingInProgress.getGivenPrice();
 			firstName = customer.getFirstName();
 			lastName = customer.getLastName();
 			phoneNumber = customer.getTelephoneNumber();

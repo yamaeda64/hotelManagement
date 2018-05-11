@@ -73,7 +73,7 @@ public class ServerMessage
         String message = "finalize booking:";
         message += booking.getId();
         message += ",";
-        message += booking.getPrice();
+        message += booking.getGivenPrice();
         return message;
     }
     

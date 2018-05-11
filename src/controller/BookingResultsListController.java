@@ -3,7 +3,6 @@ package controller;
 import client.model.Booking;
 import client.model.Booking.BookingStatus;
 import client.model.Room;
-import client.model.customer.RealCustomer.PowerLevel;
 import controller.ScreenController.Screen;
 import controller.supportClasses.BookingSearch;
 import javafx.application.Platform;
@@ -19,7 +18,6 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -129,11 +127,11 @@ public class BookingResultsListController implements Initializable
 		centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CANCELLED);
 		
     // TODO, send to server
-		LocalDate bookingStart = booking_ListView.getSelectionModel().getSelectedItem().getStartDate();
+		/*LocalDate bookingStart = booking_ListView.getSelectionModel().getSelectedItem().getStartDate();
 		LocalDate current = LocalDate.now();
 		if(bookingStart.isAfter(current.minusDays(2)) && bookingStart.isBefore(current.plusDays(1)))
 		{
-			centralController.changePayedBookingAmount(booking_ListView.getSelectionModel().getSelectedItem(), 0, booking_ListView.getSelectionModel().getSelectedItem().getPrice() * 0.1); // payes 10% of price if late cancellation TODO, this should maybe be set from server
+			centralController.changePayedBookingAmount(booking_ListView.getSelectionModel().getSelectedItem(), 0, booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice() * 0.1); // payes 10% of price if late cancellation TODO, this should maybe be set from server
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Information Dialog");
 			alert.setHeaderText(null);
@@ -141,6 +139,7 @@ public class BookingResultsListController implements Initializable
 
 			alert.showAndWait();
 		}
+		*/
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Cancelation succeded");
 		alert.setHeaderText(null);
@@ -154,29 +153,19 @@ public class BookingResultsListController implements Initializable
 	public void payButton() {
 
 		//TODO Fix database access connection.
-		booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice());
-		amount_remaining_field.setText("0.0");
-		if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == null) {		//Preventing Nullpointer exception.
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice());
-		}
-		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.NONE) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice());
-		}
-		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.BRONZE) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.95);
-		}
-		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.SILVER) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.90);
-		}
-		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.GOLD) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.85);
-		}
-		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.PLATINUM) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.80);
-		}
-		else if(booking_ListView.getSelectionModel().getSelectedItem().getCustomer().getPowerLevel() == PowerLevel.DIAMOND) {
-			booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getPrice()*0.75);
-		}
+		
+		booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice());
+		
+		centralController.changePayedBookingAmount(
+				booking_ListView.getSelectionModel().getSelectedItem(),
+				booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice(),
+				booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()
+		);
+		 
+		updateFields();
+		
+		
+		
   
     amount_paid_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -288,7 +277,11 @@ public class BookingResultsListController implements Initializable
 			String roomString = "";
 			while(rooms.hasNext())
 			{
-				roomString += Integer.toString(rooms.next().getRoomNumber()) + ", ";
+				roomString += Integer.toString(rooms.next().getRoomNumber());
+				if(rooms.hasNext())
+				{
+					roomString+= ", ";
+				}
 			}
 			String shorterRoomString;
 			if(roomString.length()> 19)
@@ -308,9 +301,11 @@ public class BookingResultsListController implements Initializable
 			check_in_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStartDate().toString());
 			check_out_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getEndDate().toString());
 			checked_in_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStatus().toString());
-			
-			amount_paid_field.setText(""+booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid());
-			
+			Double amountPaid = booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid();
+			amount_paid_field.setText(""+amountPaid);
+			amount_remaining_field.setText(""+
+					(booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice() - amountPaid));
+			System.out.println("Price = " + booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice());
 			
 			
 		}

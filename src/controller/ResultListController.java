@@ -94,7 +94,6 @@ public class ResultListController implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
         
-        
         initListView();
         
         result_list.setOnMouseClicked(event ->

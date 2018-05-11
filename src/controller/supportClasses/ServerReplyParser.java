@@ -106,6 +106,11 @@ public class ServerReplyParser
                 int newID = Integer.parseInt(splittedMessage[1]);
                 centralController.setInProgressBookingID(newID);
                 break;
+                
+            case "booking price":
+                double bookedPrice = Double.parseDouble(splittedMessage[1]);
+                centralController.setInProgressBookingPrice(bookedPrice);
+                break;
         }
     }
 }

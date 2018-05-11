@@ -82,7 +82,6 @@ public class CentralController
 	public Iterator<Booking> getBookings(Hotel hotel, LocalDate date)
 	{
 		serverCommunicator.sendToServer(serverMessageConstructor.getBookingsOfDate(hotel, date));
-		//TODO modelAccess.updateBookings(hotel, date);
 		return modelAccess.getAllBookings();
 	}
 	
@@ -141,6 +140,11 @@ public class CentralController
 		this.inProgressBooking.setId(id);
 	}
 	
+	public void setInProgressBookingPrice(double price)
+	{
+		this.inProgressBooking.setGivenPrice(price);
+	}
+	
 	public void realizeBooking(RealCustomer customer)
 	{
 		inProgressBooking.setCustomer(customer);
@@ -152,7 +156,7 @@ public class CentralController
 	
 	public void finalizeBooking(double finalPrice)
 	{
-		inProgressBooking.setPrice(finalPrice);
+		inProgressBooking.setGivenPrice(finalPrice);
 		
 		serverCommunicator.sendToServer(serverMessageConstructor.finalizeBooking(inProgressBooking));
 	}
@@ -224,8 +228,8 @@ public class CentralController
 	
 	public void setCustomerToProxy(RealCustomer customer)
 	{
-		System.out.println(tempProxyCustomer.getFirstName());
-		
 		tempProxyCustomer.addRealCustomer(customer);
 	}
+	
+	
 }

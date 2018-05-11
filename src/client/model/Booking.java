@@ -15,7 +15,7 @@ public class Booking
     private int id;
     private LocalDate startDate;
     private LocalDate endDate;
-    private double price;
+    private double givenPrice;
     private Customer customer;
     private BookingStatus status;
     private double amountPaid;
@@ -88,14 +88,14 @@ public class Booking
         this.endDate = endDate;
     }
     
-    public double getPrice()
+    public double getGivenPrice()
     {
-        return price;
+        return givenPrice;
     }
     
-    public void setPrice(double price)
+    public void setGivenPrice(double price)
     {
-        this.price = price;
+        this.givenPrice = price;
     }
     
     public Customer getCustomer()
