@@ -14,8 +14,8 @@ public class ClientConnection extends Thread
 {
     private Socket clientSocket;
     private boolean isConnected;
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    private InputStreamReader inputStream;
+    private OutputStreamWriter outputStream;
     private Logger logger;
     private AbstractServer abstractServer;
     
@@ -34,8 +34,8 @@ public class ClientConnection extends Thread
         {
             abstractServer.setClientConnection(this);
             abstractServer.clientConnected();
-            inputStream = clientSocket.getInputStream();
-            outputStream = clientSocket.getOutputStream();
+            inputStream = new InputStreamReader(clientSocket.getInputStream());
+            outputStream = new OutputStreamWriter(clientSocket.getOutputStream());
             clientSocket.setSoTimeout(5000);
             listenForClientRequest();
         }
@@ -52,7 +52,7 @@ public class ClientConnection extends Thread
         while(clientIsConnected)
         {
             int readBytes = 0;
-            byte[] buffer = new byte[1024];
+            char[] buffer = new char[1024];
             StringBuilder inputRequest = new StringBuilder();
             
             
@@ -112,7 +112,7 @@ public class ClientConnection extends Thread
     public void sendMessageToClient(String message) throws IOException
     {
         message += '\0';
-        byte[] buffer = message.getBytes();
+        char[] buffer = message.toCharArray();
 
         outputStream.write(buffer);
         outputStream.flush();

@@ -38,14 +38,14 @@ public class ExampleClientCaller_MAIN
                 {
             
                 }
-                client.sendToServer("HööÖöHö");
+                client.sendToServer("HåÅäÄöÖöHö");
                 client.receiveMessageFromServer();
             }
         }
      
         if(client.isRunning())
         {
-            client.sendToServer("Hööåååäää");
+            client.sendToServer("HöåÅäÄöÖöåååäää");
     
             client.receiveMessageFromServer();
             

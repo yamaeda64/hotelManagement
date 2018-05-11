@@ -10,9 +10,9 @@ public class ExampleServer extends AbstractServer
     protected void handleMessageFromClient(String message)
     {
 
-        if(message.equals("Hello"))
+        if(message.equals("HåÅäÄöÖöHö"))
         {
-            sendToClient("World");
+            sendToClient("^%€#^åÅäÄöÖ@£$∞§|[]");
         }
         else
         {

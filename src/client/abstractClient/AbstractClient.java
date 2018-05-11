@@ -2,8 +2,8 @@ package client.abstractClient;
 
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -17,12 +17,12 @@ public abstract class AbstractClient
     private boolean isConnected;
     private int portNumber;
     private Socket socket;
-    private byte[] buffer;
+    private char[] buffer;
     private final int BUFFER_SIZE = 1024;
     private final int SOCKET_TIMEOUT = 5000;
     private Logger logger = Logger.getLogger(AbstractClient.class.getName());
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    private InputStreamReader inputStream;
+    private OutputStreamWriter outputStream;
     
     /**
      * Opens a connection to server, the input is a InetSocketAddress to the server.
@@ -38,8 +38,8 @@ public abstract class AbstractClient
         {
             socket = new Socket(serverAddress.getAddress(), serverAddress.getPort());
             socket.setSoTimeout(SOCKET_TIMEOUT);
-            outputStream = socket.getOutputStream();
-            inputStream = socket.getInputStream();
+            outputStream = new OutputStreamWriter(socket.getOutputStream());
+            inputStream = new InputStreamReader(socket.getInputStream());
             isConnected = true;
             connectionEstablished();
             return true;
@@ -73,7 +73,7 @@ public abstract class AbstractClient
     public boolean sendToServer(String message)
     {
         message += '\0';
-        buffer = message.getBytes();
+        buffer = message.toCharArray();
     
         try
         {
@@ -101,9 +101,9 @@ public abstract class AbstractClient
     {
         try
         {
-            inputStream = socket.getInputStream();
+            inputStream = new InputStreamReader(socket.getInputStream());
     
-            buffer = new byte[BUFFER_SIZE];
+            buffer = new char[BUFFER_SIZE];
             StringBuilder sb = new StringBuilder();
             int readBytes = 0;
             boolean isEndOfMessage = false;
