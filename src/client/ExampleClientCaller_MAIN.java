@@ -25,7 +25,7 @@ public class ExampleClientCaller_MAIN
         if(client.isRunning())
     
         {
-            client.sendToServer("Hello");
+            client.sendToServer("Hällå");
         
             client.receiveMessageFromServer();
             while(true)
@@ -38,14 +38,14 @@ public class ExampleClientCaller_MAIN
                 {
             
                 }
-                client.sendToServer("Hello");
+                client.sendToServer("HööÖöHö");
                 client.receiveMessageFromServer();
             }
         }
      
         if(client.isRunning())
         {
-            client.sendToServer("Hello");
+            client.sendToServer("Hööåååäää");
     
             client.receiveMessageFromServer();
             

@@ -14,6 +14,7 @@ import javafx.scene.control.TextInputDialog;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -27,6 +28,8 @@ public class BookingConfirmationController implements Initializable{
 	private String phoneNumber;
 	private String roomNumber;
 	private String powerLevel;
+	private String checkIn;
+	private String checkOut;
 	private Booking bookingInProgress;
 	private boolean priceOverrided = false;
 
@@ -114,6 +117,8 @@ public class BookingConfirmationController implements Initializable{
 						"Phone number: "+phoneNumber + "\n"+
 						"Rooms: "+roomNumber+"\n"+
 						"Power level: "+powerLevel+"\n"+
+						"Check In:  " + checkIn + "\n"+
+						"Check Out:  " + checkOut + "\n" +
 						"\n"+
 						"\n"+
 						"Total cost: "+totalCost + "\n"+
@@ -135,13 +140,18 @@ public class BookingConfirmationController implements Initializable{
 			Iterator<Room> itr = bookingInProgress.getAllRooms();
 			StringBuilder sb = new StringBuilder();
 			while (itr.hasNext()) {
-				sb.append(itr.next().getRoomNumber() + ", ");
+				sb.append(itr.next().getRoomNumber());
+				if(itr.hasNext())
+				{
+					sb.append(", ");
+				}
 			}
 			roomNumber = sb.toString();
 			powerLevel = ""+customer.getPowerLevel();
-
+			checkIn = bookingInProgress.getStartDate().format(DateTimeFormatter.ISO_DATE).toString();
+			checkOut = bookingInProgress.getEndDate().format(DateTimeFormatter.ISO_DATE).toString();
 			updateCompleteString();
-
+	
 			text_area.setText(completeString);
 		});
 	}

@@ -38,10 +38,10 @@ public class CustomerInformationFormController implements Initializable{
     private TextField postal_code_field;
 
     @FXML
-    private TextField town_field;
+    private TextField city_field;
 
     @FXML
-    private TextField city_state_field;
+    private TextField passport_field;
 
     @FXML
     private TextField card_number_field;
@@ -86,8 +86,8 @@ public class CustomerInformationFormController implements Initializable{
 	    		power_level_field.setText(booking.getCustomer().getPowerLevel().toString());
 	    		address_field.setText(booking.getCustomer().getAddress().getStreetName());
 	    		postal_code_field.setText(Integer.toString(booking.getCustomer().getAddress().getPostalCode()));
-	    		town_field.setText(booking.getCustomer().getAddress().getCity());
-	    		city_state_field.setText(booking.getCustomer().getAddress().getCity());
+	    		city_field.setText(booking.getCustomer().getAddress().getCity());
+	    		passport_field.setText(booking.getCustomer().getPassportNumber());
 	    		card_number_field.setText(booking.getCustomer().getCreditCard().getCardNumber());
 	    		expiration_month.setValue(""+booking.getCustomer().getCreditCard().getExpMonth());
 	    		expiration_year.setValue(""+booking.getCustomer().getCreditCard().getExpYear());

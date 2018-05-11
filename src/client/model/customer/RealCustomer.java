@@ -5,7 +5,7 @@ package client.model.customer;
  */
 public class RealCustomer implements Customer
 {
-    private String customerID;
+    private String id;
     
     private String firstName;
     private String lastName;
@@ -33,9 +33,9 @@ public class RealCustomer implements Customer
     
     /* Getters & Setters */
     
-    public void setCustomerID(String customerID)
+    public void setId(String id)
     {
-        this.customerID = customerID;
+        this.id = id;
     }
     
     public void setFirstName(String firstName)
@@ -81,7 +81,7 @@ public class RealCustomer implements Customer
     @Override
     public String getID()
     {
-        return customerID;
+        return id;
     }
     
     @Override
@@ -129,7 +129,7 @@ public class RealCustomer implements Customer
     @Override
     public void setID(String id)
     {
-        this.customerID = id;
+        this.id = id;
     }
     
     @Override

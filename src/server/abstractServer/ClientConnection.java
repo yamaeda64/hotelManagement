@@ -14,8 +14,8 @@ public class ClientConnection extends Thread
 {
     private Socket clientSocket;
     private boolean isConnected;
-    private BufferedInputStream inputStream;
-    private BufferedOutputStream outputStream;
+    private InputStream inputStream;
+    private OutputStream outputStream;
     private Logger logger;
     private AbstractServer abstractServer;
     
@@ -34,8 +34,8 @@ public class ClientConnection extends Thread
         {
             abstractServer.setClientConnection(this);
             abstractServer.clientConnected();
-            inputStream = new BufferedInputStream(clientSocket.getInputStream());
-            outputStream = new BufferedOutputStream(clientSocket.getOutputStream());
+            inputStream = clientSocket.getInputStream();
+            outputStream = clientSocket.getOutputStream();
             clientSocket.setSoTimeout(5000);
             listenForClientRequest();
         }
