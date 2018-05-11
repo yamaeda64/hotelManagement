@@ -92,7 +92,11 @@ public class SqlDAO {
 		StringBuilder output = new StringBuilder("{");
 		int i = 0;
 		for (String key : customerKeys) {
-			output.append("\"").append(key).append("\": \"").append(customer.getString(key)).append("\"");
+			if (key.equals("creditCard") || key.equals("address")) {
+				output.append("\"").append(key).append("\":").append(customer.getString(key));
+			} else {
+				output.append("\"").append(key).append("\": \"").append(customer.getString(key)).append("\"");
+			}
 			if (i++ < (customerKeys.length - 1))
 				output.append(", ");
 		}
@@ -367,8 +371,10 @@ public class SqlDAO {
 	public String fullCustomer(int id) {
 		try {
 			ResultSet customer = query.searchCustomer(id);
+			customer.next();
 			return "customer:" + packCustomer(customer, true);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return "ERROR";
 		}
 	}
@@ -408,11 +414,15 @@ public class SqlDAO {
 	public String createBooking(ArrayList<Integer> rooms, String startDate,
 			String endDate) {
 		try {
-			int bookingId = query.createBooking(-1, rooms, 0, 0, startDate, endDate);
-			return "new booking:" + bookingId;
+			if (query.roomsUnbooked(rooms, startDate, endDate)) {
+				int bookingId = query.createBooking(-1, rooms, 0, 0, startDate, endDate);
+				return "new booking:" + bookingId;
+			} else {
+				return "ERROR the selected rooms are already booked";
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return "ERROR";
+			return "ERROR " +  e.getMessage();
 		}
 	}
 	
@@ -437,6 +447,7 @@ public class SqlDAO {
 					powerLevel, passportNumber);
 			query.setCustomerOnBooking(id, newCustomerId);
 			query.updateBookingPayment(id, 0, newPrice);
+			query.updateBookingStatus(id, "BOOKED");
 			return "OK";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -512,6 +523,15 @@ public class SqlDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "ERROR";
+		}
+	}
+	
+	public void clean() {
+		try {
+			query.removeUnrealizedBookings();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

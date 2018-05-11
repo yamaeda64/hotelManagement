@@ -205,7 +205,7 @@ class SqlQueries {
 	int createBooking(int customer, ArrayList<Integer> rooms, int givenPrice, int amountPaid, String startDate, String endDate) throws SQLException {
 		// convert dates from String to long to sql-date. EPOCH time in milliseconds.
 		java.sql.Date start = new java.sql.Date(Long.parseLong(startDate));
-		java.sql.Date end = new java.sql.Date(Long.parseLong(startDate));
+		java.sql.Date end = new java.sql.Date(Long.parseLong(endDate));
 		
 		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.bookings(customer, givenPrice, amountPaid, startDate, endDate, status) values (?, ?, ?, ?, ?, 'IN_PROGRESS');"
 				+ " ");
@@ -309,7 +309,7 @@ class SqlQueries {
 		}
 
 		// get all the affected bookings, within the correct time
-		StringBuilder bookingClause = new StringBuilder("SELECT * FROM hotel.bookings WHERE startDate < ? AND endDate > ?");
+		StringBuilder bookingClause = new StringBuilder("SELECT * FROM hotel.bookings WHERE startDate <= ? AND endDate >= ?");
 		bookingClause.append(" AND id IN (");
 		Iterator<Integer> bindingIt = bindings.iterator();
 		while(bindingIt.hasNext()) {
@@ -494,9 +494,9 @@ class SqlQueries {
 		if (bookingId != null) {
 			customerClause.append(" OR id=" + bookingId);
 		}
-		
 		PreparedStatement bfcPrepStatement = uplink.prepareStatement("SELECT * FROM hotel.bookings WHERE " + customerClause.toString());
-		bfcPrepStatement.setInt(1, bookingId);
+		
+		if (bookingId != null) bfcPrepStatement.setInt(1, bookingId);
 		ResultSet svar = bfcPrepStatement.executeQuery();
 		return svar;
 	}
@@ -509,7 +509,7 @@ class SqlQueries {
 	 * @throws SQLException
 	 */
 	void updateBookingStatus(int id, String status) throws SQLException {
-		PreparedStatement ubsPrepStatement = uplink.prepareStatement("UPDATE hotel.bokings SET status=? WHERE id=?");
+		PreparedStatement ubsPrepStatement = uplink.prepareStatement("UPDATE hotel.bookings SET status=? WHERE id=?");
 		ubsPrepStatement.setString(1, status);
 		ubsPrepStatement.setInt(2,id);
 		ubsPrepStatement.executeUpdate();
@@ -582,12 +582,71 @@ class SqlQueries {
 	 * @throws SQLException
 	 */
 	void setCustomerOnBooking(int bookingID, int customerID) throws SQLException {
-		PreparedStatement scobPrepStatement = uplink.prepareStatement("UPDATE hotel.bokings SET customer=? WHERE id=?");
+		PreparedStatement scobPrepStatement = uplink.prepareStatement("UPDATE hotel.bookings SET customer=? WHERE id=?");
 		scobPrepStatement.setInt(1, customerID);
 		scobPrepStatement.setInt(2, bookingID);
 		scobPrepStatement.executeUpdate();
 	}
 	
+	/**
+	 * Checks how many of the supplied rooms are currently booked.
+	 * @param rooms
+	 * @return
+	 * @throws SQLException
+	 */
+	boolean roomsUnbooked(ArrayList<Integer> rooms, String startDate, String endDate) throws SQLException {
+		ResultSet swef = this.bookingsInsideTimeframe(startDate, endDate);
+		ArrayList<Integer> bookingIds = new ArrayList<>();
+		while(swef.next()) {
+			bookingIds.add(swef.getInt("id"));
+		}
+		if (bookingIds.isEmpty()) return true;
+		
+		StringBuilder clause = new StringBuilder("SELECT count(*) as amount FROM hotel.roomBinding WHERE room IN (");
+		Iterator<Integer> roomIt = rooms.iterator();
+		while (roomIt.hasNext()) {
+			clause.append(roomIt.next());
+			if (roomIt.hasNext()) clause.append(",");
+		}
+		clause.append(") AND booking IN (");
+		Iterator<Integer> bookingIt = bookingIds.iterator();
+		while (bookingIt.hasNext()) {
+			clause.append(bookingIt.next());
+			if (bookingIt.hasNext()) clause.append(",");
+		}
+		clause.append(")");
+		
+		PreparedStatement roomPrep = uplink.prepareStatement(clause.toString());
+		ResultSet roomResult = roomPrep.executeQuery();
+		roomResult.next();
+		int amount = roomResult.getInt("amount");
+		return amount == 0;
+	}
+	
+	
+	
+	
+	void removeUnrealizedBookings() throws SQLException {
+		PreparedStatement rubPrepStatement = uplink.prepareStatement("SELECT * FROM hotel.bookings WHERE customer = -1");
+		ResultSet bookings = rubPrepStatement.executeQuery();
+		ArrayList<Integer> lameBookings = new ArrayList<>();
+		while(bookings.next()) {
+			lameBookings.add(bookings.getInt("id"));
+		}
+		if ( !lameBookings.isEmpty()) {
+			StringBuilder liberatorOne = new StringBuilder("DELETE FROM hotel.roomBinding WHERE booking IN (");
+			Iterator<Integer> bookingIt = lameBookings.iterator();
+			while (bookingIt.hasNext()) {
+				liberatorOne.append(bookingIt.next());
+				if (bookingIt.hasNext()) liberatorOne.append(",");
+			}
+			liberatorOne.append(")");
+			PreparedStatement libStatement = uplink.prepareStatement(liberatorOne.toString());
+			libStatement.executeUpdate();
+		}
+		PreparedStatement libTwoStatement = uplink.prepareStatement("DELETE FROM hotel.bookings WHERE customer = -1");
+		libTwoStatement.executeUpdate();
+	}
 	
 	
 
