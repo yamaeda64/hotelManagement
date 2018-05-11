@@ -9,7 +9,7 @@ import java.io.IOException;
 public class ScreenController {
 	controller.StageManager stageM;
 	FXMLLoader loader;
-	CentralController centralController;
+	FacadeController facadeController;
 	/**
 	 * Manages the handling of screens. Controller classes call the setScreen method to update the screen.
 	 */
@@ -35,9 +35,9 @@ public class ScreenController {
 		}
 	}
 	
-	public ScreenController(Stage s, CentralController centralController) throws IOException{
-		stageM = new controller.StageManager(s,centralController);
-		this.centralController = centralController;
+	public ScreenController(Stage s, FacadeController facadeController) throws IOException{
+		stageM = new controller.StageManager(s, facadeController);
+		this.facadeController = facadeController;
 	}
 	
 	public void setScreen(ScreenController.Screen screen)throws IOException {
@@ -46,28 +46,28 @@ public class ScreenController {
 			loader = new FXMLLoader(ScreenController.class.getResource("/fxml/Main_menu.fxml"));
 			Parent root=loader.load();
 			MainMenuController mainMenuController = loader.getController();
-			mainMenuController.setCentralController(centralController);
+			mainMenuController.setFacadeController(facadeController);
 			stageM.setRoot(root);
 		}
 		else if (screen.getResourceLocation() == ScreenController.Screen.SEARCH_ROOMS.getResourceLocation()) {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			SearchRoomController searchRoomController = loader.getController();
-			searchRoomController.setCentralController(centralController);
+			searchRoomController.setFacadeController(facadeController);
 			stageM.setRoot(root);
 		}
 		else if (screen.getResourceLocation() ==  ScreenController.Screen.RESULTS.getResourceLocation()) {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			ResultListController resultListController = loader.getController();
-			resultListController.setCentralController(centralController);
+			resultListController.setFacadeController(facadeController);
 			stageM.setRoot(root);
 		}
 		else if (screen.getResourceLocation() ==  ScreenController.Screen.CUSTOMER_FORM.getResourceLocation()) {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			CustomerFormController customerFormController = loader.getController();
-			customerFormController.setCentralController(centralController);
+			customerFormController.setFacadeController(facadeController);
 			stageM.setRoot(root);
 			
 		}
@@ -78,14 +78,14 @@ public class ScreenController {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			SearchBookingController searchBookingController = loader.getController();
-			searchBookingController.setCentralController(centralController);
+			searchBookingController.setFacadeController(facadeController);
 			stageM.setRoot(root);
 		}
 		else if (screen.getResourceLocation() == ScreenController.Screen.BOOKING_RESULTS.getResourceLocation()) {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			BookingResultsListController bookingResultsListController = loader.getController();
-			bookingResultsListController.setCentralController(centralController);
+			bookingResultsListController.setFacadeController(facadeController);
 			stageM.setRoot(root);
 
 		}
@@ -93,13 +93,13 @@ public class ScreenController {
 			loader = new FXMLLoader(ScreenController.class.getResource(screen.getResourceLocation()));
 			Parent root=loader.load();
 			BookingConfirmationController bookingConfirmationController = loader.getController();
-			bookingConfirmationController.setCentralController(centralController);
-			bookingConfirmationController.setBookingInProgress(centralController.getBookingInProgress());
+			bookingConfirmationController.setFacadeController(facadeController);
+			bookingConfirmationController.setBookingInProgress(facadeController.getBookingInProgress());
 			stageM.setRoot(root);
 
 		}
 		else if (true) {
-			centralController.showError("ERROR", "An exception occured while reading local resources");
+			facadeController.showError("ERROR", "An exception occured while reading local resources");
 			
 		}
 	}

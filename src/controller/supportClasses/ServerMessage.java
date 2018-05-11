@@ -5,7 +5,7 @@ import client.model.Hotel;
 import client.model.customer.Customer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import controller.CentralController;
+import controller.FacadeController;
 import controller.supportClasses.parsing.CustomerJsonAdapter;
 import controller.supportClasses.parsing.LocalDateJsonAdapter;
 
@@ -17,10 +17,10 @@ public class ServerMessage
 {
     private Gson gsonParser;
     
-    public ServerMessage(CentralController centralController)
+    public ServerMessage(FacadeController facadeController)
     {
         gsonParser = new GsonBuilder()
-                .registerTypeAdapter(Customer.class, new CustomerJsonAdapter(centralController))
+                .registerTypeAdapter(Customer.class, new CustomerJsonAdapter(facadeController))
                 .registerTypeAdapter(LocalDate.class, new LocalDateJsonAdapter()).create();
     }
     

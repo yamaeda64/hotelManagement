@@ -2,7 +2,7 @@ package controller.supportClasses;
 
 
 import client.abstractClient.AbstractClient;
-import controller.CentralController;
+import controller.FacadeController;
 
 import java.net.InetSocketAddress;
 import java.util.logging.ConsoleHandler;
@@ -10,6 +10,9 @@ import java.util.logging.Level;
 
 public class ServerCommunicator extends AbstractClient
 {
+    final String hostname = "sixey.es";
+    final int port = 6464;
+    
     ServerReplyParser serverReplyParser;
     
     public ServerCommunicator()
@@ -17,15 +20,15 @@ public class ServerCommunicator extends AbstractClient
         setupServer();
     }
     
-    public ServerCommunicator(CentralController centralController)
+    public ServerCommunicator(FacadeController facadeController)
     {
-        serverReplyParser = new ServerReplyParser(centralController);
+        serverReplyParser = new ServerReplyParser(facadeController);
         setupServer();
     }
     
     public void setupServer()
     {
-        InetSocketAddress socketAddress = new InetSocketAddress("sixey.es",6464);
+        InetSocketAddress socketAddress = new InetSocketAddress(hostname, port);
         setLogLevel(Level.OFF);
         ConsoleHandler handler = new ConsoleHandler();
         handler.setLevel(Level.OFF);

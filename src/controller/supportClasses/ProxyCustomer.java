@@ -4,7 +4,7 @@ import client.model.customer.Address;
 import client.model.customer.CreditCard;
 import client.model.customer.Customer;
 import client.model.customer.RealCustomer;
-import controller.CentralController;
+import controller.FacadeController;
 
 /**
  * Proxy customer is a lightweight Customer which loads more customer
@@ -20,11 +20,11 @@ public class ProxyCustomer implements Customer
     private String firstName;
     private String lastName;
     
-    private CentralController centralController;
+    private FacadeController facadeController;
     
-    public ProxyCustomer(CentralController centralController)
+    public ProxyCustomer(FacadeController facadeController)
     {
-        this.centralController = centralController;
+        this.facadeController = facadeController;
     }
     
     
@@ -139,7 +139,7 @@ public class ProxyCustomer implements Customer
     
     private void askForFullCustomer()
     {
-        centralController.getRealCustomer(this);
+        facadeController.getRealCustomer(this);
     }
     
     public void addRealCustomer(RealCustomer customer)

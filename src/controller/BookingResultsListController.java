@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 
 public class BookingResultsListController implements Initializable
 {
-	CentralController centralController;
+	FacadeController facadeController;
 	BookingSearch search;
 
 	@FXML
@@ -72,9 +72,9 @@ public class BookingResultsListController implements Initializable
 	private Button pay_button;
 
 
-	public void setCentralController(CentralController cc)
+	public void setFacadeController(FacadeController cc)
 	{
-		this.centralController = cc;
+		this.facadeController = cc;
 	}
 
 	@FXML
@@ -83,7 +83,7 @@ public class BookingResultsListController implements Initializable
 		booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_IN);
 		// TODO, send to server
 		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
-		centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_IN);
+		facadeController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_IN);
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Check in successful");
 		alert.setHeaderText(null);
@@ -108,7 +108,7 @@ public class BookingResultsListController implements Initializable
 			booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_OUT);
 			// TODO, send to server
 			checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
-			centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_OUT);
+			facadeController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_OUT);
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Check out succeded");
 			alert.setHeaderText(null);
@@ -124,22 +124,9 @@ public class BookingResultsListController implements Initializable
 	{
 		booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CANCELLED);
 		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
-		centralController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CANCELLED);
+		facadeController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CANCELLED);
 		
-    // TODO, send to server
-		/*LocalDate bookingStart = booking_ListView.getSelectionModel().getSelectedItem().getStartDate();
-		LocalDate current = LocalDate.now();
-		if(bookingStart.isAfter(current.minusDays(2)) && bookingStart.isBefore(current.plusDays(1)))
-		{
-			centralController.changePayedBookingAmount(booking_ListView.getSelectionModel().getSelectedItem(), 0, booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice() * 0.1); // payes 10% of price if late cancellation TODO, this should maybe be set from server
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Information Dialog");
-			alert.setHeaderText(null);
-			alert.setContentText("Late cancellation. Customer will be fined for the cancellation fee.");
-
-			alert.showAndWait();
-		}
-		*/
+   
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Cancelation succeded");
 		alert.setHeaderText(null);
@@ -156,7 +143,7 @@ public class BookingResultsListController implements Initializable
 		
 		booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice());
 		
-		centralController.changePayedBookingAmount(
+		facadeController.changePayedBookingAmount(
 				booking_ListView.getSelectionModel().getSelectedItem(),
 				booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice(),
 				booking_ListView.getSelectionModel().getSelectedItem().getAmountPaid()
@@ -179,13 +166,13 @@ public class BookingResultsListController implements Initializable
 	@FXML
 	public void backToSearchButton() throws IOException
 	{
-		centralController.changeScreen(Screen.SEARCH_BOOKING);
+		facadeController.changeScreen(Screen.SEARCH_BOOKING);
 	}
 
 	@FXML
 	public void returnToMainButton() throws IOException
 	{
-		centralController.changeScreen(Screen.MAIN);
+		facadeController.changeScreen(Screen.MAIN);
 	}
 
 	@Override
@@ -194,8 +181,8 @@ public class BookingResultsListController implements Initializable
 
 		Platform.runLater(() ->
 		{
-			search = centralController.getBookingSearch();
-			Iterator<Booking> bookings = centralController.getBookings();
+			search = facadeController.getBookingSearch();
+			Iterator<Booking> bookings = facadeController.getBookings();
 			while(bookings.hasNext())
 			{
 				booking_ListView.getItems().add(bookings.next());

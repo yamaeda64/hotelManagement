@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 
 public class CustomerFormController implements Initializable
 {
-    private controller.CentralController centralController;
+    private FacadeController facadeController;
     
     @FXML
     private TextField first_name_field;
@@ -70,7 +70,7 @@ public class CustomerFormController implements Initializable
     
     @FXML
     public void cancelButton() throws IOException {
-        centralController.changeScreen(Screen.MAIN);
+        facadeController.changeScreen(Screen.MAIN);
     }
     @FXML
     public void confirmButton() throws IOException {
@@ -183,11 +183,11 @@ public class CustomerFormController implements Initializable
                 throw new IllegalArgumentException("The cvc code must be in integers only");
             }
             customer.setCreditCard(card);
-            centralController.realizeBooking(customer);
+            facadeController.realizeBooking(customer);
             
-            centralController.updateBookingInProgress(customer);
+            facadeController.updateBookingInProgress(customer);
             
-            centralController.changeScreen(Screen.CONFIRM_BOOKING);
+            facadeController.changeScreen(Screen.CONFIRM_BOOKING);
         }
         catch(IllegalArgumentException e)
         {
@@ -201,11 +201,11 @@ public class CustomerFormController implements Initializable
         
     }
     
-    public void setCentralController(controller.CentralController centralController) {
-        this.centralController = centralController;
+    public void setFacadeController(FacadeController facadeController) {
+        this.facadeController = facadeController;
     }
     public boolean hasNoCentralController() {
-        return centralController == null;
+        return facadeController == null;
     }
     @Override
     public void initialize(URL location, ResourceBundle resources)

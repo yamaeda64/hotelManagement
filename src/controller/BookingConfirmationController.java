@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class BookingConfirmationController implements Initializable{
-	private CentralController centralController;
+	private FacadeController facadeController;
 	private RealCustomer customer; 
 	private String totalCost;
 	private String firstName;
@@ -74,7 +74,7 @@ public class BookingConfirmationController implements Initializable{
 			bookingInProgress.setGivenPrice(newPrice);
 			}
 			catch (NumberFormatException e) {
-				centralController.showError("Faulty input", "Digits and one dot only");
+				facadeController.showError("Faulty input", "Digits and one dot only");
 			}
 			
 		}
@@ -89,20 +89,20 @@ public class BookingConfirmationController implements Initializable{
 		//TODO, if set final price isn't blank
 		// check if right format, (maybe change , to . )
 		// if blank, do below code, else set the price to the same as the field.
-		centralController.finalizeBooking(bookingInProgress.getGivenPrice());
-		centralController.changeScreen(Screen.MAIN);
+		facadeController.finalizeBooking(bookingInProgress.getGivenPrice());
+		facadeController.changeScreen(Screen.MAIN);
 	}
 
 	@FXML
 	void cancelButton(ActionEvent event) throws IOException {
-		centralController.changeScreen(Screen.SEARCH_ROOMS);
+		facadeController.changeScreen(Screen.SEARCH_ROOMS);
 	}
 
-	public void setCentralController(CentralController centralController) {
-		this.centralController = centralController;
+	public void setFacadeController(FacadeController facadeController) {
+		this.facadeController = facadeController;
 	}
 	public boolean hasNoCentralController() {
-		return centralController == null;
+		return facadeController == null;
 	}
 	public void setBookingInProgress(Booking booking) {
 		bookingInProgress = booking;
@@ -126,7 +126,7 @@ public class BookingConfirmationController implements Initializable{
 
 		Platform.runLater(()->
 		{
-			bookingInProgress = centralController.getBookingInProgress();
+			bookingInProgress = facadeController.getBookingInProgress();
 			customer = (RealCustomer)bookingInProgress.getCustomer();
 			totalCost = ""+bookingInProgress.getGivenPrice();
 			firstName = customer.getFirstName();

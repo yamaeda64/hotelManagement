@@ -1,7 +1,7 @@
 package controller.supportClasses.parsing;
 
 import client.model.customer.Customer;
-import controller.CentralController;
+import controller.FacadeController;
 import controller.supportClasses.ProxyCustomer;
 import com.google.gson.*;
 
@@ -9,19 +9,19 @@ import java.lang.reflect.Type;
 
 public class CustomerJsonAdapter implements JsonDeserializer<Customer>, JsonSerializer<Customer>
 {
-    private CentralController centralController;
+    private FacadeController facadeController;
     
     
-    public CustomerJsonAdapter(CentralController centralController)
+    public CustomerJsonAdapter(FacadeController facadeController)
     {
-        this.centralController = centralController;
+        this.facadeController = facadeController;
     }
     
     @Override
     public Customer deserialize(JsonElement json, Type typeOfT,
                                 JsonDeserializationContext context) throws JsonParseException
     {
-        ProxyCustomer customer = new ProxyCustomer(centralController);
+        ProxyCustomer customer = new ProxyCustomer(facadeController);
         customer.setFirstName(((JsonPrimitive) json.getAsJsonObject().get("firstName")).getAsString());
         customer.setLastName(((JsonPrimitive) json.getAsJsonObject().get("lastName")).getAsString());
         customer.setID(((JsonPrimitive) json.getAsJsonObject().get("id")).getAsString());

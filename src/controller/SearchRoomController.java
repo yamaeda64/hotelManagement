@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class SearchRoomController implements Initializable
 {
-    private CentralController centralController;
+    private FacadeController facadeController;
     
     @FXML
     private DatePicker check_in_datepicker;
@@ -47,7 +47,7 @@ public class SearchRoomController implements Initializable
     {
         if(check_in_datepicker.getValue() == null || check_out_datepicker.getValue() == null)
         {
-            centralController.showError("Date error", "Both start date and end date needs to be set");
+            facadeController.showError("Date error", "Both start date and end date needs to be set");
         }
         else
         {
@@ -61,25 +61,27 @@ public class SearchRoomController implements Initializable
                 currentSearch.setAdjecentRoomAvailable(neighboring_room_box.isSelected());
                 currentSearch.setStartDate(check_in_datepicker.getValue());
                 currentSearch.setEndDate(check_out_datepicker.getValue());
-        
-                centralController.updateModel(currentSearch);
-                centralController.changeScreen(Screen.RESULTS);
+               System.out.println(1);
+                facadeController.updateModel(currentSearch);
+                facadeController.changeScreen(Screen.RESULTS);
+                System.out.println(2);
             } catch(IllegalArgumentException e)
             {
-                centralController.showError("The search wasn't complete", e.getMessage());
+                System.out.println(3);
+                facadeController.showError("The search wasn't complete", e.getMessage());
             }
         }
     }
     @FXML
     public void cancelButton() throws IOException {
-        centralController.changeScreen(Screen.MAIN);
+        facadeController.changeScreen(Screen.MAIN);
     }
-    public void setCentralController(CentralController centralController)
+    public void setFacadeController(FacadeController facadeController)
     {
-        this.centralController = centralController;
+        this.facadeController = facadeController;
     }
     public boolean hasNoCentralController() {
-        return centralController == null;
+        return facadeController == null;
     }
     
     @Override
@@ -97,7 +99,7 @@ public class SearchRoomController implements Initializable
         
         Platform.runLater(()->
         {
-            location_box.setValue(centralController.getLocation());
+            location_box.setValue(facadeController.getLocation());
         });
     }
         

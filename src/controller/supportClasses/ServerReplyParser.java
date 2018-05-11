@@ -8,7 +8,7 @@ import client.model.customer.RealCustomer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import controller.CentralController;
+import controller.FacadeController;
 import controller.supportClasses.parsing.CustomerJsonAdapter;
 import controller.supportClasses.parsing.LocalDateJsonAdapter;
 import controller.supportClasses.parsing.RoomFromIdAdapter;
@@ -21,16 +21,16 @@ import java.util.List;
 public class ServerReplyParser
 {
     Gson gson;
-    CentralController centralController;
+    FacadeController facadeController;
     
-   public ServerReplyParser(CentralController centralController)
+   public ServerReplyParser(FacadeController facadeController)
    {
        gson = new GsonBuilder()
            .registerTypeAdapter(LocalDate.class, new LocalDateJsonAdapter())
-           .registerTypeAdapter(Customer.class, new CustomerJsonAdapter(centralController))
+           .registerTypeAdapter(Customer.class, new CustomerJsonAdapter(facadeController))
            .create();
        
-       this.centralController = centralController;
+       this.facadeController = facadeController;
    }
     
     
@@ -49,15 +49,15 @@ public class ServerReplyParser
                
                 Type listTypeBooking = new TypeToken<List<Booking>>() {}.getType();
                 
-               Gson roomFromIDGSON = new GsonBuilder().registerTypeAdapter(Room.class, new RoomFromIdAdapter(centralController))
-                       .registerTypeAdapter(Customer.class, new CustomerJsonAdapter(centralController))
+               Gson roomFromIDGSON = new GsonBuilder().registerTypeAdapter(Room.class, new RoomFromIdAdapter(facadeController))
+                       .registerTypeAdapter(Customer.class, new CustomerJsonAdapter(facadeController))
                        .registerTypeAdapter(LocalDate.class, new LocalDateJsonAdapter())
                        .create();
                 ArrayList<Booking> bookingArray = roomFromIDGSON.fromJson(splittedMessage[1], listTypeBooking);
-                centralController.clearBookings();
+                facadeController.clearBookings();
                 for(Booking booking : bookingArray)
                 {
-                    centralController.addBooking(booking);
+                    facadeController.addBooking(booking);
                 }
     
                 break;
@@ -69,7 +69,7 @@ public class ServerReplyParser
                 ArrayList<Room> roomArray = gson.fromJson(splittedMessage[1], listTypeRoom);
                 for(Room room : roomArray)
                 {
-                    centralController.addRoom(room);
+                    facadeController.addRoom(room);
                 }
                 break;
                 
@@ -78,25 +78,29 @@ public class ServerReplyParser
                 RealCustomer fullDetailCustomer = gson.fromJson(splittedMessage[1], RealCustomer.class);
                 System.out.println(fullDetailCustomer.getAddress().getCity());
                
-                centralController.setCustomerToProxy(fullDetailCustomer);
+                facadeController.setCustomerToProxy(fullDetailCustomer);
                 
                 break;
                 
     
             case "error":
-                centralController.showError("An error occured", splittedMessage[1]);
+                facadeController.showError("An error occured", splittedMessage[1]);
                 break;
     
             case "available rooms":
                 
-                centralController.clearAvailableRooms();
+                facadeController.clearAvailableRooms();
                 
                 String roomsString = splittedMessage[1].substring(1,splittedMessage[1].length()-1);
                 String[] requestedRooms = roomsString.split(",");
                 
+                if(requestedRooms[0].isEmpty())
+                {
+                    throw new IllegalArgumentException("There was no available rooms");
+                }
                 for(String id : requestedRooms)
                 {
-                    centralController.addAvailableRoom(centralController.getRoomByID(Integer.parseInt(id)));
+                    facadeController.addAvailableRoom(facadeController.getRoomByID(Integer.parseInt(id)));
                 }
                 break;
                 
@@ -104,12 +108,12 @@ public class ServerReplyParser
             case "new booking":
                 
                 int newID = Integer.parseInt(splittedMessage[1]);
-                centralController.setInProgressBookingID(newID);
+                facadeController.setInProgressBookingID(newID);
                 break;
                 
             case "booking price":
                 double bookedPrice = Double.parseDouble(splittedMessage[1]);
-                centralController.setInProgressBookingPrice(bookedPrice);
+                facadeController.setInProgressBookingPrice(bookedPrice);
                 break;
         }
     }

@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SearchBookingController implements Initializable{
-    private CentralController centralController;
+    private FacadeController facadeController;
     
     @FXML
     private TextField first_name_field;
@@ -43,12 +43,12 @@ public class SearchBookingController implements Initializable{
     
     @FXML
     public void cancelButton() throws IOException {
-        centralController.changeScreen(Screen.MAIN);
+        facadeController.changeScreen(Screen.MAIN);
     }
     @FXML
     public void findBookingButton() throws IOException {
         if (first_name_field.getText() == null && last_name_field.getText() == null && telephone_number_field.getText() == null && booking_number_field.getText() == null && passport_number_field.getText() == null) {
-            centralController.showError("Search problem", "You need to fill in at least one field to do a search");
+            facadeController.showError("Search problem", "You need to fill in at least one field to do a search");
         }
         else {
             BookingSearch bookingSearch = new BookingSearch();
@@ -59,17 +59,17 @@ public class SearchBookingController implements Initializable{
             bookingSearch.setPassportNumber(passport_number_field.getText());
             bookingSearch.setHotel(location_box.getValue());
             
-            centralController.updateModel(bookingSearch);
-            centralController.changeScreen(Screen.BOOKING_RESULTS);
+            facadeController.updateModel(bookingSearch);
+            facadeController.changeScreen(Screen.BOOKING_RESULTS);
         }
     }
     
     
-    public void setCentralController(CentralController cc) {
-        centralController=cc;
+    public void setFacadeController(FacadeController cc) {
+        facadeController =cc;
     }
     public boolean hasNoCentralController() {
-        return centralController == null;
+        return facadeController == null;
     }
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -78,7 +78,7 @@ public class SearchBookingController implements Initializable{
         
         Platform.runLater(()->
         {
-            location_box.setValue(centralController.getLocation());
+            location_box.setValue(facadeController.getLocation());
         });
     }
     

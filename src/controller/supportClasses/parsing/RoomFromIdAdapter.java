@@ -2,7 +2,7 @@ package controller.supportClasses.parsing;
 
 import client.model.Room;
 import com.google.gson.*;
-import controller.CentralController;
+import controller.FacadeController;
 
 import java.lang.reflect.Type;
 
@@ -11,16 +11,16 @@ import java.lang.reflect.Type;
  */
 public class RoomFromIdAdapter implements JsonDeserializer<Room>
 {
-    private CentralController centralController;
+    private FacadeController facadeController;
    
-    public RoomFromIdAdapter(CentralController centralController)
+    public RoomFromIdAdapter(FacadeController facadeController)
     {
-        this.centralController = centralController;
+        this.facadeController = facadeController;
     }
     
     public Room deserialize(JsonElement json, Type typeOfT,
                             JsonDeserializationContext context) throws JsonParseException
     {
-        return centralController.getRoomByID(json.getAsInt());
+        return facadeController.getRoomByID(json.getAsInt());
     }
 }

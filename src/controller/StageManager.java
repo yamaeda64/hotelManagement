@@ -12,7 +12,7 @@ public class StageManager {
     private Stage stage;
     private Pane pane;
     
-    public StageManager(Stage stage, controller.CentralController cc) throws IOException {
+    public StageManager(Stage stage, FacadeController cc) throws IOException {
         this.stage=stage;
         //stage.setTitle("Hotel System");
         //stage.setMinWidth(600.0);
@@ -21,7 +21,7 @@ public class StageManager {
         Parent root=loader.load();
 
         MainMenuController mm = loader.getController();
-        mm.setCentralController(cc);
+        mm.setFacadeController(cc);
         Scene s = new Scene(root);
        /*FIXME Graphical bugs here.
        s.getStylesheets().add("css/menu_items.css"); // css for design, */

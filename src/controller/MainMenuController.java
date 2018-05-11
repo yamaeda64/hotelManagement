@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable{
     
-    private CentralController centralController;
+    private FacadeController facadeController;
     private ObservableList<RoomWrapper> bookingList;
     
 	@FXML private Button new_booking_button;
@@ -44,16 +44,16 @@ public class MainMenuController implements Initializable{
     public void new_booking_button() throws IOException {
     	String ost = ScreenController.Screen.SEARCH_ROOMS.getResourceLocation();
     	System.out.println(ost);
-        centralController.changeScreen(Screen.SEARCH_ROOMS);
+        facadeController.changeScreen(Screen.SEARCH_ROOMS);
     }
     
     @FXML
     public void find_existing_button() throws IOException {
-    	centralController.changeScreen(Screen.SEARCH_BOOKING);
+    	facadeController.changeScreen(Screen.SEARCH_BOOKING);
     }
     @FXML
     public void menu_preferences() throws IOException {
-    	centralController.changeScreen(Screen.SEARCH_ROOMS);
+    	facadeController.changeScreen(Screen.SEARCH_ROOMS);
     }
     @FXML
     public void menu_quit() throws IOException {
@@ -61,7 +61,7 @@ public class MainMenuController implements Initializable{
     }
     @FXML
     public void menu_about() throws IOException {
-    	centralController.changeScreen(Screen.SEARCH_ROOMS);
+    	facadeController.changeScreen(Screen.SEARCH_ROOMS);
     }
     
     @FXML
@@ -71,9 +71,9 @@ public class MainMenuController implements Initializable{
         
     }
     
-    public void setCentralController(CentralController centralController)
+    public void setFacadeController(FacadeController facadeController)
     {
-    	this.centralController = centralController;
+    	this.facadeController = facadeController;
     }
     
     
@@ -82,11 +82,11 @@ public class MainMenuController implements Initializable{
     {
         Platform.runLater(()->
         {
-            if(centralController.getLocation().equals(Hotel.VAXJO))
+            if(facadeController.getLocation().equals(Hotel.VAXJO))
             {
                 menu_vaxjo.setSelected(true);
             }
-            else if(centralController.getLocation() == Hotel.KALMAR)
+            else if(facadeController.getLocation() == Hotel.KALMAR)
             {
                 menu_kalmar.setSelected(true);
             }
@@ -105,7 +105,7 @@ public class MainMenuController implements Initializable{
         {
             menu_vaxjo.setSelected(true);
             menu_kalmar.setSelected(false);
-            centralController.setLocation(Hotel.VAXJO);
+            facadeController.setLocation(Hotel.VAXJO);
             updateBookingsByDate();
         });
         
@@ -113,19 +113,19 @@ public class MainMenuController implements Initializable{
         {
             menu_kalmar.setSelected(true);
             menu_vaxjo.setSelected(false);
-            centralController.setLocation(Hotel.KALMAR);
+            facadeController.setLocation(Hotel.KALMAR);
             updateBookingsByDate();
         });
         bookingsTableView.setOnMouseClicked(event ->
         {
             if(event.getClickCount() > 1)
             {
-                centralController.clearBookings();
-                centralController.addBooking(bookingsTableView.getSelectionModel().getSelectedItem().getBooking());
+                facadeController.clearBookings();
+                facadeController.addBooking(bookingsTableView.getSelectionModel().getSelectedItem().getBooking());
                 
                 try
                 {
-                    centralController.changeScreen(Screen.BOOKING_RESULTS);
+                    facadeController.changeScreen(Screen.BOOKING_RESULTS);
                 }
                 catch(IOException e)
                 {
@@ -179,15 +179,15 @@ public class MainMenuController implements Initializable{
         
         if(menu_vaxjo.isSelected())
         {
-            centralController.clearBookings();
-            centralController.getBookings(Hotel.VAXJO, datePicker.getValue());
+            facadeController.clearBookings();
+            facadeController.getBookings(Hotel.VAXJO, datePicker.getValue());
         }
         else if(menu_kalmar.isSelected())
         {
-            centralController.clearBookings();
-            centralController.getBookings(Hotel.KALMAR, datePicker.getValue());
+            facadeController.clearBookings();
+            facadeController.getBookings(Hotel.KALMAR, datePicker.getValue());
         }
-        Iterator<Booking> bookingIterator = centralController.getBookings();
+        Iterator<Booking> bookingIterator = facadeController.getBookings();
         while(bookingIterator.hasNext())
         {
             bookingList.add(new RoomWrapper(bookingIterator.next()));

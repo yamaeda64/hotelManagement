@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class ResultListController implements Initializable
 {
-    private controller.CentralController centralController;
+    private FacadeController facadeController;
     
     @FXML
     private ListView<Room> result_list;
@@ -53,7 +53,7 @@ public class ResultListController implements Initializable
     
     @FXML
     public void cancelButton() throws IOException {
-        centralController.changeScreen(Screen.MAIN);
+        facadeController.changeScreen(Screen.MAIN);
     }
     @FXML
     public void bookingButton() throws IOException
@@ -62,31 +62,31 @@ public class ResultListController implements Initializable
         ObservableList<Room> selectedItems = result_list.getSelectionModel().getSelectedItems();
         if(selectedItems.size() == 0)
         {
-            centralController.showError("Selection problem","No rooms were selected");
+            facadeController.showError("Selection problem","No rooms were selected");
         }
         else
         {
             Booking booking = new Booking();
             booking.setStatus(Booking.BookingStatus.IN_PROGRESS);
-            booking.setStartDate(centralController.getLastRoomSearch().getStartDate());
-            booking.setEndDate(centralController.getLastRoomSearch().getEndDate());
+            booking.setStartDate(facadeController.getLastRoomSearch().getStartDate());
+            booking.setEndDate(facadeController.getLastRoomSearch().getEndDate());
             for(Room room : selectedItems)
             {
                 System.out.println("added room");
                 booking.addRoom(room);
             }
     
-            centralController.createNewBooking(booking);
-            centralController.changeScreen(Screen.CUSTOMER_FORM);
+            facadeController.createNewBooking(booking);
+            facadeController.changeScreen(Screen.CUSTOMER_FORM);
         }
     }
     
-    public void setCentralController(controller.CentralController cc) {
-        this.centralController = cc;
+    public void setFacadeController(FacadeController cc) {
+        this.facadeController = cc;
     }
     
     public boolean hasNoCentralController() {
-        return centralController == null;
+        return facadeController == null;
     }
     
     
@@ -114,7 +114,7 @@ public class ResultListController implements Initializable
         
         Platform.runLater(()->
         {
-            Iterator<Room> roomIterator = centralController.getAvailableRooms();
+            Iterator<Room> roomIterator = facadeController.getAvailableRooms();
             
             while(roomIterator.hasNext())
             {
