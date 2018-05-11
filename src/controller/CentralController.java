@@ -225,11 +225,14 @@ public class CentralController
 	
 	public void getRealCustomer(ProxyCustomer customer)
 	{
+		this.tempProxyCustomer = customer;
 		serverCommunicator.sendToServer(serverMessageConstructor.getCustomerDetails(customer));
 	}
 	
 	public void setCustomerToProxy(RealCustomer customer)
 	{
-		this.tempProxyCustomer.addRealCustomer(customer);
+		System.out.println(tempProxyCustomer.getFirstName());
+		
+		tempProxyCustomer.addRealCustomer(customer);
 	}
 }

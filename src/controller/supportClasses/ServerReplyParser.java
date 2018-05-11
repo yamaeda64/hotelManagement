@@ -4,6 +4,7 @@ package controller.supportClasses;
 import client.model.Booking;
 import client.model.Room;
 import client.model.customer.Customer;
+import client.model.customer.RealCustomer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -70,12 +71,17 @@ public class ServerReplyParser
                 {
                     centralController.addRoom(room);
                 }
-    
+                break;
+                
             case "customer":
                 
-                System.out.println("Received new customer: " + splittedMessage[1]);
+                RealCustomer fullDetailCustomer = gson.fromJson(splittedMessage[1], RealCustomer.class);
+                System.out.println(fullDetailCustomer.getAddress().getCity());
+               
+                centralController.setCustomerToProxy(fullDetailCustomer);
                 
                 break;
+                
     
             case "error":
                 centralController.showError("An error occured", splittedMessage[1]);
@@ -99,6 +105,7 @@ public class ServerReplyParser
                 
                 int newID = Integer.parseInt(splittedMessage[1]);
                 centralController.setInProgressBookingID(newID);
+                break;
         }
     }
 }
