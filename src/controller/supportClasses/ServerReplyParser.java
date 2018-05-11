@@ -26,7 +26,7 @@ public class ServerReplyParser
    {
        gson = new GsonBuilder()
            .registerTypeAdapter(LocalDate.class, new LocalDateJsonAdapter())
-           .registerTypeAdapter(Customer.class, new CustomerJsonAdapter())
+           .registerTypeAdapter(Customer.class, new CustomerJsonAdapter(centralController))
            .create();
        
        this.centralController = centralController;
@@ -49,7 +49,7 @@ public class ServerReplyParser
                 Type listTypeBooking = new TypeToken<List<Booking>>() {}.getType();
                 
                Gson roomFromIDGSON = new GsonBuilder().registerTypeAdapter(Room.class, new RoomFromIdAdapter(centralController))
-                       .registerTypeAdapter(Customer.class, new CustomerJsonAdapter())
+                       .registerTypeAdapter(Customer.class, new CustomerJsonAdapter(centralController))
                        .registerTypeAdapter(LocalDate.class, new LocalDateJsonAdapter())
                        .create();
                 ArrayList<Booking> bookingArray = roomFromIDGSON.fromJson(splittedMessage[1], listTypeBooking);
@@ -72,7 +72,9 @@ public class ServerReplyParser
                 }
     
             case "customer":
-        
+                
+                System.out.println("Received new customer: " + splittedMessage[1]);
+                
                 break;
     
             case "error":

@@ -290,7 +290,21 @@ public class BookingResultsListController implements Initializable
 			{
 				roomString += Integer.toString(rooms.next().getRoomNumber()) + ", ";
 			}
-			room_number_field.setText(roomString);
+			String shorterRoomString;
+			if(roomString.length()> 19)
+			{
+				shorterRoomString = roomString.substring(0,19);
+				shorterRoomString += "...";
+				room_number_field.setText(shorterRoomString);
+				Tooltip tooltip = new Tooltip(roomString);
+				room_number_field.setTooltip(tooltip);
+				
+			}
+			else
+			{
+				room_number_field.setText(roomString);
+			}
+			
 			check_in_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStartDate().toString());
 			check_out_date_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getEndDate().toString());
 			checked_in_field.setText(booking_ListView.getSelectionModel().getSelectedItem().getStatus().toString());

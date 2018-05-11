@@ -6,10 +6,7 @@ import client.model.ModelAccess;
 import client.model.Room;
 import client.model.customer.RealCustomer;
 import controller.ScreenController.Screen;
-import controller.supportClasses.BookingSearch;
-import controller.supportClasses.RoomSearch;
-import controller.supportClasses.ServerCommunicator;
-import controller.supportClasses.ServerMessage;
+import controller.supportClasses.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
@@ -37,6 +34,7 @@ public class CentralController
 	private ServerCommunicator serverCommunicator;
 	
 	private ArrayList<Room> availableRooms;
+	private ProxyCustomer tempProxyCustomer;
 	
 	public CentralController(Stage stage) throws IOException
 	{
@@ -44,7 +42,7 @@ public class CentralController
 		screenController = new ScreenController(stage, this);
 		modelAccess = new ModelAccess();
 		location = Hotel.VAXJO;    //TODO Default, should maybe come from server or save default so not kalmar has vaxjo as default
-		serverMessageConstructor = new ServerMessage();
+		serverMessageConstructor = new ServerMessage(this);
 		serverCommunicator = new ServerCommunicator(this);
 		serverCommunicator.sendToServer(serverMessageConstructor.getAllRooms());
 		availableRooms = new ArrayList<>();
@@ -128,9 +126,10 @@ public class CentralController
 		
 	}
 	
-	public void updateModel(BookingSearch booking)
+	public void updateModel(BookingSearch bookingsearch)
 	{
-		this.bookingSearch = booking;
+		this.bookingSearch = bookingsearch;
+		serverCommunicator.sendToServer(serverMessageConstructor.getBookingsFromSearch(bookingsearch));
 	}
 	
 	public RoomSearch getLastRoomSearch()
@@ -222,5 +221,15 @@ public class CentralController
 	public Room getRoomByID(int id)
 	{
 		return modelAccess.getRoomByID(id);
+	}
+	
+	public void getRealCustomer(ProxyCustomer customer)
+	{
+		serverCommunicator.sendToServer(serverMessageConstructor.getCustomerDetails(customer));
+	}
+	
+	public void setCustomerToProxy(RealCustomer customer)
+	{
+		this.tempProxyCustomer.addRealCustomer(customer);
 	}
 }

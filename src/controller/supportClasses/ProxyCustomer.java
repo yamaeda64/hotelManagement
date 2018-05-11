@@ -1,4 +1,10 @@
-package client.model.customer;
+package controller.supportClasses;
+
+import client.model.customer.Address;
+import client.model.customer.CreditCard;
+import client.model.customer.Customer;
+import client.model.customer.RealCustomer;
+import controller.CentralController;
 
 /**
  * Proxy customer is a lightweight Customer which loads more customer
@@ -14,10 +20,11 @@ public class ProxyCustomer implements Customer
     private String firstName;
     private String lastName;
     
+    private CentralController centralController;
     
-    public ProxyCustomer()
+    public ProxyCustomer(CentralController centralController)
     {
-        
+        this.centralController = centralController;
     }
     
     
@@ -57,7 +64,7 @@ public class ProxyCustomer implements Customer
     {
         if(realCustomer == null)
         {
-            loadFullCustomerDetails();
+            askForFullCustomer();
         }
         return realCustomer.getAddress();
     }
@@ -67,7 +74,7 @@ public class ProxyCustomer implements Customer
     {
         if(realCustomer == null)
         {
-            loadFullCustomerDetails();
+            askForFullCustomer();
         }
         return realCustomer.getTelephoneNumber();
     }
@@ -77,7 +84,7 @@ public class ProxyCustomer implements Customer
     {
         if(realCustomer == null)
         {
-            loadFullCustomerDetails();
+            askForFullCustomer();
         }
         return realCustomer.getPersonalNumber();
     }
@@ -87,7 +94,7 @@ public class ProxyCustomer implements Customer
     {
         if(realCustomer == null)
         {
-            loadFullCustomerDetails();
+            askForFullCustomer();
         }
         return realCustomer.getPassportNumber();
     }
@@ -97,7 +104,7 @@ public class ProxyCustomer implements Customer
     {
         if(realCustomer == null)
         {
-            loadFullCustomerDetails();
+            askForFullCustomer();
         }
         return realCustomer.getCreditCard();
     }
@@ -125,24 +132,18 @@ public class ProxyCustomer implements Customer
     {
         if(realCustomer == null)
         {
-            loadFullCustomerDetails();
+            askForFullCustomer();
         }
         return realCustomer.getPowerLevel();
     }
     
-    private void loadFullCustomerDetails()
+    private void askForFullCustomer()
     {
-        
-        //TODO Code to load the details to create a full customer
-        this.realCustomer = new RealCustomer();
-        
-        realCustomer.setCustomerID(customerID);
-        realCustomer.setFirstName(firstName);
-        realCustomer.setLastName(lastName);
-       
-       /* ServerMessage message = new ServerMessage();
-        ServerCommunicator communicator = new ServerCommunicator();
-        communicator.sendToServer(message.getCustomerDetails(this));
-        */
+        centralController.getRealCustomer(this);
+    }
+    
+    public void addRealCustomer(RealCustomer customer)
+    {
+        this.realCustomer = customer;
     }
 }

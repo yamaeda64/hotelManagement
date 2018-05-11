@@ -51,15 +51,15 @@ public class SearchBookingController implements Initializable{
             centralController.showError("Search problem", "You need to fill in at least one field to do a search");
         }
         else {
-            BookingSearch booking = new BookingSearch();
-            booking.setFirstName(first_name_field.getText());
-            booking.setLastName(last_name_field.getText());
-            booking.setTelephoneNumber(telephone_number_field.getText());
-            booking.setBookingNumber(booking_number_field.getText());
-            booking.setPassportNumber(passport_number_field.getText());
-            booking.setHotel(location_box.getValue());
+            BookingSearch bookingSearch = new BookingSearch();
+            bookingSearch.setFirstName(first_name_field.getText());
+            bookingSearch.setLastName(last_name_field.getText());
+            bookingSearch.setTelephoneNumber(telephone_number_field.getText());
+            bookingSearch.setBookingNumber(booking_number_field.getText());
+            bookingSearch.setPassportNumber(passport_number_field.getText());
+            bookingSearch.setHotel(location_box.getValue());
             
-            centralController.updateModel(booking);
+            centralController.updateModel(bookingSearch);
             centralController.changeScreen(Screen.BOOKING_RESULTS);
         }
     }

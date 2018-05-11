@@ -99,7 +99,7 @@ public class ScreenController {
 
 		}
 		else if (true) {
-			System.err.println("Unexpected error during screen switching.");
+			centralController.showError("ERROR", "An exception occured while reading local resources");
 			
 		}
 	}

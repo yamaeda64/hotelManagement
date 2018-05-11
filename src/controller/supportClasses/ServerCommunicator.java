@@ -12,7 +12,18 @@ public class ServerCommunicator extends AbstractClient
 {
     ServerReplyParser serverReplyParser;
     
+    public ServerCommunicator()
+    {
+        setupServer();
+    }
+    
     public ServerCommunicator(CentralController centralController)
+    {
+        serverReplyParser = new ServerReplyParser(centralController);
+        setupServer();
+    }
+    
+    public void setupServer()
     {
         InetSocketAddress socketAddress = new InetSocketAddress("sixey.es",6464);
         setLogLevel(Level.OFF);
@@ -20,9 +31,7 @@ public class ServerCommunicator extends AbstractClient
         handler.setLevel(Level.OFF);
         setLogHandler(handler);
         openConnection(socketAddress);
-        serverReplyParser = new ServerReplyParser(centralController);
     }
-    
     
     @Override
     public boolean sendToServer(String message)

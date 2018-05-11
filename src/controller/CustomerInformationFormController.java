@@ -78,6 +78,7 @@ public class CustomerInformationFormController implements Initializable{
 		
 		  Platform.runLater(()->
 	        {
+	            
 	    		first_name_field.setText(booking.getCustomer().getFirstName());
 	    		last_name_field.setText(booking.getCustomer().getLastName());
 	    		telephone_number_field.setText(booking.getCustomer().getTelephoneNumber());

@@ -162,6 +162,7 @@ public class MainMenuController implements Initializable{
         TableColumn roomNumberCol = new TableColumn("Room Number");
         roomNumberCol.setCellValueFactory(
                 new PropertyValueFactory<RoomWrapper, String>("roomNumbers"));
+        roomNumberCol.setMaxWidth(130);
         
         TableColumn bookingStatusCol = new TableColumn("Booking Status");
         bookingStatusCol.setCellValueFactory(
