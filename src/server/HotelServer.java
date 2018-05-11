@@ -33,6 +33,8 @@ public class HotelServer extends AbstractServer
     @Override
     protected void handleMessageFromClient(String message)
     {
+    	
+    	long incomingTime = System.currentTimeMillis();
         logger.log(Level.INFO, "incoming\n-------------\n");
         String response = "ERROR did not understand the request!";
         if(message.indexOf(':') >= 0) {
@@ -164,10 +166,20 @@ public class HotelServer extends AbstractServer
         		break;
         	}
         	
+        	case "finalize booking":
+        	{
+        		String[] params = incoming[1].split(",");
+        		response = database.updateBookingPayment(Integer.parseInt(params[0]), 
+        				0, Double.parseDouble(params[1]));
+        		break;
+        	}
+        	
         	} // end case
         	
             logger.log(Level.INFO, response);
             logger.log(Level.INFO, "--------------------");
+            long finishTime = System.currentTimeMillis() - incomingTime;
+            logger.log(Level.FINE, "took " + finishTime + " ms to finish.");
         	sendToClient(response);
         }
         else
