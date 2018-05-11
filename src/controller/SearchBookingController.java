@@ -47,20 +47,28 @@ public class SearchBookingController implements Initializable{
     }
     @FXML
     public void findBookingButton() throws IOException {
-        if (first_name_field.getText() == null && last_name_field.getText() == null && telephone_number_field.getText() == null && booking_number_field.getText() == null && passport_number_field.getText() == null) {
-            facadeController.showError("Search problem", "You need to fill in at least one field to do a search");
+        
+        if (first_name_field.getText().isEmpty() && last_name_field.getText().isEmpty() && telephone_number_field.getText().isEmpty() && booking_number_field.getText().isEmpty() && passport_number_field.getText().isEmpty()) {
+            facadeController.showError("Search problem", "At least on of the fields need to be filled in to do a search.");
         }
         else {
-            BookingSearch bookingSearch = new BookingSearch();
-            bookingSearch.setFirstName(first_name_field.getText());
-            bookingSearch.setLastName(last_name_field.getText());
-            bookingSearch.setTelephoneNumber(telephone_number_field.getText());
-            bookingSearch.setBookingNumber(booking_number_field.getText());
-            bookingSearch.setPassportNumber(passport_number_field.getText());
-            bookingSearch.setHotel(location_box.getValue());
-            
-            facadeController.updateModel(bookingSearch);
-            facadeController.changeScreen(Screen.BOOKING_RESULTS);
+            try
+            {
+                BookingSearch bookingSearch = new BookingSearch();
+                bookingSearch.setFirstName(first_name_field.getText());
+                bookingSearch.setLastName(last_name_field.getText());
+                bookingSearch.setTelephoneNumber(telephone_number_field.getText());
+                bookingSearch.setBookingNumber(booking_number_field.getText());
+                bookingSearch.setPassportNumber(passport_number_field.getText());
+                bookingSearch.setHotel(location_box.getValue());
+    
+                facadeController.updateModel(bookingSearch);
+                facadeController.changeScreen(Screen.BOOKING_RESULTS);
+            }
+            catch(IllegalArgumentException e)
+            {
+                facadeController.showError("Search problem", e.getMessage());
+            }
         }
     }
     

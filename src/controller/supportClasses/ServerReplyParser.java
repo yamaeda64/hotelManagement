@@ -87,6 +87,12 @@ public class ServerReplyParser
                 facadeController.showError("An error occured", splittedMessage[1]);
                 break;
     
+            case "ERROR no such bookings available!":
+                throw new IllegalArgumentException("There was no booking matching the search");
+                
+            case "ERROR bad parameters":
+                throw new IllegalArgumentException("At least one search criteria has to be used");
+                
             case "available rooms":
                 
                 facadeController.clearAvailableRooms();
