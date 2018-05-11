@@ -3,6 +3,9 @@ package server;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,10 +26,30 @@ public class HotelServer extends AbstractServer
     
     public HotelServer() throws SQLException {
     	try {
+    		// create new database
 			database = new SqlDAO();
+			
+			/*
+			 * The following sets up the clean up routine to run every five minutes.
+			 */
+			ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+			exec.scheduleAtFixedRate(new Runnable() {
+			  @Override
+			  public void run() {
+				  try {
+					SqlDAO tempdao = new SqlDAO();
+					tempdao.clean();
+					tempdao.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				  
+			  }
+			}, 0, 5, TimeUnit.MINUTES);
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			throw new SQLException("Could not instantiate database driver");
+			throw new SQLException("Could probably not instantiate database driver");
 		}
     }
 	
@@ -144,7 +167,7 @@ public class HotelServer extends AbstractServer
         		
         		String[] params = incoming[1].split(",", 3);
         		int bookingID = bookingJson.get("id").getAsInt(); //Integer.parseInt(params[0]);
-        		int newPrice = bookingJson.get("price").getAsInt();
+        		int newPrice = bookingJson.get("givenPrice").getAsInt();
         		
         		//JsonObject customerJson = new JsonParser().parse(params[2]).getAsJsonObject();
         		JsonObject customerJson = bookingJson.get("customer").getAsJsonObject();
@@ -156,11 +179,7 @@ public class HotelServer extends AbstractServer
         		String address = customerJson.get("address").getAsJsonObject().toString();
         		String creditCard = customerJson.get("creditCard").getAsJsonObject().toString();
         		String passportNumber = customerJson.get("passportNumber").getAsString();
-        		String powerLevel = customerJson.get("powerLevel").getAsString();
-        		
-        		System.out.println("\nnuseee\n\n" + address + "\n" + creditCard + "\n\n");
-        		
-        		
+        		String powerLevel = customerJson.get("powerLevel").getAsString();        		
         		
         		response = database.realizeBooking(bookingID, newPrice, firstName, lastName, telephone, idNumber, address, creditCard, powerLevel, passportNumber);
         		break;
@@ -191,6 +210,6 @@ public class HotelServer extends AbstractServer
     @Override
     public void exceptionOccured(Exception e)
     {
-       System.out.println("Exception occured: " +  e.getClass().getName() + e.getMessage());
+       //System.out.println("Exception occured: " +  e.getClass().getName() + e.getMessage());
     }
 }

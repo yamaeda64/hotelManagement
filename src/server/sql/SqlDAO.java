@@ -8,11 +8,23 @@ import java.util.logging.Level;
 
 public class SqlDAO {
 	private SqlQueries query;
+	
+	HashMap<String, Integer> customerPowerLevelTranslator = new HashMap<>();
 
 	public SqlDAO() throws SQLException, ClassNotFoundException {
 		query = new SqlQueries();
+		
+        customerPowerLevelTranslator.put("NONE", 0);
+		customerPowerLevelTranslator.put("BRONZE", 5);
+		customerPowerLevelTranslator.put("SILVER", 10);
+		customerPowerLevelTranslator.put("GOLD", 15);
+		customerPowerLevelTranslator.put("PLATINUM", 20);
+		customerPowerLevelTranslator.put("DIAMOND", 25);
 	}
-
+	
+	public void close() throws SQLException {
+		query.close();
+	}
 	/**
 	 * Creates a json string representing a single room.
 	 * 
@@ -332,12 +344,15 @@ public class SqlDAO {
 			} else if (bookingId != null) {
 				// ok no customer. but does the bookingId give us anything?
 				results = query.specificBooking(bookingId);
+			} else {
+				return "ERROR bad parameters";
 			}
+			
 			if (results != null) {
 				return "bookings:" + packBookings(results);
 			} else {
 				// exception.
-				return "ERROR bad parameters";
+				return "ERROR no such bookings available!";
 			}
 
 		} catch (SQLException e) {
@@ -448,7 +463,21 @@ public class SqlDAO {
 			query.setCustomerOnBooking(id, newCustomerId);
 			query.updateBookingPayment(id, 0, newPrice);
 			query.updateBookingStatus(id, "BOOKED");
-			return "OK";
+			
+			ResultSet rooms = query.roomsForBooking(id);
+			double basePrice = 0;
+			System.out.println("Base price: " + basePrice);
+			while(rooms.next()) {
+				int nyPris = rooms.getInt("standardPrice");
+				basePrice += nyPris; 
+				System.out.println(" + " + nyPris + " = "  + basePrice);
+			}
+			double powerLevelModifier = 1-(customerPowerLevelTranslator.get(powerLevel)/100.0);
+			basePrice = basePrice * powerLevelModifier;
+			System.out.println(" * " + powerLevelModifier + " = "  + basePrice);
+	        
+			
+			return "booking price:" + basePrice;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
