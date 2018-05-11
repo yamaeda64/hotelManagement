@@ -20,9 +20,6 @@ public class CentralController
 {
 	
 	private ScreenController screenController;
-	private StageManager stageM;
-	private Stage stage;
-	private Scene scene;
 	private ModelAccess modelAccess;
 	private Hotel location;
 	private RoomSearch lastRoomSearch;
@@ -53,10 +50,6 @@ public class CentralController
 		return screenController;
 	}
 	
-	public StageManager getStageManager()
-	{
-		return stageM;
-	}
 	
 	public void changeScreen(Screen screen) throws IOException
 	{
