@@ -31,8 +31,8 @@ class SqlQueries {
 	 * 
 	 * @param firstName
 	 * @param lastName
-	 * @param telephone
-	 * @param idNumber
+	 * @param telephoneNumber
+	 * @param personalNumber
 	 * @param address
 	 * @param creditCard
 	 * @param powerLevel
@@ -40,12 +40,12 @@ class SqlQueries {
 	 * @return the assigned ID for the new customer.
 	 * @throws SQLException
 	 */
-	int createCustomer(String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, String powerLevel, String passportNumber) throws SQLException {
-		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.customers(firstName, lastName, telephone, idNumber, address, creditCard, powerLevel, passportNumber) values (?, ?, ?, ?, ?, ?, ?, ?);");
+	int createCustomer(String firstName, String lastName, String telephoneNumber, String personalNumber, String address, String creditCard, String powerLevel, String passportNumber) throws SQLException {
+		PreparedStatement prepStatement = uplink.prepareStatement("insert into hotel.customers(firstName, lastName, telephoneNumber, personalNumber, address, creditCard, powerLevel, passportNumber) values (?, ?, ?, ?, ?, ?, ?, ?);");
 		prepStatement.setString(1, firstName);
 		prepStatement.setString(2, lastName);
-		prepStatement.setString(3, telephone);
-		prepStatement.setString(4, idNumber);
+		prepStatement.setString(3, telephoneNumber);
+		prepStatement.setString(4, personalNumber);
 		prepStatement.setString(5, address);
 		prepStatement.setString(6, creditCard);
 		prepStatement.setString(7, powerLevel);
@@ -63,7 +63,7 @@ class SqlQueries {
 	 *  
 	 *  ... unfinished, and unused.
 	 */
-	ResultSet searchCustomer(String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, int powerLevel) throws SQLException {
+	ResultSet searchCustomer(String firstName, String lastName, String telephoneNumber, String personalNumber, String address, String creditCard, int powerLevel) throws SQLException {
 		PreparedStatement prepStatement = uplink.prepareStatement("SELECT * FROM hotel.customers WHERE "
 				+ "firstName = ? AND lastName = ?");
 		ResultSet svar = prepStatement.executeQuery();

@@ -98,7 +98,7 @@ public class SqlDAO {
 	private String packCustomer(ResultSet customer, boolean extended) throws SQLException {
 		String[] customerKeys = new String[] { "id", "firstName", "lastName" };
 		if (extended)
-			customerKeys = new String[] { "id", "firstName", "lastName", "telephone", "idNumber", "address",
+			customerKeys = new String[] { "id", "firstName", "lastName", "telephoneNumber", "personalNumber", "address",
 					"creditCard", "powerLevel", "passportNumber" };
 
 		StringBuilder output = new StringBuilder("{");
@@ -308,15 +308,15 @@ public class SqlDAO {
 	 *            Name of customer
 	 * @param lastName
 	 *            Name of customer
-	 * @param telephone
-	 *            Customers telephone
+	 * @param telephoneNumber
+	 *            Customers telephoneNumber
 	 * @param passport
 	 *            Customers passport number
 	 * @param bookingId
 	 *            The booking id
 	 * @return A json string of the booking.
 	 */
-	public String findBookings(String firstName, String lastName, String telephone, String passport,
+	public String findBookings(String firstName, String lastName, String telephoneNumber, String passport,
 			Integer bookingId) {
 		try {
 			// compile hashmap
@@ -325,8 +325,8 @@ public class SqlDAO {
 				parameter.put("firstName", firstName);
 			if (lastName != null)
 				parameter.put("lastName", lastName);
-			if (telephone != null)
-				parameter.put("telephone", telephone);
+			if (telephoneNumber != null)
+				parameter.put("telephoneNumber", telephoneNumber);
 			if (passport != null)
 				parameter.put("passportNumber", passport);
 			// see if there are any people to find?
@@ -448,17 +448,17 @@ public class SqlDAO {
 	 * @param newPrice
 	 * @param firstName
 	 * @param lastName
-	 * @param telephone
-	 * @param idNumber
+	 * @param telephoneNumber
+	 * @param personalNumber
 	 * @param address
 	 * @param creditCard
 	 * @param powerLevel
 	 * @param passportNumber
 	 * @return
 	 */
-	public String realizeBooking(int id, int newPrice, String firstName, String lastName, String telephone, String idNumber, String address, String creditCard, String powerLevel, String passportNumber) {
+	public String realizeBooking(int id, int newPrice, String firstName, String lastName, String telephoneNumber, String personalNumber, String address, String creditCard, String powerLevel, String passportNumber) {
 		try {
-			int newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
+			int newCustomerId = query.createCustomer(firstName, lastName, telephoneNumber, personalNumber, address, creditCard,
 					powerLevel, passportNumber);
 			query.setCustomerOnBooking(id, newCustomerId);
 			query.updateBookingPayment(id, 0, newPrice);
@@ -492,19 +492,19 @@ public class SqlDAO {
 	 * 
 	 * @param firstName
 	 * @param lastName
-	 * @param telephone
-	 * @param idNumber
+	 * @param telephoneNumber
+	 * @param personalNumber
 	 * @param address
 	 * @param creditCard
 	 * @param powerLevel
 	 * @param passportNumber
 	 * @return
 	 */
-	public String createCustomer(String firstName, String lastName, String telephone, String idNumber, String address,
+	public String createCustomer(String firstName, String lastName, String telephoneNumber, String personalNumber, String address,
 			String creditCard, String powerLevel, String passportNumber) {
 		int newCustomerId;
 		try {
-			newCustomerId = query.createCustomer(firstName, lastName, telephone, idNumber, address, creditCard,
+			newCustomerId = query.createCustomer(firstName, lastName, telephoneNumber, personalNumber, address, creditCard,
 					powerLevel, passportNumber);
 			ResultSet newCustomer = query.searchCustomer(newCustomerId);
 			newCustomer.next();

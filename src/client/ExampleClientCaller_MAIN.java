@@ -12,7 +12,7 @@ public class ExampleClientCaller_MAIN
 {
     public static void main(String[] args) throws IOException, InterruptedException
     {
-        InetSocketAddress socketAddress = new InetSocketAddress( 6464);
+        InetSocketAddress socketAddress = new InetSocketAddress("sixey.es", 6464);
         
         ExampleClient client = new ExampleClient();
         client.setLogLevel(Level.ALL);
