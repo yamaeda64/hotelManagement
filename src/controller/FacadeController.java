@@ -31,7 +31,11 @@ public class FacadeController
 	
 	private ArrayList<Room> availableRooms;
 	private ProxyCustomer tempProxyCustomer;
-	
+	/**
+	 * 
+	 * @param stage A stage for the application.
+	 * @throws IOException
+	 */
 	public FacadeController(Stage stage) throws IOException
 	{
 		//setup();
@@ -54,25 +58,7 @@ public class FacadeController
 	{
 		screenController.setScreen(screen);
 	}
-	
-	
-	/*
-	public void setup() throws IOException {
-	        this.stage= new Stage();
-	        stage.setTitle("Hotel System");
-	        stage.setMinWidth(600.0);
-	        Parent root= FXMLLoader.load(ScreenController.class.getResource("/fxml/Main_menu.fxml"));
 
-	        this.scene = new Scene(root);
-	        scene.getStylesheets().add("css/menu_items.css"); // css for design
-	        stage.setScene(scene);
-	        System.out.print(Screen.MAIN.getResourceLocation());
-	        stageM.setPaneFragment(root);
-	        //screenC.setScreen(Screen.MAIN);
-	        stage.show();
-	}
-	
-	*/
 	public Iterator<Booking> getBookings()
 	{
 		return modelAccess.getAllBookings();
@@ -84,10 +70,6 @@ public class FacadeController
 		return modelAccess.getAllBookings();
 	}
 	
-	/*public Iterator<Room> getRooms()
-	{
-		return modelAccess.getAllRooms();
-    }*/
 
 	public void updateBookingInProgress(RealCustomer c) {
 		inProgressBooking.setCustomer(c);
@@ -108,13 +90,22 @@ public class FacadeController
 		return location;
 	}
 	
+	/**
+	 * 
+	 * @param currentSearch
+	 * Updating the RoomSearch object before it is made to a server request.
+	 */
 	public void updateModel(RoomSearch currentSearch)
 	{
 		this.lastRoomSearch = currentSearch;
 		
 		serverCommunicator.sendToServer(serverMessageConstructor.getRoomsFromSearch(currentSearch));
 	}
-	
+	/**
+	 * 
+	 * @param bookingsearch
+	 * Updating the BookingSearch Object before it is turned into a server request.
+	 */
 	public void updateModel(BookingSearch bookingsearch)
 	{
 		this.bookingSearch = bookingsearch;

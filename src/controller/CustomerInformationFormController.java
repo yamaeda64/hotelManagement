@@ -16,6 +16,10 @@ public class CustomerInformationFormController implements Initializable{
 	Booking booking;
 	Stage stage;
 	
+	/**
+	 * A Form with information. This is not for editing, but only to display the customer information.
+	 */
+	
     @FXML
     private TextField first_name_field;
 

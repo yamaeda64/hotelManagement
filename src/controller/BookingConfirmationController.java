@@ -32,14 +32,8 @@ public class BookingConfirmationController implements Initializable{
 	private String checkOut;
 	private Booking bookingInProgress;
 	private boolean priceOverrided = false;
-
 	private String completeString;
 
-
-	
-	/* TODO
-	 * Fix connection so that price is updated correctly when entering this fxml.
-	 */
 
 
 

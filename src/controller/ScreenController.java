@@ -40,6 +40,17 @@ public class ScreenController {
 		this.facadeController = facadeController;
 	}
 	
+	/**
+	 * 
+	 * @param screen
+	 * The screen that has the resource location for the selected fxml
+	 * 
+	 * @throws IOException
+	 * 
+	 * Changes the current screen in the application. Throws IOException if the screen cannot be found.
+	 * 
+	 */
+	
 	public void setScreen(ScreenController.Screen screen)throws IOException {
 		if (screen.getResourceLocation() == ScreenController.Screen.MAIN.getResourceLocation()) {
 			
