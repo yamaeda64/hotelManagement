@@ -198,7 +198,7 @@ public class HotelServer extends AbstractServer
             logger.log(Level.INFO, response);
             logger.log(Level.INFO, "--------------------");
             long finishTime = System.currentTimeMillis() - incomingTime;
-            logger.log(Level.FINE, "took " + finishTime + " ms to finish.");
+            logger.log(Level.INFO, "took " + finishTime + " ms to finish.");
         	sendToClient(response);
         }
         
