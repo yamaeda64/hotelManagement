@@ -7,6 +7,11 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
+/**
+ * An adapter for JSON parsing.
+ * It has a specific use when parsing a Customer from JSON, since customer is an interface it cannot be instanciated
+ * and the adapter instead instanciate a ProxyCustomer.
+ */
 public class CustomerJsonAdapter implements JsonDeserializer<Customer>, JsonSerializer<Customer>
 {
     private FacadeController facadeController;

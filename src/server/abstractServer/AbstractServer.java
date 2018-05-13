@@ -73,7 +73,7 @@ public abstract class AbstractServer
         
         }
     }
-    
+    // Removes threads that are no longer connected.
     private void removeUnusedSockets()
     {
         ArrayList<Socket> removeList = new ArrayList<>();
@@ -93,6 +93,9 @@ public abstract class AbstractServer
         }
     }
     
+    /**
+     * Stop running the server
+     */
     public void stopServer()
     {
         try
@@ -196,6 +199,7 @@ public abstract class AbstractServer
         }
     }
     
+  
     public int getPortNumber()
     {
         return portNumber;

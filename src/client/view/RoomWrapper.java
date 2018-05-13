@@ -19,29 +19,17 @@ public class RoomWrapper
     
     public String getFirstName()
     {
-        // TODO, remove if else
-        if(booking.getCustomer() != null)
-        {
-            return booking.getCustomer().getFirstName();
-        }
-        else
-            return "";
+        return booking.getCustomer().getFirstName();
+       
     }
     
     public String getLastName()
     {
-        if(booking.getCustomer() != null)
-        {
-            return booking.getCustomer().getLastName();
-        }
-        else
-        {
-            return "";
-        }
+        return booking.getCustomer().getLastName();
     }
+    
     public String getRoomNumbers()
     {
-    
         String roomNumbers = "";
         Iterator<Room> roomIterator = booking.getAllRooms();
       

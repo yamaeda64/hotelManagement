@@ -1,6 +1,8 @@
 package client.model.customer;
 
-
+/**
+ * A simple Class to be used for storing credit card information.
+ */
 public class CreditCard
 {
     private String cardNumber;

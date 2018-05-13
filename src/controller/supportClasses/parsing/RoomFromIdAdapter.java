@@ -7,7 +7,7 @@ import controller.FacadeController;
 import java.lang.reflect.Type;
 
 /**
- * Created by joakimbergqvist on 2018-05-10.
+ * An adapter class for deserialize a JSON to a Room by just the room ID.
  */
 public class RoomFromIdAdapter implements JsonDeserializer<Room>
 {

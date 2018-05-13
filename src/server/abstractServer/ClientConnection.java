@@ -46,6 +46,10 @@ public class ClientConnection extends Thread
         }
     }
     
+    /**
+     * Listens for client requests and any received message is sent to the abstract function handleMessageFromClient()
+     * @throws IOException
+     */
     private void listenForClientRequest() throws IOException
     {
         boolean clientIsConnected = true;

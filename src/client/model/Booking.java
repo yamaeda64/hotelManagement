@@ -7,7 +7,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
+/**
+ * The Booking is a information holder class for booking details such as booked rooms, startDate, endDate,
+ * price, customer, amount payed and booking Status
+ */
 public class Booking
 {
     private ArrayList<Room> bookedRooms;
@@ -25,6 +28,9 @@ public class Booking
         bookedRooms = new ArrayList<>();
     }
     
+    /**
+     * An enumeration to handle the different statuses a booking can have.
+     */
     public enum BookingStatus
     {
         IN_PROGRESS,

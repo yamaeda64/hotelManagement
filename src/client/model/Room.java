@@ -1,29 +1,28 @@
 package client.model;
 
-
+/**
+ * Keeps information about a room.
+ */
 public class Room
 {
     private int id;
     private Hotel hotel;
     private int roomNumber;
     private String view;
-    private QualityLevel qualityLevel;
     private boolean noSmoking;
     private BedType bedType;
     private Room adjecentRoom;
     private int standardPrice;
     
     
-    
+    /**
+     * An enumeration for what bedtype, which is bound to Room
+     */
     public enum BedType
     {
         SINGLE,
         TWIN,
         KING
-    }
-    public enum QualityLevel
-    {
-        
     }
     
     // Getters & Setters
@@ -66,16 +65,6 @@ public class Room
     public void setView(String view)
     {
         this.view = view;
-    }
-    
-    public QualityLevel getQualityLevel()
-    {
-        return qualityLevel;
-    }
-    
-    public void setQualityLevel(QualityLevel qualityLevel)
-    {
-        this.qualityLevel = qualityLevel;
     }
     
     public boolean isNoSmoking()

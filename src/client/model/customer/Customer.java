@@ -1,6 +1,8 @@
 package client.model.customer;
 
-
+/**
+ * An interface for a customer with getters and setters needed to fullfill the customer interface
+ */
 public interface Customer
 {
     public String getID();

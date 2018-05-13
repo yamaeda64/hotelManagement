@@ -19,6 +19,9 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * A controller class for the BookingConfirmationWindow
+ */
 public class BookingConfirmationController implements Initializable{
 	private FacadeController facadeController;
 	private RealCustomer customer; 
@@ -101,9 +104,9 @@ public class BookingConfirmationController implements Initializable{
 	public boolean hasNoCentralController() {
 		return facadeController == null;
 	}
-	public void setBookingInProgress(Booking booking) {
-		bookingInProgress = booking;
-	}
+	//public void setBookingInProgress(Booking booking) {
+	//	bookingInProgress = booking;
+	//}
 	public void updateCompleteString() {
 		completeString = 
 				"Summary of the Booking \n"
@@ -122,7 +125,8 @@ public class BookingConfirmationController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		text_area.setEditable(false);
-
+		
+		// Platform.runLater makes these line wait until the facadecontroller is read into this class.
 		Platform.runLater(()->
 		{
 			bookingInProgress = facadeController.getBookingInProgress();

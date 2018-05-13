@@ -1,6 +1,8 @@
 package client.model.customer;
 
-
+/**
+ * A simple model class for holding Address information
+ */
 public class Address
 {
     private String streetName;

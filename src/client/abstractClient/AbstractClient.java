@@ -57,6 +57,9 @@ public abstract class AbstractClient
         return false;
     }
     
+    /**
+     * Close the connection to server, if more transitions are to be made a new open connection has to be called.
+     */
     public void closeConnection()
     {
         try
@@ -70,6 +73,11 @@ public abstract class AbstractClient
         }
     }
     
+    /**
+     * Send a string to the connected server
+     * @param message The input
+     * @return True if messege could be sent successfully
+     */
     public boolean sendToServer(String message)
     {
         message += '\0';
@@ -187,16 +195,26 @@ public abstract class AbstractClient
     }
     
     
-    // Hooks (methods the subclass can override)
-    
+    /**
+     * Has no implementation but is called every time a connection is established.
+     * This can be overridden if any functionality is needed
+     */
     public void connectionEstablished()
     {
         
     }
+    /**
+     * Has no implementation but is called every time a connection is closed.
+     * This can be overridden if any functionality is needed
+     */
     public void connectionClosed()
     {
         
     }
+    /**
+     * Has no implementation but is called every time a exception occurs.
+     * This can be overridden if any functionality is needed
+     */
     public void connectionException(Exception e)
     {
         

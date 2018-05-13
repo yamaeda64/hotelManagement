@@ -105,7 +105,7 @@ public class ScreenController {
 			Parent root=loader.load();
 			BookingConfirmationController bookingConfirmationController = loader.getController();
 			bookingConfirmationController.setFacadeController(facadeController);
-			bookingConfirmationController.setBookingInProgress(facadeController.getBookingInProgress());
+			//bookingConfirmationController.setBookingInProgress(facadeController.getBookingInProgress());
 			stageM.setRoot(root);
 
 		}
