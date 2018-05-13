@@ -1,4 +1,4 @@
-package controller.supportClasses.parsing;
+package client.controller.supportClasses.parsing;
 
 import com.google.gson.*;
 

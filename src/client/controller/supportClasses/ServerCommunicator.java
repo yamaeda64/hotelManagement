@@ -1,8 +1,8 @@
-package controller.supportClasses;
+package client.controller.supportClasses;
 
 
 import client.abstractClient.AbstractClient;
-import controller.FacadeController;
+import client.controller.FacadeController;
 
 import java.net.InetSocketAddress;
 import java.util.logging.ConsoleHandler;
@@ -39,7 +39,6 @@ public class ServerCommunicator extends AbstractClient
     @Override
     public boolean sendToServer(String message)
     {
-        System.out.println("ToServer: " + message); // TODO, debug
         super.sendToServer(message);
         receiveMessageFromServer();
         return true;

@@ -1,4 +1,4 @@
-package controller.supportClasses;
+package client.controller.supportClasses;
 
 import client.model.Hotel;
 import client.model.Room;

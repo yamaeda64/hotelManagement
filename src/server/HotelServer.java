@@ -1,5 +1,12 @@
 package server;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import server.abstractServer.AbstractServer;
+import server.sql.SqlDAO;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,14 +15,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import server.abstractServer.AbstractServer;
-import server.sql.SqlDAO;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 
 public class HotelServer extends AbstractServer
@@ -193,6 +192,7 @@ public class HotelServer extends AbstractServer
         		break;
         	}
         	
+        	
         	} // end case
         	
             logger.log(Level.INFO, response);
@@ -201,15 +201,12 @@ public class HotelServer extends AbstractServer
             logger.log(Level.FINE, "took " + finishTime + " ms to finish.");
         	sendToClient(response);
         }
-        else
-        {
-            System.out.println("MESSAGE WAS WRONG!!!!    " + message);
-        }
+        
     }
     
     @Override
     public void exceptionOccured(Exception e)
     {
-       //System.out.println("Exception occured: " +  e.getClass().getName() + e.getMessage());
+       
     }
 }

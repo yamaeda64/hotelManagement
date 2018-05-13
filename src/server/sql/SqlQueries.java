@@ -1,16 +1,7 @@
 package server.sql;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.logging.Level;
+import java.sql.*;
+import java.util.*;
 
 class SqlQueries {
 	private final String db_url = "jdbc:mysql://" + SqlLogin.db_hostname + ":" + SqlLogin.db_port + "/" + SqlLogin.db_dbname + "?user=" + SqlLogin.db_username + "&password=" + SqlLogin.db_password + "&useUnicode=true&characterEncoding=utf8&autoReconnect=true";
@@ -110,7 +101,6 @@ class SqlQueries {
 		Iterator<Integer> idIterator = which.iterator();
 		while (idIterator.hasNext()) {
 			String i = String.valueOf(idIterator.next());
-			//System.out.print(i);
 			query.append(i);
 			if (idIterator.hasNext()) {
 				query.append(", ");
@@ -119,7 +109,6 @@ class SqlQueries {
 		query.append(")");
 		
 		// search
-		//System.out.println(query);
 		PreparedStatement prepStatement = uplink.prepareStatement(query.toString());
 		ResultSet svar = prepStatement.executeQuery();
 		return svar;
@@ -304,7 +293,6 @@ class SqlQueries {
 		}
 		
 		if (bindings.size() <= 0) {
-			System.out.println("-- booking size 0 return");
 			return null;
 		}
 
@@ -340,7 +328,6 @@ class SqlQueries {
 		Iterator<Integer> bookingIt = potentialBookings.iterator();
 		while (bookingIt.hasNext()) {
 			String i = String.valueOf(bookingIt.next());
-			//System.out.print(i);
 			query.append(i);
 			if (bookingIt.hasNext()) {
 				query.append(", ");

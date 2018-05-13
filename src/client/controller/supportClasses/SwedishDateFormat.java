@@ -1,4 +1,4 @@
-package controller.supportClasses;
+package client.controller.supportClasses;
 
 
 import javafx.util.StringConverter;

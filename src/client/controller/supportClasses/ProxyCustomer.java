@@ -1,10 +1,10 @@
-package controller.supportClasses;
+package client.controller.supportClasses;
 
 import client.model.customer.Address;
 import client.model.customer.CreditCard;
 import client.model.customer.Customer;
 import client.model.customer.RealCustomer;
-import controller.FacadeController;
+import client.controller.FacadeController;
 
 /**
  * Proxy customer is a lightweight Customer which loads more customer

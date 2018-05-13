@@ -1,8 +1,8 @@
-package controller.supportClasses.parsing;
+package client.controller.supportClasses.parsing;
 
 import client.model.customer.Customer;
-import controller.FacadeController;
-import controller.supportClasses.ProxyCustomer;
+import client.controller.FacadeController;
+import client.controller.supportClasses.ProxyCustomer;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

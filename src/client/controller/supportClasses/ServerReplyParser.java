@@ -1,4 +1,4 @@
-package controller.supportClasses;
+package client.controller.supportClasses;
 
 
 import client.model.Booking;
@@ -8,10 +8,10 @@ import client.model.customer.RealCustomer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import controller.FacadeController;
-import controller.supportClasses.parsing.CustomerJsonAdapter;
-import controller.supportClasses.parsing.LocalDateJsonAdapter;
-import controller.supportClasses.parsing.RoomFromIdAdapter;
+import client.controller.FacadeController;
+import client.controller.supportClasses.parsing.CustomerJsonAdapter;
+import client.controller.supportClasses.parsing.LocalDateJsonAdapter;
+import client.controller.supportClasses.parsing.RoomFromIdAdapter;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
@@ -36,7 +36,6 @@ public class ServerReplyParser
     
     public void handleMessage(String message)
     {
-        System.out.println("receivedFromParser: " + message);
         String[] splittedMessage = message.split(":",2);
         
         switch(splittedMessage[0])
@@ -76,8 +75,6 @@ public class ServerReplyParser
             case "customer":
                 
                 RealCustomer fullDetailCustomer = gson.fromJson(splittedMessage[1], RealCustomer.class);
-                System.out.println(fullDetailCustomer.getAddress().getCity());
-               
                 facadeController.setCustomerToProxy(fullDetailCustomer);
                 
                 break;
@@ -109,8 +106,7 @@ public class ServerReplyParser
                     facadeController.addAvailableRoom(facadeController.getRoomByID(Integer.parseInt(id)));
                 }
                 break;
-                
-                
+            
             case "new booking":
                 
                 int newID = Integer.parseInt(splittedMessage[1]);

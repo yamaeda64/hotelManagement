@@ -1,10 +1,10 @@
-package controller;
+package client.controller;
 
 import client.model.Booking;
 import client.model.Booking.BookingStatus;
 import client.model.Room;
-import controller.ScreenController.Screen;
-import controller.supportClasses.BookingSearch;
+import client.controller.ScreenController.Screen;
+import client.controller.supportClasses.BookingSearch;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -96,7 +96,6 @@ public class BookingResultsListController implements Initializable
 	public void checkOutButton()
 	{
 		if (!amount_remaining_field.getText().equals("0.0")) {
-			System.out.println(amount_remaining_field.getText());
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Payment not complete");
 			alert.setHeaderText(null);
@@ -245,7 +244,7 @@ public class BookingResultsListController implements Initializable
 					infoStage.show();
 				} else
 				{
-					System.err.println("File not found");
+					
 				}
 				
 				
@@ -294,9 +293,6 @@ public class BookingResultsListController implements Initializable
 			amount_paid_field.setText(""+amountPaid);
 			amount_remaining_field.setText(""+
 					(booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice() - amountPaid));
-			System.out.println("Price = " + booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice());
-			
-			
 		}
 		else 		// when nothing is selected
 		{

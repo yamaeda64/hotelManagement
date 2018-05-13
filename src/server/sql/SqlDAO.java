@@ -279,7 +279,6 @@ public class SqlDAO {
 	 */
 	public String allBookingsForHotel(String hotel, String startDate, String endDate) {
 		try {
-			System.out.println("--allbookingsforhotel--");
 			ResultSet bookingSet = query.bookingsForHotel(hotel, startDate, endDate);
 			if (bookingSet == null) return "bookings:[]";
 			bookingSet.beforeFirst();
@@ -483,16 +482,13 @@ public class SqlDAO {
 			
 			ResultSet rooms = query.roomsForBooking(id);
 			double basePrice = 0;
-			System.out.println("Base price: " + basePrice);
+			
 			while(rooms.next()) {
 				int nyPris = rooms.getInt("standardPrice");
-				basePrice += nyPris; 
-				System.out.println(" + " + nyPris + " = "  + basePrice);
+				basePrice += nyPris;
 			}
 			double powerLevelModifier = 1-(customerPowerLevelTranslator.get(powerLevel)/100.0);
 			basePrice = basePrice * powerLevelModifier;
-			System.out.println(" * " + powerLevelModifier + " = "  + basePrice);
-	        
 			
 			return "booking price:" + basePrice;
 		} catch (SQLException e) {

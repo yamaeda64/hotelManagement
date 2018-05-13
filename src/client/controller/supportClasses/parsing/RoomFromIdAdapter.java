@@ -1,8 +1,8 @@
-package controller.supportClasses.parsing;
+package client.controller.supportClasses.parsing;
 
 import client.model.Room;
 import com.google.gson.*;
-import controller.FacadeController;
+import client.controller.FacadeController;
 
 import java.lang.reflect.Type;
 

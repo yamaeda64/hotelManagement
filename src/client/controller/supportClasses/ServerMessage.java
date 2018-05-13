@@ -1,13 +1,13 @@
-package controller.supportClasses;
+package client.controller.supportClasses;
 
 import client.model.Booking;
 import client.model.Hotel;
 import client.model.customer.Customer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import controller.FacadeController;
-import controller.supportClasses.parsing.CustomerJsonAdapter;
-import controller.supportClasses.parsing.LocalDateJsonAdapter;
+import client.controller.FacadeController;
+import client.controller.supportClasses.parsing.CustomerJsonAdapter;
+import client.controller.supportClasses.parsing.LocalDateJsonAdapter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

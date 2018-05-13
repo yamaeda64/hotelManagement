@@ -1,4 +1,6 @@
-import controller.FacadeController;
+package client;
+
+import client.controller.FacadeController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

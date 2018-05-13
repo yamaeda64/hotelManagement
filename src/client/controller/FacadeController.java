@@ -1,12 +1,12 @@
-package controller;
+package client.controller;
 
 import client.model.Booking;
 import client.model.Hotel;
 import client.model.ModelAccess;
 import client.model.Room;
 import client.model.customer.RealCustomer;
-import controller.ScreenController.Screen;
-import controller.supportClasses.*;
+import client.controller.ScreenController.Screen;
+import client.controller.supportClasses.*;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
@@ -39,7 +39,6 @@ public class FacadeController
 	 */
 	public FacadeController(Stage stage) throws IOException
 	{
-		//setup();
 		screenController = new ScreenController(stage, this);
 		modelAccess = new ModelAccess();
 		location = Hotel.VAXJO;    //TODO Default, should maybe come from server or save default so not kalmar has vaxjo as default
