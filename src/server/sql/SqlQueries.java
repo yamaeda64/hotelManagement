@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.logging.Level;
 
 class SqlQueries {
-	private final String db_url = "jdbc:mysql://" + SqlLogin.db_hostname + ":" + SqlLogin.db_port + "/" + SqlLogin.db_dbname + "?user=" + SqlLogin.db_username + "&password=" + SqlLogin.db_password + "&useUnicode=true&characterEncoding=utf8";
+	private final String db_url = "jdbc:mysql://" + SqlLogin.db_hostname + ":" + SqlLogin.db_port + "/" + SqlLogin.db_dbname + "?user=" + SqlLogin.db_username + "&password=" + SqlLogin.db_password + "&useUnicode=true&characterEncoding=utf8&autoReconnect=true";
 	private Connection uplink;
 	SqlQueries() throws ClassNotFoundException, SQLException {
 		// creates a new instance of the driver, which loads itself into the place where

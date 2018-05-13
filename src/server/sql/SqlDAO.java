@@ -83,7 +83,7 @@ public class SqlDAO {
 	private String packRooms(ResultSet rooms) throws SQLException {
 		return packRooms(rooms, true); // true
 	}
-
+	
 	/**
 	 * Creates a json string representing a single customer.
 	 * 
@@ -195,7 +195,23 @@ public class SqlDAO {
 		output.append("]");
 		return output.toString();
 	}
-
+	
+	/**
+	 * Checks the number of rows to see if it's empty.
+	 * Most likely more costly than we'd like.
+	 * @param set
+	 * @return
+	 * @throws SQLException
+	 */
+	private boolean resultSetIsEmpty(ResultSet set) throws SQLException {
+		set.beforeFirst();
+		int count = 0;
+		while(set.next()) {
+			if (count++ > 0) return false;
+		}
+		return true;
+	}
+	
 	/*
 	 * 
 	 * 
@@ -292,6 +308,7 @@ public class SqlDAO {
 		try {
 			// bedtype can be null!
 			ResultSet rooms = query.findFreeRooms(hotel, bedType, noSmoking, adjacent, startDate, endDate);
+			if (resultSetIsEmpty(rooms)) return "ERROR no such rooms available";
 			return "available rooms:" + packRooms(rooms);
 		} catch (SQLException e) {
 			e.printStackTrace();
