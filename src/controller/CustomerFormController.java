@@ -15,7 +15,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
-
+/**
+ * 
+ * This is the controller for the form where we enter the customers information.
+ *
+ */
 public class CustomerFormController implements Initializable
 {
     private FacadeController facadeController;

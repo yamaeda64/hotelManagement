@@ -252,7 +252,9 @@ public class BookingResultsListController implements Initializable
 			}
 		});
 	}
-	
+	/**
+	 * Update the fields in the GUI.
+	 */
 	private void updateFields()
 	{
 		if(booking_ListView.getSelectionModel().getSelectedItem() != null)

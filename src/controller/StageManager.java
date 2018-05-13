@@ -12,19 +12,24 @@ public class StageManager {
     private Stage stage;
     private Pane pane;
     
-    public StageManager(Stage stage, FacadeController cc) throws IOException {
+    /**
+     * 
+     * @param stage
+     * The stage you wish to control
+     * @param fc
+     * The controller for the facade
+     * @throws IOException
+     * Throws IOException if the screens are not found.
+     */
+    
+    public StageManager(Stage stage, FacadeController fc) throws IOException {
         this.stage=stage;
-        //stage.setTitle("Hotel System");
-        //stage.setMinWidth(600.0);
-        //stage.setMinHeight(600);
         FXMLLoader loader = new FXMLLoader(ScreenController.class.getResource("/fxml/Main_menu.fxml"));
         Parent root=loader.load();
 
         MainMenuController mm = loader.getController();
-        mm.setFacadeController(cc);
+        mm.setFacadeController(fc);
         Scene s = new Scene(root);
-       /*FIXME Graphical bugs here.
-       s.getStylesheets().add("css/menu_items.css"); // css for design, */
         stage.setScene(s);
         stage.show();
         

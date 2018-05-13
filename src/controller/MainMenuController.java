@@ -134,7 +134,7 @@ public class MainMenuController implements Initializable{
             }
         });
         
-        /* Date picker setup for dafault as today, and Swedish date format. */
+        /* Date picker setup for default as today, and Swedish date format. */
         datePicker.setValue(LocalDate.now());
         datePicker.setShowWeekNumbers(true);
         
