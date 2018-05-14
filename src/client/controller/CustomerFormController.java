@@ -147,7 +147,7 @@ public class CustomerFormController implements Initializable
             {
                 customer.setTelephoneNumber(telephone_number_field.getText());
             }
-            if(personal_number_field.getText().equals(""))  // TODO, should personal number have more checks (in that case maybe from server??)?
+            if(personal_number_field.getText().equals(""))
             {
                 throw new IllegalArgumentException("There was no personal number");
             } else

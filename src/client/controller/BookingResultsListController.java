@@ -81,7 +81,6 @@ public class BookingResultsListController implements Initializable
 	public void checkInButton()
 	{
 		booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_IN);
-		// TODO, send to server
 		checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
 		facadeController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_IN);
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -105,7 +104,6 @@ public class BookingResultsListController implements Initializable
 		}
 		else {
 			booking_ListView.getSelectionModel().getSelectedItem().setStatus(BookingStatus.CHECKED_OUT);
-			// TODO, send to server
 			checked_in_field.setText("" + booking_ListView.getSelectionModel().getSelectedItem().getStatus());
 			facadeController.changeBookingStatus(booking_ListView.getSelectionModel().getSelectedItem(), BookingStatus.CHECKED_OUT);
 			Alert alert = new Alert(AlertType.INFORMATION);
@@ -137,8 +135,6 @@ public class BookingResultsListController implements Initializable
 
 	@FXML
 	public void payButton() {
-
-		//TODO Fix database access connection.
 		
 		booking_ListView.getSelectionModel().getSelectedItem().setAmountPaid(booking_ListView.getSelectionModel().getSelectedItem().getGivenPrice());
 		

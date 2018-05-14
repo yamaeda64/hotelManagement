@@ -85,10 +85,7 @@ public class BookingConfirmationController implements Initializable{
 
 	@FXML
 	void bookingButton(ActionEvent event) throws IOException {
-
-		//TODO, if set final price isn't blank
-		// check if right format, (maybe change , to . )
-		// if blank, do below code, else set the price to the same as the field.
+		
 		facadeController.finalizeBooking(bookingInProgress.getGivenPrice());
 		facadeController.changeScreen(Screen.MAIN);
 	}

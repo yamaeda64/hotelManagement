@@ -39,13 +39,23 @@ public class FacadeController
 	 */
 	public FacadeController(Stage stage) throws IOException
 	{
+		
 		screenController = new ScreenController(stage, this);
 		modelAccess = new ModelAccess();
 		location = Hotel.VAXJO;    //TODO Default, should maybe come from server or save default so not kalmar has vaxjo as default
 		serverMessageConstructor = new ServerMessage(this);
-		serverCommunicator = new ServerCommunicator(this);
-		serverCommunicator.sendToServer(serverMessageConstructor.getAllRooms());
-		availableRooms = new ArrayList<>();
+		try
+		{
+			serverCommunicator = new ServerCommunicator(this);
+			serverCommunicator.sendToServer(serverMessageConstructor.getAllRooms());
+			
+			availableRooms = new ArrayList<>();
+		}
+		catch(Exception e)
+		{
+			showError("Couldn't connect to server", "There was a problem while connecting the server");
+			System.exit(1);
+		}
 	}
 	
 	public ScreenController getScreenController()
@@ -77,8 +87,17 @@ public class FacadeController
 	 */
 	public Iterator<Booking> getBookings(Hotel hotel, LocalDate date)
 	{
-		serverCommunicator.sendToServer(serverMessageConstructor.getBookingsOfDate(hotel, date));
-		return modelAccess.getAllBookings();
+		try
+		{
+			serverCommunicator.sendToServer(serverMessageConstructor.getBookingsOfDate(hotel, date));
+			return modelAccess.getAllBookings();
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
+		
+				
 	}
 	
 	/**
@@ -239,7 +258,7 @@ public class FacadeController
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setHeaderText(errorHeader);
 		alert.setContentText(errorMsg);
-		alert.show();
+		alert.showAndWait();
 	}
 	
 	/**

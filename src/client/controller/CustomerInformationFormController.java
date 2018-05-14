@@ -82,7 +82,6 @@ public class CustomerInformationFormController implements Initializable{
 		
 		  Platform.runLater(()->
 	        {
-	            
 	    		first_name_field.setText(booking.getCustomer().getFirstName());
 	    		last_name_field.setText(booking.getCustomer().getLastName());
 	    		telephone_number_field.setText(booking.getCustomer().getTelephoneNumber());
@@ -99,9 +98,5 @@ public class CustomerInformationFormController implements Initializable{
 	    		country_field.setText(booking.getCustomer().getAddress().getCountry());
 	           
 	        });
-
-		// TODO Auto-generated method stub
-		
 	}
-
 }

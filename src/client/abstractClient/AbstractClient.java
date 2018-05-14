@@ -95,6 +95,10 @@ public abstract class AbstractClient
         {
             connectionException(e);
         }
+        catch(Exception e)
+        {
+            connectionException(e);
+        }
     
         logger.log(Level.FINEST, "Msg sent to server: " + message.substring(0,message.length()-1));
         
@@ -142,7 +146,12 @@ public abstract class AbstractClient
         {
             connectionException(new SocketTimeoutException("The connection timed out"));
         }
+        
         catch(IOException e)
+        {
+            connectionException(e);
+        }
+        catch(Exception e)
         {
             connectionException(e);
         }
